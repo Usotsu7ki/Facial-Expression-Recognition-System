@@ -8,8 +8,7 @@ import numpy as np
 SERVER_IP = ''
 SERVER_PORT = 8080
 
-# 管理员密码
-ADMIN_PASSWORD = '12345678'  # 密码
+
 
 # 客户端和管理员的套接字列表
 client_sockets = []
@@ -17,7 +16,13 @@ admin_sock = None
 
 
 
-
+def load_admin_password():
+    try:
+        with open('password.txt', 'r') as file:
+            return file.readline().strip()  # 读取第一行并去除可能的前后空白字符
+    except Exception as e:
+        print(f"Error loading admin password: {e}")
+        return None
 
 def client_handler(client_sock, client_address):
     global admin_sock
@@ -182,6 +187,11 @@ def accept_connections(server_socket):
         threading.Thread(target=client_handler, args=(client_sock, client_address)).start()
 
 def main():
+    global ADMIN_PASSWORD
+    ADMIN_PASSWORD = load_admin_password()
+    if ADMIN_PASSWORD is None:
+        print("Admin password could not be loaded.")
+
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((SERVER_IP, SERVER_PORT))
     server_socket.listen()
