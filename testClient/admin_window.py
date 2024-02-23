@@ -60,7 +60,7 @@ class AdminWindow(QtWidgets.QMainWindow):
         self.clientListWidget.clear()
         # 添加新的客户端列表
         for client_address in client_list:
-            if client_address:  # 确保地址不是空字符串
+            if client_address and client_address != "disconnect" and not(HOST in client_address):  # 确保地址不是空字符串
                 self.add_client(client_address)
 
     def add_client(self, client_address):

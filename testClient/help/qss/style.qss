@@ -1,0 +1,34 @@
+#label{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+#label_2{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+#label_3{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+#frame{
+    background:url(:/pic/login.jpg);
+}
+#pushButton{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 48, 145);
+    border-radius: 5px;
+}
+#pushButton:hover{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(21, 193, 182);
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标按下*/
+#pushButton:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 255, 255);
+    border-radius: 5px;
+}

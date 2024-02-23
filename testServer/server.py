@@ -9,7 +9,7 @@ SERVER_IP = ''
 SERVER_PORT = 8080
 
 # 管理员密码
-ADMIN_PASSWORD = '12345678'  # 假设这是您设置的管理员密码
+ADMIN_PASSWORD = '12345678'  # 密码
 
 # 客户端和管理员的套接字列表
 client_sockets = []
@@ -41,11 +41,13 @@ def client_handler(client_sock, client_address):
                     client_sock.send("password false".encode())
             elif message == "client":
                 # 客户端请求跳过登录，进入普通客户端处理逻辑
+                print("client require to connect")
                 client_sockets.append(client_sock)
                 handle_client(client_sock,client_address)
                 break
             else:
                 print(f"未知消息 {message} 从 {client_address} 收到。")
+                break
         except ConnectionResetError:
             # 客户端断开连接
             print(f"客户端 {client_address} 断开连接。")

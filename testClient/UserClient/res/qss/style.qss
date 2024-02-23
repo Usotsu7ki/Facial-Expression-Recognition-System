@@ -1,0 +1,50 @@
+#shotButton{
+    border: none;
+    font: 10pt Arial;
+    background-color:#ffffff;
+    border-radius: 5px;
+}
+
+#shotButton:hover{
+    border: none;
+    background-color:#f6ffff;
+    border-radius: 5px;
+}
+
+#shotButton:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:#ffffff;
+    border-radius: 5px;
+}
+
+#recordButton{
+border: none;
+font: 10pt Arial;
+background-color:#ffffff;
+border-radius: 5px;
+}
+
+#recordButton:hover{
+border: none;
+background-color:#f6ffff;
+border-radius: 5px;
+}
+
+#recordButton:pressed{
+color:#ffffff;
+border: none;
+background-color:#ffffff;
+border-radius: 5px;
+}
+#frame_background{
+   background-image: url(:/res/pic/login.jpg);
+}
+#Camera{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+#label{
+    color:#ffffff;
+    font: 10pt Arial;
+}

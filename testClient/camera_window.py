@@ -9,6 +9,9 @@ import cv2
 import socket
 import time
 
+from contactus import ContactUsDialog
+from help import HelpDialog
+
 # 服务端ip地址
 HOST = '127.0.0.1'
 # 服务端端口号
@@ -20,7 +23,15 @@ class CameraWindow(QtWidgets.QMainWindow):
 
     def __init__(self,client_socket, main_window):
         super().__init__()
-        uic.loadUi('camera_window.ui', self)
+        uic.loadUi('UserClient\mainwindow.ui', self)
+
+        try:
+            with open(r"UserClient\res\qss\style.qss", "r", encoding="utf-8") as file:
+                stylesheet = file.read()
+                self.setStyleSheet(stylesheet)
+        except Exception as e:
+            print(f"Error loading stylesheet in CameraWindow: {e}")
+
         self.client_socket = client_socket
         self.main_window = main_window
 
@@ -36,8 +47,11 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.scene = QGraphicsScene(self)
         self.graphicsView.setScene(self.scene)
 
-        self.consoleTextEdit = self.findChild(QtWidgets.QTextEdit,'consoleTextEdit')
+        self.consoleTextEdit = self.findChild(QtWidgets.QTextEdit,'textEdit')
         self.consoleTextEdit.setReadOnly(True)
+
+        self.cameraCheckBox = self.findChild(QtWidgets.QCheckBox, 'Camera')
+
 
         self.cap = cv2.VideoCapture(0)
         self.timer_show = QTimer(self)
@@ -50,13 +64,23 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.timer_send.start(20)
 
         self.back_to_main_signal.connect(main_window.show)
-        threading.Thread(target=self.listen_server_messages, daemon=True).start()#aia
+        #threading.Thread(target=self.listen_server_messages, daemon=True).start()#aia
 
     def append_to_console(self,message):
         self.consoleTextEdit.append(message)
 
     def backAction(self):
         print("back action")
+
+        if self.timer_show.isActive():
+            self.timer_show.stop()
+
+        if self.timer_send.isActive():
+            self.timer_send.stop()
+
+        if self.cap.isOpened():
+            self.cap.release()
+
         self.back_to_main_signal.emit()
         self.close()
 
@@ -155,7 +179,11 @@ class CameraWindow(QtWidgets.QMainWindow):
 
 
     def helpActionTriggered(self):
-        QMessageBox.information(self, 'help', 'this is help context')
+        print("open help dialog")
+        dialog = HelpDialog(self)
+        dialog.exec_()
 
     def contactActionTriggered(self):
-        QMessageBox.information(self, 'contact us', 'this is contact us text')
+        print("open contact us dialog")
+        dialog = ContactUsDialog(self)
+        dialog.exec_()
