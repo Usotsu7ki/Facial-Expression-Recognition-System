@@ -1,0 +1,50 @@
+#frame_background{
+    background-image: url(:/res/pic/login.jpg);
+}
+
+
+#sendButton{
+    color:#ffffff;
+    border: none;
+    font: 10pt Arial;
+    background-color:rgb(0, 48, 145);
+    border-radius: 5px;
+}
+
+#sendButton:hover{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(21, 193, 182);
+    border-radius: 5px;
+}
+/*按钮-鼠标按下*/
+#sendButton:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 255, 255);
+    border-radius: 5px;
+}
+
+#helpButton{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#ffffff;
+}
+
+/*按钮-user?-鼠标悬停*/
+#helpButton:hover{
+    border:none;
+    color:#e83737;
+}
+
+#UsButton{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#ffffff;
+}
+
+/*按钮-user?-鼠标悬停*/
+#UsButton:hover{
+    border:none;
+    color:#e83737;
+}

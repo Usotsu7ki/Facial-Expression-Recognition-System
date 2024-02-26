@@ -51,7 +51,7 @@ def client_handler(client_sock, client_address):
                 handle_client(client_sock,client_address)
                 break
             else:
-                print(f"未知消息 {message} 从 {client_address} 收到。")
+                print(f"未知消息 {message} 从 {client_address} 收到,可能是断开连接")
                 break
         except ConnectionResetError:
             # 客户端断开连接

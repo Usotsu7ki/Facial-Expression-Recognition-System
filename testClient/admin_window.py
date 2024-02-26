@@ -1,16 +1,15 @@
 import socket
 import threading
-
-# import cv2
-# import numpy as np
 from PyQt5 import QtWidgets, uic, QtCore
 # import sys
 
-from PyQt5.QtWidgets import QMessageBox
+from contactus import ContactUsDialog
+from help import HelpDialog
 
-HOST = ''
+HOST = '127.0.0.1'
 PORT = 8080
 ADDRESS = (HOST, PORT)
+#这里之后要改成读取本地ip
 
 
 class AdminWindow(QtWidgets.QMainWindow):
@@ -19,16 +18,25 @@ class AdminWindow(QtWidgets.QMainWindow):
 
     def __init__(self, client_socket):
         super().__init__()
-        uic.loadUi('admin.ui', self)
+        uic.loadUi('admin\mainwindow.ui', self)
+        print("load ui finish")
+
+        try:
+            with open(r"admin\res\qss\style.qss", "r", encoding="utf-8") as file:
+                stylesheet = file.read()
+                self.setStyleSheet(stylesheet)
+        except Exception as e:
+            print(f"Error loading stylesheet in AdminWindow: {e}")
+
         self.client_socket = client_socket
 
-        self.clientListWidget = self.findChild(QtWidgets.QListWidget, 'listWidget')
+        self.clientListWidget = self.findChild(QtWidgets.QListWidget, 'listWidget_2')
         self.consoleTextEdit = self.findChild(QtWidgets.QTextEdit, 'textEdit')
         self.sendButton = self.findChild(QtWidgets.QPushButton, 'sendButton')
 
         self.helpAction = self.findChild(QtWidgets.QAction, 'actionhelp')
         self.helpAction.triggered.connect(self.helpActionTriggered)
-        self.contactAction = self.findChild(QtWidgets.QAction, 'actioncontact_us')
+        self.contactAction = self.findChild(QtWidgets.QAction, 'actionContact_us')
         self.contactAction.triggered.connect(self.contactActionTriggered)
 
         self.sendButton.clicked.connect(self.sendMessage) # send button
@@ -110,10 +118,12 @@ class AdminWindow(QtWidgets.QMainWindow):
 
 
 
-
-
     def helpActionTriggered(self):
-        QMessageBox.information(self, 'help', 'this is help context')
+        print("open help dialog")
+        dialog = HelpDialog(self)
+        dialog.exec_()
 
     def contactActionTriggered(self):
-        QMessageBox.information(self, 'contact us', 'this is contact us text')
+        print("open contact us dialog")
+        dialog = ContactUsDialog(self)
+        dialog.exec_()

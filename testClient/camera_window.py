@@ -1,8 +1,9 @@
+import os
 import queue
 import threading
 
 from PyQt5 import QtWidgets, uic, QtCore
-from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtCore import QTimer, Qt, QCoreApplication
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QGraphicsScene
 import cv2
@@ -12,31 +13,39 @@ import time
 from contactus import ContactUsDialog
 from help import HelpDialog
 
-# 服务端ip地址
-HOST = '127.0.0.1'
-# 服务端端口号
-PORT = 8080
-ADDRESS = (HOST, PORT)
+def read_server_address():
+    with open("address.txt", "r") as file:
+        lines = file.readlines()
+        host = lines[0].strip()
+        port = int(lines[1].strip())
+    return host, port
 
 class CameraWindow(QtWidgets.QMainWindow):
     back_to_main_signal = QtCore.pyqtSignal()
 
     def __init__(self,client_socket, main_window):
         super().__init__()
-        uic.loadUi('UserClient\mainwindow.ui', self)
+        uic.loadUi('cameraWindow\mainwindow.ui', self)
 
         try:
-            with open(r"UserClient\res\qss\style.qss", "r", encoding="utf-8") as file:
+            with open(r"cameraWindow\res\qss\style.qss", "r", encoding="utf-8") as file:
                 stylesheet = file.read()
                 self.setStyleSheet(stylesheet)
         except Exception as e:
             print(f"Error loading stylesheet in CameraWindow: {e}")
 
+        #确保保存视频的record文件夹存在
+        record_path = os.path.join(QCoreApplication.applicationDirPath(), "record")
+        os.makedirs(record_path, exist_ok=True)
+
         self.client_socket = client_socket
         self.main_window = main_window
 
         self.returnButton = self.findChild(QtWidgets.QPushButton, 'pushButton')
-        self.returnButton.clicked.connect(self.backAction)
+        self.returnButton.clicked.connect(self.back_action)
+
+        self.recordButton = self.findChild(QtWidgets.QPushButton, 'recordButton')
+        self.recordButton.clicked.connect(self.toggleRecording)
 
         self.helpAction = self.findChild(QtWidgets.QAction, 'actionhelp')
         self.helpAction.triggered.connect(self.helpActionTriggered)
@@ -50,8 +59,9 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.consoleTextEdit = self.findChild(QtWidgets.QTextEdit,'textEdit')
         self.consoleTextEdit.setReadOnly(True)
 
-        self.cameraCheckBox = self.findChild(QtWidgets.QCheckBox, 'Camera')
+        self.host, self.port = read_server_address()
 
+        self.cameraCheckBox = self.findChild(QtWidgets.QCheckBox, 'Camera')
 
         self.cap = cv2.VideoCapture(0)
         self.timer_show = QTimer(self)
@@ -64,22 +74,37 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.timer_send.start(20)
 
         self.back_to_main_signal.connect(main_window.show)
-        #threading.Thread(target=self.listen_server_messages, daemon=True).start()#aia
+        threading.Thread(target=self.listen_server_messages, daemon=True).start()#aia
 
+        self.is_recording = False
+        self.video_writer = None
+
+    def toggleRecording(self):
+        if self.is_recording:
+            # 停止录制
+            self.is_recording = False
+            self.recordButton.setText("Record")
+            if self.video_writer:
+                self.video_writer.release()
+                self.video_writer = None
+            self.append_to_console("Recording finished")
+        else:
+            # 开始录制
+            self.is_recording = True
+            self.recordButton.setText("Stop")
+            filename = os.path.join(QCoreApplication.applicationDirPath(), "record",
+                                    "recorded-{}.avi".format(time.strftime("%Y%m%d-%H%M%S")))
+            fourcc = cv2.VideoWriter_fourcc(*'XVID')
+            self.video_writer = cv2.VideoWriter(filename, fourcc, 20.0, (640, 480))
+            self.append_to_console("Recording started")
     def append_to_console(self,message):
         self.consoleTextEdit.append(message)
 
-    def backAction(self):
+    def back_action(self):
         print("back action")
+        self.append_to_console("back action")
 
-        if self.timer_show.isActive():
-            self.timer_show.stop()
-
-        if self.timer_send.isActive():
-            self.timer_send.stop()
-
-        if self.cap.isOpened():
-            self.cap.release()
+        self.cleanup_resources()
 
         self.back_to_main_signal.emit()
         self.close()
@@ -112,6 +137,10 @@ class CameraWindow(QtWidgets.QMainWindow):
             self.frame_queue.get()
         self.frame_queue.put(frame)
 
+        #如果在录制也开始写入视频文件
+        if self.is_recording and self.video_writer is not None:
+            self.video_writer.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+
     def send_frame(self):
         # 处理队列中的图像帧并发送
         if not self.frame_queue.empty():
@@ -126,7 +155,7 @@ class CameraWindow(QtWidgets.QMainWindow):
                 self.append_to_console("error in packing and sending"+str(e))
 
 
-
+    #废弃不用了
     def closeCameraAndTCPConnection(self):
         # 关闭摄像头的代码
         print("Closing camera and TCP connection")
@@ -142,17 +171,23 @@ class CameraWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):#重写关闭窗口函数，清理资源
         self.cleanup_resources()
+        self.client_socket.send("close\n".encode())
         event.accept()
 
     def cleanup_resources(self):
         print("Cleaning up resources")
+        if self.is_recording:
+            self.toggleRecording()  # 停止录制并保存
+
         if self.timer_show.isActive():
             self.timer_show.stop()
+
         if self.timer_send.isActive():
             self.timer_send.stop()
+
         if self.cap.isOpened():
             self.cap.release()
-        self.client_socket.send("close\n".encode())
+
         print("Resources cleaned up")
 
 
@@ -165,7 +200,7 @@ class CameraWindow(QtWidgets.QMainWindow):
                 server_message = self.client_socket.recv(1024).decode()
                 if server_message == "disconnect":
                     print("Received disconnect from server")
-                    self.backAction()
+                    self.back_action()
                     break
                 else:
                     print("其他消息")
