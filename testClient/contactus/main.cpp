@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QFile file(":/qss/style.qss");/*QSS文件所在的路径*/
+    QFile file(":/res/qss/style.qss");/*QSS文件所在的路径*/
 
     file.open(QFile::ReadOnly);
     QTextStream filetext(&file);

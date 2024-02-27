@@ -25,12 +25,13 @@ HEADERS += \
 FORMS += \
     dialog.ui
 
+TRANSLATIONS += \
+    testProgress_en_GB.ts
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    qss.qrc
-    pic.qrc
-
+    resources.qrc

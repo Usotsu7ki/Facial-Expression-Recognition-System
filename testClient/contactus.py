@@ -6,7 +6,7 @@ class ContactUsDialog(QtWidgets.QDialog):
         uic.loadUi('contactUs\dialog.ui', self)
 
         try:
-            with open(r"contactUs\qss\style.qss", "r", encoding="utf-8") as file:
+            with open(r"contactUs\res\qss\style.qss", "r", encoding="utf-8") as file:
                 stylesheet = file.read()
                 self.setStyleSheet(stylesheet)
         except Exception as e:

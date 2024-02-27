@@ -12,7 +12,6 @@ Widget::Widget(QWidget *parent) :
     ui->label_pwd->setScaledContents(true);         //图片自适应label大小
 
     ui->lineE_pwd->setEchoMode(QLineEdit::Password);//设置为小黑点
-
 }
 
 /*

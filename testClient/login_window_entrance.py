@@ -8,6 +8,8 @@ import time
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMessageBox, QApplication, QProgressDialog
 import socket
+
+from ProgressBarDialog import ProgressBarDialog
 from camera_window import CameraWindow
 from admin_window import AdminWindow
 from contactus import ContactUsDialog
@@ -23,16 +25,14 @@ def read_server_address():
 
 def show_loading_dialog():
     # 创建一个QProgressDialog实例
-    progressDialog = QProgressDialog("Loading...", None, 0, 100)
+    progressDialog = ProgressBarDialog()
     progressDialog.setWindowTitle("Launching, Please Wait")
-    progressDialog.setCancelButton(None)  # 禁用取消按钮
     progressDialog.setWindowModality(Qt.ApplicationModal)
     progressDialog.show()
 
     # 更新进度条来模拟加载过程
-    for i in range(1, 101):
-        progressDialog.setValue(i)
-        QApplication.processEvents()  # 处理事件，保持界面响应
+    for i in range(1, 71):
+        progressDialog.update_progress(i)
         time.sleep(0.01)
 
     progressDialog.close()

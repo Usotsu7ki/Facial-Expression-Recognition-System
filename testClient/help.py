@@ -6,7 +6,7 @@ class HelpDialog(QtWidgets.QDialog):
         uic.loadUi('help\dialog.ui', self)
 
         try:
-            with open(r"help\qss\style.qss", "r", encoding="utf-8") as file:
+            with open(r"help\res\qss\style.qss", "r", encoding="utf-8") as file:
                 stylesheet = file.read()
                 self.setStyleSheet(stylesheet)
         except Exception as e:

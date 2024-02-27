@@ -1,5 +1,5 @@
 /**
-    该页面为粉红色皮肤
+
 */
 
 
@@ -84,6 +84,30 @@ QLineEdit{
     background-color:rgb(0, 255, 255);
     border-radius: 5px;
 }
+
+/*按钮-登录*/
+#btn_forget{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 48, 145);
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标悬停*/
+#btn_forget:hover{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(21, 193, 182);
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标按下*/
+#btn_forget:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 255, 255);
+    border-radius: 5px;
+}
+
+
 /*label-login*/
 #label_login
 {
