@@ -1,6 +1,7 @@
 # login_window_entrance.py
 
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 
 import resources_rc
 import sys
@@ -13,7 +14,9 @@ from ProgressBarDialog import ProgressBarDialog
 from camera_window import CameraWindow
 from admin_window import AdminWindow
 from contactus import ContactUsDialog
+from forgetPasswordWindow import ForgetPasswordWindow
 from help import HelpDialog
+from registerWindow import RegisterWindow
 
 
 def read_server_address():
@@ -42,8 +45,10 @@ class MainWindow(QtWidgets.QWidget):
         super(MainWindow, self).__init__()
         uic.loadUi('login\widget.ui', self)  # 加载UI文件
 
+        self.label_pwd_2.setPixmap(QPixmap(":/res/pic/user_name.png"))
+
         self.btn_login.clicked.connect(self.submitPassword)  # 绑定提交按钮的点击事件
-        self.btn_forget.clicked.connect(self.skipLogin)  # 绑定跳过按钮的点击事件
+        #self.btn_forget.clicked.connect(self.skipLogin)  # 绑定跳过按钮的点击事件
 
         '''
         self.helpAction = self.findChild(QtWidgets.QAction, 'actionhelp')
@@ -52,7 +57,12 @@ class MainWindow(QtWidgets.QWidget):
         self.contactAction.triggered.connect(self.contactActionTriggered)
         '''
 
+        self.lineE_username.setPlaceholderText("Enter username")
+
         self.lineE_pwd.setEchoMode(QtWidgets.QLineEdit.Password)
+
+        self.pushButton_register.clicked.connect(self.openRegisterWindow)
+        self.pushButton_fgtpwd.clicked.connect(self.openForgetPasswordWindow)
 
         self.btn_forget_2.clicked.connect(self.contactActionTriggered)
         self.btn_forget_3.clicked.connect(self.helpActionTriggered)
@@ -63,6 +73,17 @@ class MainWindow(QtWidgets.QWidget):
 
         self.client_socket = self.connect_to_server()  # 建立到服务器的连接
 
+
+
+    def openRegisterWindow(self):
+        print("open stage open")
+        self.register_window = RegisterWindow(self)
+        self.register_window.show()
+
+    def openForgetPasswordWindow(self):
+        print("forget password open")
+        self.forget_password_window = ForgetPasswordWindow(self)
+        self.forget_password_window.show()
 
 
     def connect_to_server(self):
@@ -76,21 +97,37 @@ class MainWindow(QtWidgets.QWidget):
 
     def submitPassword(self):
         password = self.lineE_pwd.text()
-        self.client_socket.send(("password:"+password).encode())  # 向服务器发送密码
+        self.client_socket.send(("password:" + password).encode())  # 向服务器发送密码
         response = self.client_socket.recv(1024).decode()  # 接收服务器响应
         if response == "admin":
             self.admin_window = AdminWindow(self.client_socket)  # 创建管理员界面
             self.admin_window.show()
             self.close()
             print("admin stage open")
+        elif response == "client":
+            reply = QMessageBox.question(self, 'Webcam Permission', 'Please give us permission to open the camera.',
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                print("open camera window")
+                self.client_socket.send("client".encode())
+                if self.client_socket.recv(1024).decode() == "ok":
+                    print("receive respnce ok from server, open the webcam and send imgs")
+                    self.camera_window = CameraWindow(self.client_socket, self)
+                    self.camera_window.show()
+                    self.hide()
+                else:
+                    print(self.client_socket.recv(1024).decode())
+            else:
+                print("camera permission not granted")
         else:
+            QMessageBox.warning(self, 'Login Failed', 'Wrong password or username, please try again!', QMessageBox.Ok)
             print("wrong password")
-            #self.lineEdit.setText("wrong password")  # 显示密码错误信息
 
     """
     跳过登录，给其相应问题框：如果同意给摄像头权限就打开摄像头，关闭登录窗口
             不同意就不操作
     """
+    #skipLogin方法已经废弃
     def skipLogin(self):
         reply = QMessageBox.question(self, 'webcam permission', 'Please give us permission to open camera？',
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)

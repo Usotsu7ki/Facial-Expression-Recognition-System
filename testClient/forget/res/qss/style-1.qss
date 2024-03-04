@@ -1,0 +1,156 @@
+/**
+
+*/
+
+
+/*背景*/
+#frame_background{
+    background:url(:/res/pic/login.jpg);
+}
+/*登录背景*/
+#frame_login{background-color:#ffffff}
+
+/*右侧图片*/
+#frame_pic{
+    background-image:url(:/res/pic/right.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;  /* 禁止背景图像重复 */
+}
+/*账户和密码框*/
+#frame_pwd{
+    border: 1px solid #696969;
+    border-radius: 5px;
+}
+#frame_pwd_2{
+    border: 1px solid #696969;
+    border-radius: 5px;
+}
+
+#frame_pwd_4{
+    border: 1px solid #696969;
+    border-radius: 5px;
+}
+#frame_pwd_5{
+    border: 1px solid #696969;
+    border-radius: 5px;
+}
+QLineEdit{
+    border: none;
+}
+
+
+#btn_forget{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;
+}
+
+/*按钮-user?-鼠标悬停*/
+#btn_forget:hover{
+    border:none;
+    color:#e83737;
+}
+
+#btn_forget_3{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;
+}
+
+/*按钮-user?-鼠标悬停*/
+#btn_forget_3:hover{
+    border:none;
+    color:#e83737;
+}
+
+#btn_forget_2{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;
+}
+
+/*按钮-user?-鼠标悬停*/
+#btn_forget_2:hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#e83737;
+}
+/*按钮-登录*/
+#btn_login{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 48, 145);
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标悬停*/
+#btn_login:hover{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(21, 193, 182);
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标按下*/
+#btn_login:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 255, 255);
+    border-radius: 5px;
+}
+
+/*按钮-登录*/
+#btn_forget{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 48, 145);
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标悬停*/
+#btn_forget:hover{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(21, 193, 182);
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标按下*/
+#btn_forget:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 255, 255);
+    border-radius: 5px;
+}
+
+
+/*label-login*/
+#label_login
+{
+    color:rgb(0, 48, 145);
+
+}
+
+
+/*图标-密码*/
+#label_pwd
+{
+    border-image:url(:/res/pic/pwd.png);
+
+}
+#label_pwd_2
+{
+    border-image:url(:/res/pic/user_name.png);
+}
+#label_pwd_3
+{
+    border-image:url(:/res/pic/protect.jpeg);
+}
+
+#label_pwd_4
+{
+    border-image:url(:/res/pic/protect.jpeg);
+}
+
+#label_pwd_5
+{
+    border-image:url(:/res/pic/pwd.png);
+}
+
+
