@@ -1,8 +1,8 @@
 from PyQt5 import QtWidgets, uic
 
 class ForgetPasswordWindow(QtWidgets.QDialog):
-    def __init__(self, parent=None):
-        super(ForgetPasswordWindow, self).__init__(parent)
+    def __init__(self, client_socket):
+        super(ForgetPasswordWindow, self).__init__()
         uic.loadUi('forget/widget.ui', self)  # 加载忘记密码窗口的UI文件
 
         # 加载样式表

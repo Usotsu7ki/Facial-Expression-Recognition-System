@@ -77,12 +77,12 @@ class MainWindow(QtWidgets.QWidget):
 
     def openRegisterWindow(self):
         print("open stage open")
-        self.register_window = RegisterWindow(self)
+        self.register_window = RegisterWindow(self.client_socket)
         self.register_window.show()
 
     def openForgetPasswordWindow(self):
         print("forget password open")
-        self.forget_password_window = ForgetPasswordWindow(self)
+        self.forget_password_window = ForgetPasswordWindow(self.client_socket)
         self.forget_password_window.show()
 
 
@@ -96,32 +96,42 @@ class MainWindow(QtWidgets.QWidget):
             #reply = QMessageBox.show(self,"connet fail")
 
     def submitPassword(self):
+        username = self.lineE_username.text()
         password = self.lineE_pwd.text()
-        self.client_socket.send(("password:" + password).encode())  # 向服务器发送密码
-        response = self.client_socket.recv(1024).decode()  # 接收服务器响应
-        if response == "admin":
-            self.admin_window = AdminWindow(self.client_socket)  # 创建管理员界面
-            self.admin_window.show()
-            self.close()
-            print("admin stage open")
-        elif response == "client":
-            reply = QMessageBox.question(self, 'Webcam Permission', 'Please give us permission to open the camera.',
-                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                print("open camera window")
-                self.client_socket.send("client".encode())
-                if self.client_socket.recv(1024).decode() == "ok":
-                    print("receive respnce ok from server, open the webcam and send imgs")
-                    self.camera_window = CameraWindow(self.client_socket, self)
-                    self.camera_window.show()
-                    self.hide()
+
+        if username and password:
+            login_info = f"login:{username}:{password}"
+            self.client_socket.send(login_info.encode())
+            print("发送完毕")
+            response = self.client_socket.recv(1024).decode()
+            if response == "admin":
+                print("接到admin指令，初始化并打开管理员界面")
+                self.admin_window = AdminWindow(self.client_socket)  # 创建管理员界面
+                self.admin_window.show()
+                self.close()
+                print("admin stage open")
+            elif response == "client":
+                reply = QMessageBox.question(self, 'Webcam Permission', 'Please give us permission to open the camera.',
+                                             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    print("open camera window")
+                    if self.client_socket.recv(1024).decode() == "ok":
+                        print("receive respnce ok from server, open the webcam and send imgs")
+                        self.camera_window = CameraWindow(self.client_socket, self)
+                        self.camera_window.show()
+                        self.hide()
+                    else:
+                        print(self.client_socket.recv(1024).decode())
                 else:
-                    print(self.client_socket.recv(1024).decode())
+                    print("camera permission not granted")
+            elif response == "fail":
+                QMessageBox.warning(self, 'Login Failed', 'No such user found or incorrect password.', QMessageBox.Ok)
             else:
-                print("camera permission not granted")
+                QMessageBox.warning(self, 'Error', 'An error occurred during login.', QMessageBox.Ok)
+                print("wrong username or password")
         else:
-            QMessageBox.warning(self, 'Login Failed', 'Wrong password or username, please try again!', QMessageBox.Ok)
-            print("wrong password")
+            QMessageBox.warning(self, 'Input Error', 'Please enter both username and password.', QMessageBox.Ok)
+
 
     """
     跳过登录，给其相应问题框：如果同意给摄像头权限就打开摄像头，关闭登录窗口
