@@ -3,18 +3,90 @@ import socket
 import threading
 import cv2
 import numpy as np
+import sqlite3
 
 # 服务器IP和端口配置
 SERVER_IP = ''
 SERVER_PORT = 8080
 
-
+DATABASE_FILE = 'server_database.db'
 
 # 客户端和管理员的套接字列表
 client_sockets = []
 admin_sock = None
 
+# 暂时定义一个管理员注册码为12345678
+correct_admin_number = 12345678
 
+
+def verify_user_credentials(username, password):
+    connection = sqlite3.connect(DATABASE_FILE)
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT password, admin_number FROM users WHERE username=?", (username,))
+    user_record = cursor.fetchone()
+
+    connection.close()
+
+    if user_record:
+        stored_password, admin_number = user_record
+        #判断密码
+        if password == stored_password:
+            #判断是否有admin码
+            if admin_number:
+                is_admin = True
+            else:
+                is_admin = False
+            return True, is_admin
+        else:
+            return False, False
+    else:
+        return False, False
+
+
+
+def setup_database():
+    conn = sqlite3.connect(DATABASE_FILE)
+    cursor = conn.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        security_question TEXT NOT NULL,
+        security_answer TEXT NOT NULL,
+        admin_number TEXT
+    )''')
+    conn.commit()
+    conn.close()
+
+def register_user(username, password, security_question, security_answer, admin_number):
+    print("注册用户")
+    conn = sqlite3.connect(DATABASE_FILE)
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+        INSERT INTO users (username, password, security_question, security_answer, admin_number)
+        VALUES (?, ?, ?, ?, ?)''', (username, password, security_question, security_answer, admin_number))
+        conn.commit()
+        print("注册完毕")
+        return True
+    except sqlite3.IntegrityError:
+        return False
+    except Exception as e:
+        print(f"Database error: {e}")
+        return False
+    finally:
+        conn.close()
+
+# 验证用户名是否已存在
+def username_exists(username):
+    conn = sqlite3.connect(DATABASE_FILE)
+    cursor = conn.cursor()
+    cursor.execute('SELECT id FROM users WHERE username=?', (username,))
+    user = cursor.fetchone()
+    conn.close()
+    return user is not None
 
 def load_admin_password():
     try:
@@ -31,25 +103,52 @@ def client_handler(client_sock, client_address):
         try:
             # 接收客户端发送的信息
             message = client_sock.recv(1024).decode()
-            if message.startswith("password:"):
-                _, password = message.split(":")
-                print(f"password: {password}")
-                if password == ADMIN_PASSWORD:
-                    # 如果是管理员密码，发送确认消息(主界面接收并打开admin界面)
-                    client_sockets.append(client_sock)
-                    admin_sock = client_sock
-                    client_sock.send("admin".encode())
-                    print(f"管理员 {client_address} 已连接。")
-                    handle_admin(client_sock)
-                    break
+            if message.startswith("login:"):
+                _, username, password = message.split(":", 2)
+                # 收到后进行用户名和密码的验证
+                user_verified, is_admin = verify_user_credentials(username, password)
+                if user_verified:
+                    if is_admin:
+                        # 如果是管理员，发送确认消息(主界面接收并打开admin界面)
+                        print("admin require to connect")
+                        client_sockets.append(client_sock)
+                        admin_sock = client_sock
+                        client_sock.send("admin".encode())
+                        print(f"管理员 {client_address} 已连接。")
+                        handle_admin(client_sock)
+                        break
+                    else:
+                        # 不是管理员，进入普通客户端处理逻辑
+                        print("client require to connect")
+                        client_sock.send("client".encode())
+                        client_sockets.append(client_sock)
+                        handle_client(client_sock, client_address)
+                        break
                 else:
-                    client_sock.send("password false".encode())
-            elif message == "client":
-                # 客户端请求跳过登录，进入普通客户端处理逻辑
-                print("client require to connect")
-                client_sockets.append(client_sock)
-                handle_client(client_sock,client_address)
-                break
+                    client_sock.send("fail".encode())
+
+            elif message.startswith("register:"):
+                print("user want to register")
+                _, registration_info = message.split("register:", 1)
+                username, password, security_question, security_answer, admin_number = registration_info.split("|")
+
+                # 如果提供了 admin_number，需要验证
+                if admin_number and admin_number != str(correct_admin_number):
+                    client_sock.send("fail_admin".encode())
+                    continue
+
+                # 检查用户名是否已存在
+                if username_exists(username):
+                    client_sock.send("fail_username_same".encode())
+                    continue
+
+                # 注册用户
+                if register_user(username, password, security_question, security_answer, admin_number):
+                    client_sock.send("register success".encode())
+                else:
+                    client_sock.send("fail_database".encode())
+                    continue
+
             else:
                 print(f"未知消息 {message} 从 {client_address} 收到,可能是断开连接")
                 break
@@ -187,6 +286,7 @@ def accept_connections(server_socket):
         threading.Thread(target=client_handler, args=(client_sock, client_address)).start()
 
 def main():
+    setup_database()
     global ADMIN_PASSWORD
     ADMIN_PASSWORD = load_admin_password()
     if ADMIN_PASSWORD is None:
