@@ -14,9 +14,9 @@ Widget::Widget(QWidget *parent) :
     ui->label_pwd_4->setScaledContents(true);         //图片自适应label大小
     ui->label_pwd_5->setScaledContents(true);         //图片自适应label大小
 
-    ui->lineE_pwd_2->setPlaceholderText("User name");
-    ui->lineE_pwd_4->setPlaceholderText("Security answer");
-    ui->lineE_pwd_5->setPlaceholderText("New password");
+    ui->username->setPlaceholderText("User name");
+    ui->security_answer->setPlaceholderText("Security answer");
+    ui->new_password->setPlaceholderText("New password");
 
     // 创建一个QPalette对象
    QPalette palette;

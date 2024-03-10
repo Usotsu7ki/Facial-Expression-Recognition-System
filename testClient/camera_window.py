@@ -23,7 +23,7 @@ def read_server_address():
 class CameraWindow(QtWidgets.QMainWindow):
     back_to_main_signal = QtCore.pyqtSignal()
 
-    def __init__(self,client_socket, main_window):
+    def __init__(self,client_socket, main_window,server_host,server_port):
         super().__init__()
         uic.loadUi('cameraWindow\mainwindow.ui', self)
 
@@ -40,6 +40,9 @@ class CameraWindow(QtWidgets.QMainWindow):
 
         self.client_socket = client_socket
         self.main_window = main_window
+
+        self.server_host = server_host
+        self.server_port = server_port
 
         self.returnButton = self.findChild(QtWidgets.QPushButton, 'pushButton')
         self.returnButton.clicked.connect(self.back_action)
@@ -188,7 +191,24 @@ class CameraWindow(QtWidgets.QMainWindow):
         if self.cap.isOpened():
             self.cap.release()
 
+        #self.client_socket.close()
+        #self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #self.client_socket.connect((self.server_host, self.server_port))
+        self.clear_socket_buffer()
         print("Resources cleaned up")
+
+    def clear_socket_buffer(self):
+        """清除在socket缓冲区中可能残留的数据。"""
+        self.client_socket.setblocking(False)
+        try:
+            while True:
+                data = self.client_socket.recv(1024)
+                if not data:
+                    break  # 没有更多的数据
+        except BlockingIOError:
+            pass
+        finally:
+            self.client_socket.setblocking(True)
 
 
     """

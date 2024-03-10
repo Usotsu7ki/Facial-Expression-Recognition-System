@@ -45,6 +45,7 @@ class AdminWindow(QtWidgets.QMainWindow):
 
         self.update_client_list_signal.connect(self.update_client_list)
         self.start_receiving()
+        print("加载admin完毕")
 
     def start_receiving(self):
         print("start receiving")

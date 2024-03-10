@@ -102,8 +102,9 @@ class MainWindow(QtWidgets.QWidget):
         if username and password:
             login_info = f"login:{username}:{password}"
             self.client_socket.send(login_info.encode())
-            print("发送完毕")
+            print("username password 发送完毕")
             response = self.client_socket.recv(1024).decode()
+            print("Received:", response)
             if response == "admin":
                 print("接到admin指令，初始化并打开管理员界面")
                 self.admin_window = AdminWindow(self.client_socket)  # 创建管理员界面
@@ -115,15 +116,18 @@ class MainWindow(QtWidgets.QWidget):
                                              QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 if reply == QMessageBox.Yes:
                     print("open camera window")
+                    self.client_socket.send("request_ok".encode())
                     if self.client_socket.recv(1024).decode() == "ok":
                         print("receive respnce ok from server, open the webcam and send imgs")
-                        self.camera_window = CameraWindow(self.client_socket, self)
+                        self.camera_window = CameraWindow(self.client_socket, self,self.host,self.port)
                         self.camera_window.show()
                         self.hide()
                     else:
                         print(self.client_socket.recv(1024).decode())
                 else:
+                    self.client_socket.send("request_back".encode())
                     print("camera permission not granted")
+                    return
             elif response == "fail":
                 QMessageBox.warning(self, 'Login Failed', 'No such user found or incorrect password.', QMessageBox.Ok)
             else:

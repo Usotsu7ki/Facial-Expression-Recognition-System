@@ -19,6 +19,51 @@ admin_sock = None
 correct_admin_number = 12345678
 
 
+
+
+def verify_security_answer(username, security_answer):
+    conn = sqlite3.connect(DATABASE_FILE)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT security_answer FROM users WHERE username=?", (username,))
+        answer = cursor.fetchone()
+        if answer and answer[0] == security_answer:
+            return True
+        else:
+            return False
+    finally:
+        conn.close()
+
+
+def update_password(username, new_password):
+    conn = sqlite3.connect(DATABASE_FILE)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("UPDATE users SET password=? WHERE username=?", (new_password, username))
+        conn.commit()
+        return True
+    except sqlite3.Error:
+        return False
+    finally:
+        conn.close()
+
+
+
+def get_security_question(username):
+    conn = sqlite3.connect(DATABASE_FILE)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT security_question FROM users WHERE username=?", (username,))
+        question = cursor.fetchone()
+        if question:
+            return question[0]
+        else:
+            return None
+    finally:
+        conn.close()
+
+
+
 def verify_user_credentials(username, password):
     connection = sqlite3.connect(DATABASE_FILE)
     cursor = connection.cursor()
@@ -97,12 +142,14 @@ def load_admin_password():
         return None
 
 def client_handler(client_sock, client_address):
+    clear_socket_buffer(client_sock)
     global admin_sock
     print("client handler")
     while True:
         try:
             # 接收客户端发送的信息
             message = client_sock.recv(1024).decode()
+############################第一个分支，login#############################################
             if message.startswith("login:"):
                 _, username, password = message.split(":", 2)
                 # 收到后进行用户名和密码的验证
@@ -115,7 +162,7 @@ def client_handler(client_sock, client_address):
                         admin_sock = client_sock
                         client_sock.send("admin".encode())
                         print(f"管理员 {client_address} 已连接。")
-                        handle_admin(client_sock)
+                        handle_admin(client_sock,client_address)
                         break
                     else:
                         # 不是管理员，进入普通客户端处理逻辑
@@ -126,7 +173,7 @@ def client_handler(client_sock, client_address):
                         break
                 else:
                     client_sock.send("fail".encode())
-
+############################第二个分支，register#############################################
             elif message.startswith("register:"):
                 print("user want to register")
                 _, registration_info = message.split("register:", 1)
@@ -134,21 +181,43 @@ def client_handler(client_sock, client_address):
 
                 # 如果提供了 admin_number，需要验证
                 if admin_number and admin_number != str(correct_admin_number):
+                    print("admin number incorrect")
                     client_sock.send("fail_admin".encode())
                     continue
 
                 # 检查用户名是否已存在
                 if username_exists(username):
+                    print("username duplicate")
                     client_sock.send("fail_username_same".encode())
                     continue
 
                 # 注册用户
                 if register_user(username, password, security_question, security_answer, admin_number):
+                    print("register success")
                     client_sock.send("register success".encode())
                 else:
+                    print("fail in database")
                     client_sock.send("fail_database".encode())
                     continue
-
+############################第三个分支，获取密保#############################################
+            elif message.startswith("forget:"):
+                username = message.split(":", 1)[1]
+                security_question = get_security_question(username)
+                if security_question:
+                    client_sock.send(security_question.encode())
+                else:
+                    client_sock.send("username_notexist".encode())
+############################第四个分支，修改密码#############################################
+            elif message.startswith("change:"):
+                _, username, security_answer, new_password = message.split(":", 3)
+                if verify_security_answer(username, security_answer):
+                    if update_password(username, new_password):
+                        client_sock.send("success".encode())
+                    else:
+                        client_sock.send("fail_database".encode())
+                else:
+                    client_sock.send("fail".encode())
+############################其他分支#############################################
             else:
                 print(f"未知消息 {message} 从 {client_address} 收到,可能是断开连接")
                 break
@@ -164,8 +233,13 @@ def client_handler(client_sock, client_address):
 def handle_client(client_sock,client_address):
     # 处理普通客户端的函数
     # 这里可以处理客户端发送的图像并发送回响应
+    print("handling client")
     is_connected = True
-
+    message = client_sock.recv(1024).decode#用于等阻塞客户端的Qmessagebox
+    print(message)
+    if(message=="request_back"):
+        client_handler(client_sock, client_address)
+        return
     client_sock.send("ok".encode())
     if admin_sock:
         send_client_list_to_admin(admin_sock)
@@ -188,6 +262,7 @@ def handle_client(client_sock,client_address):
             if length_str == b'close': #收到close命令后停止接收处理图像(但是不停socket)
                 is_connected = False
                 print("Client requested to close the connection")
+                clear_socket_buffer(client_sock)
                 continue
 
             total = int(length_str)
@@ -216,15 +291,15 @@ def handle_client(client_sock,client_address):
 
 
 
-def handle_admin(admin_socket): #要像client一样退出后回去
+def handle_admin(admin_socket_me,admin_address): #要像client一样退出后回去
     global admin_sock
     is_admin_connected = True
-    message = admin_socket.recv(1024).decode()
+    message = admin_socket_me.recv(1024).decode()
     print(f"message from admin: {message}")
-    send_client_list_to_admin(admin_socket)
+    send_client_list_to_admin(admin_socket_me)
     try:
         while is_admin_connected:
-            message = admin_socket.recv(1024).decode()
+            message = admin_socket_me.recv(1024).decode()
             if message == "close":
                 is_admin_connected = False
                 continue
@@ -238,14 +313,11 @@ def handle_admin(admin_socket): #要像client一样退出后回去
         print(f"Error handling admin message: {e}")
     finally:
         print("connection close, wait for new connection")
-        try:
-            admin_sock.close()
-        except Exception as e:
-            print(f"close admin socket fail{e}")
-        if admin_socket in client_sockets:
-            client_sockets.remove(admin_socket)
-        admin_sock = None
-
+        if admin_socket_me in client_sockets:
+            client_sockets.remove(admin_socket_me)
+        is_admin_connected = False
+        admin_sock=None
+        client_handler(admin_socket_me, admin_address)
 
 
 
@@ -284,6 +356,20 @@ def accept_connections(server_socket):
         client_sock, client_address = server_socket.accept()
         print(f"客户端 {client_address} 已连接。")
         threading.Thread(target=client_handler, args=(client_sock, client_address)).start()
+
+def clear_socket_buffer(sock):
+    """尝试非阻塞地读取socket，以清理可能残留的数据。"""
+    sock.setblocking(0)  # 设置socket为非阻塞模式
+    try:
+        while True:
+            data = sock.recv(1024)
+            if not data:
+                break  # 如果没有更多数据，跳出循环
+    except BlockingIOError:
+        # 如果没有数据可读，会抛出BlockingIOError错误
+        pass
+    finally:
+        sock.setblocking(1)  # 将socket重置为阻塞模式
 
 def main():
     setup_database()

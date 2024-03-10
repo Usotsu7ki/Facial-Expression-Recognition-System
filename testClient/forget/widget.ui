@@ -140,7 +140,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QLabel" name="label_forget">
+                       <widget class="QLabel" name="label_login">
                         <property name="font">
                          <font>
                           <family>Arial</family>
@@ -238,7 +238,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="btn_submit">
+                       <widget class="QPushButton" name="btn_forget">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                           <horstretch>0</horstretch>
@@ -265,7 +265,7 @@
                          </font>
                         </property>
                         <property name="text">
-                         <string>Submit it</string>
+                         <string>Submit</string>
                         </property>
                        </widget>
                       </item>
@@ -368,9 +368,27 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="lineE_pwd_2"/>
+                            <widget class="QLineEdit" name="username"/>
                            </item>
                           </layout>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QPushButton" name="btn_getSecurity">
+                           <property name="sizePolicy">
+                            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                             <horstretch>0</horstretch>
+                             <verstretch>0</verstretch>
+                            </sizepolicy>
+                           </property>
+                           <property name="font">
+                            <font>
+                             <pointsize>7</pointsize>
+                            </font>
+                           </property>
+                           <property name="text">
+                            <string>Get Security</string>
+                           </property>
+                          </widget>
                          </item>
                         </layout>
                        </widget>
@@ -464,7 +482,7 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="lineE_pwd_4"/>
+                            <widget class="QLineEdit" name="security_answer"/>
                            </item>
                           </layout>
                          </item>
@@ -583,7 +601,7 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLabel" name="label_2">
+                            <widget class="QLabel" name="security_label">
                              <property name="font">
                               <font>
                                <family>Arial</family>
@@ -701,7 +719,7 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="lineE_pwd_5"/>
+                            <widget class="QLineEdit" name="new_password"/>
                            </item>
                           </layout>
                          </item>
