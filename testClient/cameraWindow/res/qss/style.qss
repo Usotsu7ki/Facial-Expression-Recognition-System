@@ -1,38 +1,42 @@
 #shotButton{
     border: none;
     font: 10pt Arial;
-    background-color:#ffffff;
+    color:#ffffff;
+    background-color:rgb(0, 48, 145);
     border-radius: 5px;
 }
 
 #shotButton:hover{
     border: none;
-    background-color:#f6ffff;
+    color: #fdff55;
+    background-color:#000000;
     border-radius: 5px;
 }
 
 #shotButton:pressed{
-    color:#ffffff;
-    border: none;
-    background-color:#ffffff;
-    border-radius: 5px;
+color:rgb(0, 48, 145);
+border: none;
+background-color:#ffffff;
+border-radius: 5px;
 }
 
 #recordButton{
-border: none;
 font: 10pt Arial;
-background-color:#ffffff;
+color:#ffffff;
+border: none;
+background-color:rgb(0, 48, 145);
 border-radius: 5px;
 }
 
 #recordButton:hover{
 border: none;
-background-color:#f6ffff;
+color: #fdff55;
+background-color:#000000;
 border-radius: 5px;
 }
 
 #recordButton:pressed{
-color:#ffffff;
+color:rgb(0, 48, 145);
 border: none;
 background-color:#ffffff;
 border-radius: 5px;

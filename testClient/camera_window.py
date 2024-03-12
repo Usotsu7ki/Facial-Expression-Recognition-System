@@ -44,20 +44,25 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.server_host = server_host
         self.server_port = server_port
 
-        self.returnButton = self.findChild(QtWidgets.QPushButton, 'pushButton')
+        self.returnButton = self.findChild(QtWidgets.QPushButton, 'returnButton')
         self.returnButton.clicked.connect(self.back_action)
 
         self.recordButton = self.findChild(QtWidgets.QPushButton, 'recordButton')
         self.recordButton.clicked.connect(self.toggleRecording)
+        print("2 button loading end")
 
         self.helpAction = self.findChild(QtWidgets.QAction, 'actionhelp')
         self.helpAction.triggered.connect(self.helpActionTriggered)
         self.contactAction = self.findChild(QtWidgets.QAction, 'actioncontact_us')
         self.contactAction.triggered.connect(self.contactActionTriggered)
+        self.actionOpen_record_folder = self.findChild(QtWidgets.QAction, 'actionOpen_record_folder')
+        self.actionOpen_record_folder.triggered.connect(self.openRecordFolder)
+        print("3 action loading end")
 
         self.graphicsView = self.findChild(QtWidgets.QGraphicsView, 'graphicsView')
         self.scene = QGraphicsScene(self)
         self.graphicsView.setScene(self.scene)
+        print("graphview loading end")
 
         self.consoleTextEdit = self.findChild(QtWidgets.QTextEdit,'textEdit')
         self.consoleTextEdit.setReadOnly(True)
@@ -70,17 +75,33 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.timer_show = QTimer(self)
         self.timer_show.timeout.connect(self.display_frame)
         self.timer_show.start(20)  # 更新间隔，20ms,50fps
+        print("cap&timer1 loading end")
 
         self.frame_queue = queue.Queue(maxsize=5)  # 队列存储待传输的帧
         self.timer_send = QTimer(self)  # 处理队列中的图像帧
         self.timer_send.timeout.connect(self.send_frame)  # 将定时器的timeout信号连接到send_frame函数
         self.timer_send.start(20)
+        print("timer2 loading end")
 
         self.back_to_main_signal.connect(main_window.show)
         threading.Thread(target=self.listen_server_messages, daemon=True).start()#aia
 
         self.is_recording = False
         self.video_writer = None
+        print("initial camera window end")
+
+    def openRecordFolder(self):
+        record_path = os.path.join(QCoreApplication.applicationDirPath(), "record")
+        # 检查操作系统平台
+        if os.name == 'nt':  # 对于Windows
+            os.startfile(record_path)
+        elif os.name == 'posix':  # 对于macOS和Linux
+            try:
+                # 尝试macOS的打开方式
+                os.system(f'open "{record_path}"')
+            except:
+                # 默认使用Linux的打开方式
+                os.system(f'xdg-open "{record_path}"')
 
     def toggleRecording(self):
         if self.is_recording:
