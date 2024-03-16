@@ -1,0 +1,89 @@
+#MainWindow{
+    border-image:url(:/res/pic/login3.png);
+}
+#shotButton{
+    border: none;
+    font: 10pt Arial;
+    color:#ffffff;
+    background-color:rgb(0, 48, 145);
+    border-radius: 5px;
+}
+
+#shotButton:hover{
+    border: none;
+    color: #fdff55;
+    background-color:#000000;
+    border-radius: 5px;
+}
+
+#shotButton:pressed{
+color:rgb(0, 48, 145);
+border: none;
+background-color:#ffffff;
+border-radius: 5px;
+}
+
+#returnButton{
+font: 10pt Arial;
+color:#ffffff;
+border: none;
+background-color:rgb(0, 48, 145);
+border-radius: 5px;
+}
+
+#returnButton:hover{
+border: none;
+color: #fdff55;
+background-color:#000000;
+border-radius: 5px;
+}
+
+#returnButton:pressed{
+color:rgb(0, 48, 145);
+border: none;
+background-color:#ffffff;
+border-radius: 5px;
+}
+#frame_background{
+   background-image: url(:/res/pic/login.jpg);
+}
+#Camera{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+#label{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+
+/*按钮-星空*/
+#btn_1{
+color:#000000;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-大海*/
+#btn_2{
+color:#20cfff;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-高山*/
+#btn_3{
+color:#7185ff;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-草原*/
+#btn_4{
+color:#7bb7a5;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}

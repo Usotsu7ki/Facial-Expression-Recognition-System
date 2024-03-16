@@ -1,0 +1,66 @@
+#Dialog{
+    border-image:url(:/res/pic/login2.jpg);
+}
+#label{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+#label_2{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+#label_3{
+    color:#ffffff;
+    font: 10pt Arial;
+}
+#pushButton{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 48, 145);
+    border-radius: 5px;
+}
+#pushButton:hover{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(21, 193, 182);
+    border-radius: 5px;
+}
+/*按钮-登录-鼠标按下*/
+#pushButton:pressed{
+    color:#ffffff;
+    border: none;
+    background-color:rgb(0, 255, 255);
+    border-radius: 5px;
+}
+
+/*按钮-星空*/
+#btn_1{
+color:#000000;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-大海*/
+#btn_2{
+color:#20cfff;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-高山*/
+#btn_3{
+color:#7185ff;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-草原*/
+#btn_4{
+color:#7bb7a5;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
