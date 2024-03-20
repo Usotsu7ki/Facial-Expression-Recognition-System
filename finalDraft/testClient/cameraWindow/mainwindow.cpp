@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->btn_3, SIGNAL(clicked(bool)), this, SLOT(set_style()));
     connect(ui->btn_4, SIGNAL(clicked(bool)), this, SLOT(set_style()));
 
+    connect(ui->Camera,SIGNAL(clicked()),this,SLOT(changeCamera()));
+    ui->Camera->setStyleSheet("border-image:url(:/res/pic/record.png)");
 }
 
 void MainWindow::set_style()
@@ -22,6 +24,7 @@ void MainWindow::set_style()
     QPushButton *btn = qobject_cast<QPushButton*>(sender()); // 获取发射信号的按钮对象
     QString filePath;
     QString backgroundImagePath;
+    QString currentStyleSheet = btn->styleSheet();
 
     if (btn->objectName() == "btn_1") {
         filePath = ":/res/qss/style.qss";
@@ -37,6 +40,7 @@ void MainWindow::set_style()
 
     }
 
+
     /* 皮肤设置 */
     QFile file(filePath);
     file.open(QFile::ReadOnly);
@@ -46,6 +50,22 @@ void MainWindow::set_style()
     file.close();
 
 }
+void MainWindow::changeCamera()
+{
+    // 获取按钮对象
+    QPushButton *btn = qobject_cast<QPushButton*>(sender());
+
+    // 获取按钮当前的样式表
+    QString currentStyleSheet = btn->styleSheet();
+
+    // 检查当前样式表中是否包含 "record.jpg"，如果包含则切换为 "recording.png"，否则切换为 "record.png"
+    if (currentStyleSheet.contains("record.png")) {
+        btn->setStyleSheet("border-image: url(:/res/pic/recording.png);");
+    } else {
+        btn->setStyleSheet("border-image: url(:/res/pic/record.png);");
+    }
+}
+
 
 MainWindow::~MainWindow()
 {

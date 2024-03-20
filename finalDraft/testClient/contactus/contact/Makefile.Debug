@@ -101,10 +101,10 @@ compiler_rcc_clean:
 	-$(DEL_FILE) debug\qrc_res.cpp
 debug/qrc_res.cpp: res.qrc \
 		D:/qtgrp/5.13.2/mingw73_32/bin/rcc.exe \
+		res/pic/login3.jpg \
 		res/pic/login.jpg \
 		res/pic/login2.jpg \
 		res/pic/login1.jpg \
-		res/pic/login3.png \
 		res/qss/style2.qss \
 		res/qss/style.qss \
 		res/qss/style1.qss \
@@ -227,7 +227,7 @@ debug/moc_dialog.cpp: dialog.h \
 		D:/qtgrp/5.13.2/mingw73_32/include/QtGui/qtouchdevice.h \
 		debug/moc_predefs.h \
 		D:/qtgrp/5.13.2/mingw73_32/bin/moc.exe
-	D:\qtgrp\5.13.2\mingw73_32\bin\moc.exe $(DEFINES) --include C:/Users/86138/Desktop/jiang/testClient/contactus/contact/debug/moc_predefs.h -ID:/qtgrp/5.13.2/mingw73_32/mkspecs/win32-g++ -IC:/Users/86138/Desktop/jiang/testClient/contactus/contact -ID:/qtgrp/5.13.2/mingw73_32/include -ID:/qtgrp/5.13.2/mingw73_32/include/QtWidgets -ID:/qtgrp/5.13.2/mingw73_32/include/QtGui -ID:/qtgrp/5.13.2/mingw73_32/include/QtANGLE -ID:/qtgrp/5.13.2/mingw73_32/include/QtCore -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -ID:/qtgrp/Tools/mingw730_32/i686-w64-mingw32/include dialog.h -o debug\moc_dialog.cpp
+	D:\qtgrp\5.13.2\mingw73_32\bin\moc.exe $(DEFINES) --include C:/Users/86138/Desktop/jiang/finalDraft/testClient/contactus/contact/debug/moc_predefs.h -ID:/qtgrp/5.13.2/mingw73_32/mkspecs/win32-g++ -IC:/Users/86138/Desktop/jiang/finalDraft/testClient/contactus/contact -ID:/qtgrp/5.13.2/mingw73_32/include -ID:/qtgrp/5.13.2/mingw73_32/include/QtWidgets -ID:/qtgrp/5.13.2/mingw73_32/include/QtGui -ID:/qtgrp/5.13.2/mingw73_32/include/QtANGLE -ID:/qtgrp/5.13.2/mingw73_32/include/QtCore -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -ID:/qtgrp/Tools/mingw730_32/i686-w64-mingw32/include dialog.h -o debug\moc_dialog.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:

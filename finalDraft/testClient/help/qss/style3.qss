@@ -1,9 +1,9 @@
 #label{
-    color:#000000;
+    color:#ffffff;
     font: 10pt Arial;
 }
 #label_2{
-    color:#000000;
+    color:#ffffff;
     font: 10pt Arial;
 }
 #label_3{
@@ -11,7 +11,7 @@
     font: 10pt Arial;
 }
 #Dialog{
-    border-image:url(:/pic/login3.png);
+    border-image:url(:/pic/login3.jpg);
 }
 #pushButton{
     color:#000000;

@@ -16,6 +16,7 @@ public:
     ~MainWindow();
 public slots:
     void set_style();
+    void changeCamera();
 private:
     Ui::MainWindow *ui;
 };

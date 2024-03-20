@@ -20,7 +20,6 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
@@ -49,7 +48,7 @@ public:
     QSpacerItem *horizontalSpacer_9;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
-    QRadioButton *Camera;
+    QPushButton *Camera;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *shotButton;
     QPushButton *returnButton;
@@ -91,6 +90,7 @@ public:
         btn_1->setMinimumSize(QSize(150, 50));
         btn_1->setMaximumSize(QSize(150, 50));
         QFont font;
+        font.setFamily(QString::fromUtf8("Arial"));
         font.setPointSize(10);
         btn_1->setFont(font);
 
@@ -149,8 +149,14 @@ public:
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        Camera = new QRadioButton(centralwidget);
+        Camera = new QPushButton(centralwidget);
         Camera->setObjectName(QString::fromUtf8("Camera"));
+        sizePolicy.setHeightForWidth(Camera->sizePolicy().hasHeightForWidth());
+        Camera->setSizePolicy(sizePolicy);
+        Camera->setMinimumSize(QSize(80, 80));
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Arial"));
+        Camera->setFont(font1);
         Camera->setStyleSheet(QString::fromUtf8(""));
 
         horizontalLayout->addWidget(Camera);
@@ -164,6 +170,7 @@ public:
         sizePolicy.setHeightForWidth(shotButton->sizePolicy().hasHeightForWidth());
         shotButton->setSizePolicy(sizePolicy);
         shotButton->setMinimumSize(QSize(130, 50));
+        shotButton->setFont(font1);
 
         horizontalLayout->addWidget(shotButton);
 
@@ -172,6 +179,7 @@ public:
         sizePolicy.setHeightForWidth(returnButton->sizePolicy().hasHeightForWidth());
         returnButton->setSizePolicy(sizePolicy);
         returnButton->setMinimumSize(QSize(130, 50));
+        returnButton->setFont(font1);
 
         horizontalLayout->addWidget(returnButton);
 
@@ -180,15 +188,13 @@ public:
 
         graphicsView = new QGraphicsView(centralwidget);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        QFont font1;
-        font1.setFamily(QString::fromUtf8("Arial"));
-        font1.setPointSize(10);
-        graphicsView->setFont(font1);
+        graphicsView->setFont(font);
 
         verticalLayout->addWidget(graphicsView);
 
         label = new QLabel(centralwidget);
         label->setObjectName(QString::fromUtf8("label"));
+        label->setFont(font1);
 
         verticalLayout->addWidget(label);
 
@@ -238,9 +244,9 @@ public:
         actionLog_out->setText(QCoreApplication::translate("MainWindow", "return", nullptr));
         btn_1->setText(QCoreApplication::translate("MainWindow", "starry sky", nullptr));
         btn_2->setText(QCoreApplication::translate("MainWindow", "sea", nullptr));
-        btn_3->setText(QCoreApplication::translate("MainWindow", "mountain", nullptr));
+        btn_3->setText(QCoreApplication::translate("MainWindow", "desert", nullptr));
         btn_4->setText(QCoreApplication::translate("MainWindow", "grassland", nullptr));
-        Camera->setText(QCoreApplication::translate("MainWindow", "Camera", nullptr));
+        Camera->setText(QString());
         shotButton->setText(QCoreApplication::translate("MainWindow", "screen shot", nullptr));
         returnButton->setText(QCoreApplication::translate("MainWindow", "return", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "ConsoleText", nullptr));

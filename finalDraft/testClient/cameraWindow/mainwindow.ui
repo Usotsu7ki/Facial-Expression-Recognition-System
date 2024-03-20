@@ -52,6 +52,7 @@
         </property>
         <property name="font">
          <font>
+          <family>Arial</family>
           <pointsize>10</pointsize>
          </font>
         </property>
@@ -98,6 +99,7 @@
         </property>
         <property name="font">
          <font>
+          <family>Arial</family>
           <pointsize>10</pointsize>
          </font>
         </property>
@@ -144,11 +146,12 @@
         </property>
         <property name="font">
          <font>
+          <family>Arial</family>
           <pointsize>10</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>mountain</string>
+         <string>desert</string>
         </property>
        </widget>
       </item>
@@ -190,6 +193,7 @@
         </property>
         <property name="font">
          <font>
+          <family>Arial</family>
           <pointsize>10</pointsize>
          </font>
         </property>
@@ -218,12 +222,29 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QRadioButton" name="Camera">
+         <widget class="QPushButton" name="Camera">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>80</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Arial</family>
+           </font>
+          </property>
           <property name="styleSheet">
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Camera</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -254,6 +275,11 @@
             <height>50</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Arial</family>
+           </font>
+          </property>
           <property name="text">
            <string>screen shot</string>
           </property>
@@ -272,6 +298,11 @@
             <width>130</width>
             <height>50</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Arial</family>
+           </font>
           </property>
           <property name="text">
            <string>return</string>
@@ -292,6 +323,11 @@
       </item>
       <item>
        <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+         </font>
+        </property>
         <property name="text">
          <string>ConsoleText</string>
         </property>

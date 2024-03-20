@@ -7,6 +7,8 @@
         <file>res/qss/style3.qss</file>
         <file>res/pic/login1.jpg</file>
         <file>res/pic/login2.jpg</file>
-        <file>res/pic/login3.png</file>
+        <file>res/pic/login3.jpg</file>
+        <file>res/pic/record.png</file>
+        <file>res/pic/recording.png</file>
     </qresource>
 </RCC>

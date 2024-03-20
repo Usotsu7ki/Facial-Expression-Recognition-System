@@ -5,7 +5,7 @@
 
 /*背景*/
 #frame_background{
-    background:url(:/res/pic/login3.png);
+    background:url(:/res/pic/login3.jpg);
 }
 /*登录背景*/
 #frame_login{background-color:#ffffff}

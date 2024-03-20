@@ -79,6 +79,7 @@ public:
         btn_1->setMinimumSize(QSize(150, 50));
         btn_1->setMaximumSize(QSize(150, 50));
         QFont font;
+        font.setFamily(QString::fromUtf8("Arial"));
         font.setPointSize(10);
         btn_1->setFont(font);
 
@@ -157,6 +158,9 @@ public:
         sizePolicy1.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
         pushButton->setSizePolicy(sizePolicy1);
         pushButton->setMinimumSize(QSize(160, 50));
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Arial"));
+        pushButton->setFont(font1);
 
         horizontalLayout_3->addWidget(pushButton);
 
@@ -184,10 +188,6 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
         label->setSizePolicy(sizePolicy2);
-        QFont font1;
-        font1.setPointSize(9);
-        font1.setBold(false);
-        font1.setWeight(50);
         label->setFont(font1);
 
         horizontalLayout->addWidget(label);
@@ -209,6 +209,7 @@ public:
         label_2->setObjectName(QString::fromUtf8("label_2"));
         sizePolicy.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
         label_2->setSizePolicy(sizePolicy);
+        label_2->setFont(font1);
 
         horizontalLayout_2->addWidget(label_2);
 
@@ -218,6 +219,7 @@ public:
 
         label_3 = new QLabel(Dialog);
         label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setFont(font1);
 
         horizontalLayout_2->addWidget(label_3);
 
@@ -245,7 +247,7 @@ public:
         Dialog->setWindowTitle(QCoreApplication::translate("Dialog", "Dialog", nullptr));
         btn_1->setText(QCoreApplication::translate("Dialog", "starry sky", nullptr));
         btn_2->setText(QCoreApplication::translate("Dialog", "sea", nullptr));
-        btn_3->setText(QCoreApplication::translate("Dialog", "mountain", nullptr));
+        btn_3->setText(QCoreApplication::translate("Dialog", "desert", nullptr));
         btn_4->setText(QCoreApplication::translate("Dialog", "grassland", nullptr));
         pushButton->setText(QCoreApplication::translate("Dialog", "OK", nullptr));
         label->setText(QCoreApplication::translate("Dialog", "If you have questions or feedback, please contact us via email", nullptr));

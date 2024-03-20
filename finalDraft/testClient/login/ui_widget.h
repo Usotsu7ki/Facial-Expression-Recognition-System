@@ -124,6 +124,7 @@ public:
         btn_5->setMinimumSize(QSize(150, 50));
         btn_5->setMaximumSize(QSize(150, 50));
         QFont font;
+        font.setFamily(QString::fromUtf8("Arial"));
         font.setPointSize(10);
         btn_5->setFont(font);
 
@@ -436,7 +437,7 @@ public:
         Widget->setWindowTitle(QCoreApplication::translate("Widget", "Widget", nullptr));
         btn_5->setText(QCoreApplication::translate("Widget", "starry sky", nullptr));
         btn_6->setText(QCoreApplication::translate("Widget", "sea", nullptr));
-        btn_7->setText(QCoreApplication::translate("Widget", "mountain", nullptr));
+        btn_7->setText(QCoreApplication::translate("Widget", "desert", nullptr));
         btn_8->setText(QCoreApplication::translate("Widget", "grassland", nullptr));
         label_login->setText(QCoreApplication::translate("Widget", "LOGIN", nullptr));
         label_pwd->setText(QString());

@@ -7,6 +7,6 @@
         <file>res/qss/style2.qss</file>
         <file>res/pic/login1.jpg</file>
         <file>res/pic/login2.jpg</file>
-        <file>res/pic/login3.png</file>
+        <file>res/pic/login3.jpg</file>
     </qresource>
 </RCC>

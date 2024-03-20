@@ -1,5 +1,5 @@
 #Dialog{
-    border-image:url(:/res/pic/login.jpg);
+    background:url(:/res/pic/login.jpg);
 }
 #label{
     color:#ffffff;

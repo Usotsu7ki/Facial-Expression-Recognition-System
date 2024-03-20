@@ -1,5 +1,5 @@
 #MainWindow{
-    border-image:url(:/res/pic/login3.png);
+    border-image:url(:/res/pic/login3.jpg);
 }
 #shotButton{
     border: none;

@@ -101,10 +101,12 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_Res.cpp
 release/qrc_Res.cpp: Res.qrc \
 		D:/qtgrp/5.13.2/mingw73_32/bin/rcc.exe \
+		res/pic/record.png \
+		res/pic/login3.jpg \
 		res/pic/login.jpg \
 		res/pic/login2.jpg \
+		res/pic/recording.png \
 		res/pic/login1.jpg \
-		res/pic/login3.png \
 		res/qss/style2.qss \
 		res/qss/style.qss \
 		res/qss/style1.qss \
@@ -229,7 +231,7 @@ release/moc_mainwindow.cpp: mainwindow.h \
 		D:/qtgrp/5.13.2/mingw73_32/include/QtGui/qicon.h \
 		release/moc_predefs.h \
 		D:/qtgrp/5.13.2/mingw73_32/bin/moc.exe
-	D:\qtgrp\5.13.2\mingw73_32\bin\moc.exe $(DEFINES) --include C:/Users/86138/Desktop/jiang/testClient/cameraWindow/release/moc_predefs.h -ID:/qtgrp/5.13.2/mingw73_32/mkspecs/win32-g++ -IC:/Users/86138/Desktop/jiang/testClient/cameraWindow -ID:/qtgrp/5.13.2/mingw73_32/include -ID:/qtgrp/5.13.2/mingw73_32/include/QtWidgets -ID:/qtgrp/5.13.2/mingw73_32/include/QtGui -ID:/qtgrp/5.13.2/mingw73_32/include/QtANGLE -ID:/qtgrp/5.13.2/mingw73_32/include/QtCore -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -ID:/qtgrp/Tools/mingw730_32/i686-w64-mingw32/include mainwindow.h -o release\moc_mainwindow.cpp
+	D:\qtgrp\5.13.2\mingw73_32\bin\moc.exe $(DEFINES) --include C:/Users/86138/Desktop/jiang/finalDraft/testClient/cameraWindow/release/moc_predefs.h -ID:/qtgrp/5.13.2/mingw73_32/mkspecs/win32-g++ -IC:/Users/86138/Desktop/jiang/finalDraft/testClient/cameraWindow -ID:/qtgrp/5.13.2/mingw73_32/include -ID:/qtgrp/5.13.2/mingw73_32/include/QtWidgets -ID:/qtgrp/5.13.2/mingw73_32/include/QtGui -ID:/qtgrp/5.13.2/mingw73_32/include/QtANGLE -ID:/qtgrp/5.13.2/mingw73_32/include/QtCore -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -ID:/qtgrp/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -ID:/qtgrp/Tools/mingw730_32/i686-w64-mingw32/include mainwindow.h -o release\moc_mainwindow.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:

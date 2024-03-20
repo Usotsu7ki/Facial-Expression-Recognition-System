@@ -58,6 +58,11 @@
             <height>0</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Arial</family>
+           </font>
+          </property>
           <property name="text">
            <string>send</string>
           </property>
@@ -102,6 +107,7 @@
           </property>
           <property name="font">
            <font>
+            <family>Arial</family>
             <pointsize>10</pointsize>
            </font>
           </property>
@@ -148,6 +154,7 @@
           </property>
           <property name="font">
            <font>
+            <family>Arial</family>
             <pointsize>10</pointsize>
            </font>
           </property>
@@ -194,11 +201,12 @@
           </property>
           <property name="font">
            <font>
+            <family>Arial</family>
             <pointsize>10</pointsize>
            </font>
           </property>
           <property name="text">
-           <string>mountain</string>
+           <string>desert</string>
           </property>
          </widget>
         </item>
@@ -240,6 +248,7 @@
           </property>
           <property name="font">
            <font>
+            <family>Arial</family>
             <pointsize>10</pointsize>
            </font>
           </property>

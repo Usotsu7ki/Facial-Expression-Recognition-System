@@ -53,6 +53,7 @@
          </property>
          <property name="font">
           <font>
+           <family>Arial</family>
            <pointsize>10</pointsize>
           </font>
          </property>
@@ -99,6 +100,7 @@
          </property>
          <property name="font">
           <font>
+           <family>Arial</family>
            <pointsize>10</pointsize>
           </font>
          </property>
@@ -145,11 +147,12 @@
          </property>
          <property name="font">
           <font>
+           <family>Arial</family>
            <pointsize>10</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>mountain</string>
+          <string>desert</string>
          </property>
         </widget>
        </item>
@@ -191,6 +194,7 @@
          </property>
          <property name="font">
           <font>
+           <family>Arial</family>
            <pointsize>10</pointsize>
           </font>
          </property>
@@ -271,6 +275,11 @@
              <height>50</height>
             </size>
            </property>
+           <property name="font">
+            <font>
+             <family>Arial</family>
+            </font>
+           </property>
            <property name="text">
             <string>OK</string>
            </property>
@@ -329,9 +338,7 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>9</pointsize>
-             <weight>50</weight>
-             <bold>false</bold>
+             <family>Arial</family>
             </font>
            </property>
            <property name="text">
@@ -377,6 +384,11 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="font">
+            <font>
+             <family>Arial</family>
+            </font>
+           </property>
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;scyqz5@nottingham.edu.cn&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;scyqz5@nottingham.edu.cn&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -397,6 +409,11 @@
          </item>
          <item>
           <widget class="QLabel" name="label_3">
+           <property name="font">
+            <font>
+             <family>Arial</family>
+            </font>
+           </property>
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;scyqz5@nottingham.edu.cn&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;scyzq1@nottingham.edu.cn&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>

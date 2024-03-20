@@ -1,8 +1,8 @@
 #Dialog{
-    border-image:url(:/res/pic/login3.png);
+    border-image:url(:/res/pic/login3.jpg);
 }
 #label{
-    color:#000000;
+    color:#ffffff;
     font: 10pt Arial;
 }
 #label_2{
