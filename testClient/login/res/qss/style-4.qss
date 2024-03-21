@@ -11,6 +11,28 @@
     background-position: center center;
     background-repeat: no-repeat;  /* 禁止背景图像重复 */
 }
+#pushButton_register:!hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;
+
+}
+#pushButton_register:hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#e83737;
+}
+
+#pushButton_fgtpwd:hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#e83737;
+}
+#pushButton_fgtpwd:!hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;;
+}
 /*账户和密码框*/
 #frame_pwd{
     border: 1px solid #696969;

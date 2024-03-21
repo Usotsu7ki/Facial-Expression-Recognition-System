@@ -57,12 +57,35 @@ QLineEdit{
     color:#080808;
 }
 
-/*按钮-user?-鼠标悬停*/
 #btn_contact:hover{
     background-color:rgba(255, 255, 255, 0);
     border:none;
     color:#e83737;
 }
+
+#pushButton_register:!hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;
+
+}
+#pushButton_register:hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#e83737;
+}
+
+#pushButton_fgtpwd:hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#e83737;
+}
+#pushButton_fgtpwd:!hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;;
+}
+
 
 #btn_register{
     background-color:rgba(255, 255, 255, 0);

@@ -484,7 +484,7 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="lineE_pwd_2"/>
+                            <widget class="QLineEdit" name="lineE_username"/>
                            </item>
                           </layout>
                          </item>
@@ -714,12 +714,17 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="btn_register">
+                       <widget class="QPushButton" name="pushButton_register">
                         <property name="font">
                          <font>
                           <family>Arial</family>
                           <underline>true</underline>
                          </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">pushButton_register{
+    border: none;//最外层边框
+}</string>
                         </property>
                         <property name="text">
                          <string>Register</string>
@@ -760,7 +765,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="btn_forget">
+                       <widget class="QPushButton" name="pushButton_fgtpwd">
                         <property name="font">
                          <font>
                           <family>Arial</family>

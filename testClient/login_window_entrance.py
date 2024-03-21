@@ -69,8 +69,8 @@ class MainWindow(QtWidgets.QWidget):
         self.pushButton_register.clicked.connect(self.openRegisterWindow) #register function
         self.pushButton_fgtpwd.clicked.connect(self.openForgetPasswordWindow) #forget password function
 
-        self.btn_forget_2.clicked.connect(self.contactActionTriggered)
-        self.btn_forget_3.clicked.connect(self.helpActionTriggered)
+        self.btn_help.clicked.connect(self.contactActionTriggered)
+        self.btn_contact.clicked.connect(self.helpActionTriggered)
 
         print("Window initialized")
 

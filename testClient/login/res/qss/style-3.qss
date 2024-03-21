@@ -16,6 +16,28 @@
     border: 1px solid #696969;
     border-radius: 5px;
 }
+#pushButton_register:!hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;
+
+}
+#pushButton_register:hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#e83737;
+}
+
+#pushButton_fgtpwd:hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#e83737;
+}
+#pushButton_fgtpwd:!hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;;
+}
 #frame_pwd_2{
     border: 1px solid #696969;
     border-radius: 5px;
