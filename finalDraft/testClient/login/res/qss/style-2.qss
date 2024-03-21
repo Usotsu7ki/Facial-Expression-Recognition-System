@@ -16,6 +16,11 @@
     border: 1px solid #696969;
     border-radius: 5px;
 }
+#frame_pwd_2{
+    border: 1px solid #696969;
+    border-radius: 5px;
+}
+
 
 QLineEdit{
     border: none;
@@ -34,30 +39,44 @@ QLineEdit{
     color:#e83737;
 }
 
-#btn_forget_3{
+#btn_help{
     background-color:rgba(255, 255, 255, 0);
     border:none;
     color:#080808;
 }
 
 /*按钮-user?-鼠标悬停*/
-#btn_forget_3:hover{
+#btn_help:hover{
     border:none;
     color:#e83737;
 }
 
-#btn_forget_2{
+#btn_contact{
     background-color:rgba(255, 255, 255, 0);
     border:none;
     color:#080808;
 }
 
 /*按钮-user?-鼠标悬停*/
-#btn_forget_2:hover{
+#btn_contact:hover{
     background-color:rgba(255, 255, 255, 0);
     border:none;
     color:#e83737;
 }
+
+#btn_register{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#080808;
+}
+
+/*按钮-user?-鼠标悬停*/
+#btn_register:hover{
+    background-color:rgba(255, 255, 255, 0);
+    border:none;
+    color:#e83737;
+}
+
 /*按钮-登录*/
 #btn_login{
     color:#ffffff;
@@ -91,6 +110,11 @@ QLineEdit{
 #label_pwd
 {
     border-image:url(:/res/pic/pwd.png);
+
+}
+#label_pwd_2
+{
+    border-image:url(:/res/pic/user_name.png);
 
 }
 

@@ -56,6 +56,15 @@ public:
     QSpacerItem *horizontalSpacer_2;
     QSpacerItem *verticalSpacer;
     QSpacerItem *verticalSpacer_3;
+    QHBoxLayout *horizontalLayout_4;
+    QSpacerItem *horizontalSpacer_7;
+    QFrame *frame_pwd_2;
+    QGridLayout *gridLayout_4;
+    QHBoxLayout *horizontalLayout_11;
+    QSpacerItem *horizontalSpacer_8;
+    QLabel *label_pwd_2;
+    QLineEdit *lineE_pwd_2;
+    QSpacerItem *horizontalSpacer_23;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer_6;
     QFrame *frame_pwd;
@@ -65,10 +74,15 @@ public:
     QLabel *label_pwd;
     QLineEdit *lineE_pwd;
     QSpacerItem *horizontalSpacer_19;
+    QSpacerItem *verticalSpacer_4;
     QHBoxLayout *horizontalLayout_5;
     QSpacerItem *horizontalSpacer_11;
-    QPushButton *btn_forget;
+    QPushButton *btn_register;
     QSpacerItem *horizontalSpacer_12;
+    QHBoxLayout *horizontalLayout_10;
+    QSpacerItem *horizontalSpacer_21;
+    QPushButton *btn_forget;
+    QSpacerItem *horizontalSpacer_22;
     QSpacerItem *verticalSpacer_5;
     QHBoxLayout *horizontalLayout_6;
     QSpacerItem *horizontalSpacer_13;
@@ -76,8 +90,8 @@ public:
     QSpacerItem *horizontalSpacer_14;
     QSpacerItem *verticalSpacer_6;
     QSpacerItem *verticalSpacer_8;
-    QPushButton *btn_forget_3;
-    QPushButton *btn_forget_2;
+    QPushButton *btn_help;
+    QPushButton *btn_contact;
     QLabel *label;
     QFrame *frame_pic;
     QSpacerItem *horizontalSpacer_18;
@@ -256,6 +270,55 @@ public:
 
         verticalLayout->addItem(verticalSpacer_3);
 
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalSpacer_7 = new QSpacerItem(80, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_7);
+
+        frame_pwd_2 = new QFrame(frame_login);
+        frame_pwd_2->setObjectName(QString::fromUtf8("frame_pwd_2"));
+        frame_pwd_2->setFrameShape(QFrame::StyledPanel);
+        frame_pwd_2->setFrameShadow(QFrame::Raised);
+        gridLayout_4 = new QGridLayout(frame_pwd_2);
+        gridLayout_4->setSpacing(6);
+        gridLayout_4->setContentsMargins(11, 11, 11, 11);
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        horizontalLayout_11 = new QHBoxLayout();
+        horizontalLayout_11->setSpacing(6);
+        horizontalLayout_11->setObjectName(QString::fromUtf8("horizontalLayout_11"));
+        horizontalSpacer_8 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_11->addItem(horizontalSpacer_8);
+
+        label_pwd_2 = new QLabel(frame_pwd_2);
+        label_pwd_2->setObjectName(QString::fromUtf8("label_pwd_2"));
+        sizePolicy.setHeightForWidth(label_pwd_2->sizePolicy().hasHeightForWidth());
+        label_pwd_2->setSizePolicy(sizePolicy);
+        label_pwd_2->setMinimumSize(QSize(30, 30));
+        label_pwd_2->setMaximumSize(QSize(30, 30));
+
+        horizontalLayout_11->addWidget(label_pwd_2);
+
+        lineE_pwd_2 = new QLineEdit(frame_pwd_2);
+        lineE_pwd_2->setObjectName(QString::fromUtf8("lineE_pwd_2"));
+
+        horizontalLayout_11->addWidget(lineE_pwd_2);
+
+
+        gridLayout_4->addLayout(horizontalLayout_11, 0, 0, 1, 1);
+
+
+        horizontalLayout_4->addWidget(frame_pwd_2);
+
+        horizontalSpacer_23 = new QSpacerItem(80, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_23);
+
+
+        verticalLayout->addLayout(horizontalLayout_4);
+
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
@@ -305,6 +368,10 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_2);
 
+        verticalSpacer_4 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+        verticalLayout->addItem(verticalSpacer_4);
+
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setSpacing(6);
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
@@ -312,21 +379,41 @@ public:
 
         horizontalLayout_5->addItem(horizontalSpacer_11);
 
-        btn_forget = new QPushButton(frame_login);
-        btn_forget->setObjectName(QString::fromUtf8("btn_forget"));
+        btn_register = new QPushButton(frame_login);
+        btn_register->setObjectName(QString::fromUtf8("btn_register"));
         QFont font2;
         font2.setFamily(QString::fromUtf8("Arial"));
         font2.setUnderline(true);
-        btn_forget->setFont(font2);
+        btn_register->setFont(font2);
 
-        horizontalLayout_5->addWidget(btn_forget);
+        horizontalLayout_5->addWidget(btn_register);
 
-        horizontalSpacer_12 = new QSpacerItem(80, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+        horizontalSpacer_12 = new QSpacerItem(80, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_5->addItem(horizontalSpacer_12);
 
 
         verticalLayout->addLayout(horizontalLayout_5);
+
+        horizontalLayout_10 = new QHBoxLayout();
+        horizontalLayout_10->setSpacing(6);
+        horizontalLayout_10->setObjectName(QString::fromUtf8("horizontalLayout_10"));
+        horizontalSpacer_21 = new QSpacerItem(28, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_10->addItem(horizontalSpacer_21);
+
+        btn_forget = new QPushButton(frame_login);
+        btn_forget->setObjectName(QString::fromUtf8("btn_forget"));
+        btn_forget->setFont(font2);
+
+        horizontalLayout_10->addWidget(btn_forget);
+
+        horizontalSpacer_22 = new QSpacerItem(80, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_10->addItem(horizontalSpacer_22);
+
+
+        verticalLayout->addLayout(horizontalLayout_10);
 
         verticalSpacer_5 = new QSpacerItem(20, 13, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -368,18 +455,18 @@ public:
 
         verticalLayout->addItem(verticalSpacer_8);
 
-        btn_forget_3 = new QPushButton(frame_login);
-        btn_forget_3->setObjectName(QString::fromUtf8("btn_forget_3"));
-        btn_forget_3->setFont(font2);
-        btn_forget_3->setStyleSheet(QString::fromUtf8(""));
+        btn_help = new QPushButton(frame_login);
+        btn_help->setObjectName(QString::fromUtf8("btn_help"));
+        btn_help->setFont(font2);
+        btn_help->setStyleSheet(QString::fromUtf8(""));
 
-        verticalLayout->addWidget(btn_forget_3);
+        verticalLayout->addWidget(btn_help);
 
-        btn_forget_2 = new QPushButton(frame_login);
-        btn_forget_2->setObjectName(QString::fromUtf8("btn_forget_2"));
-        btn_forget_2->setFont(font2);
+        btn_contact = new QPushButton(frame_login);
+        btn_contact->setObjectName(QString::fromUtf8("btn_contact"));
+        btn_contact->setFont(font2);
 
-        verticalLayout->addWidget(btn_forget_2);
+        verticalLayout->addWidget(btn_contact);
 
         label = new QLabel(frame_login);
         label->setObjectName(QString::fromUtf8("label"));
@@ -440,11 +527,13 @@ public:
         btn_7->setText(QCoreApplication::translate("Widget", "desert", nullptr));
         btn_8->setText(QCoreApplication::translate("Widget", "grassland", nullptr));
         label_login->setText(QCoreApplication::translate("Widget", "LOGIN", nullptr));
+        label_pwd_2->setText(QString());
         label_pwd->setText(QString());
-        btn_forget->setText(QCoreApplication::translate("Widget", "User? Directly log in", nullptr));
+        btn_register->setText(QCoreApplication::translate("Widget", "Register", nullptr));
+        btn_forget->setText(QCoreApplication::translate("Widget", "Forget Password", nullptr));
         btn_login->setText(QCoreApplication::translate("Widget", "ADMIN LOGIN", nullptr));
-        btn_forget_3->setText(QCoreApplication::translate("Widget", "help", nullptr));
-        btn_forget_2->setText(QCoreApplication::translate("Widget", "contact us", nullptr));
+        btn_help->setText(QCoreApplication::translate("Widget", "help", nullptr));
+        btn_contact->setText(QCoreApplication::translate("Widget", "contact us", nullptr));
         label->setText(QCoreApplication::translate("Widget", "version 0.0.0", nullptr));
     } // retranslateUi
 

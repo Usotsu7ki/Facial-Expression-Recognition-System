@@ -115,6 +115,7 @@ release/qrc_pic.cpp: pic.qrc \
 		res/pic/login3.jpg \
 		res/pic/login.jpg \
 		res/pic/login2.jpg \
+		res/pic/user_name.png \
 		res/pic/pwd.png \
 		res/pic/login1.jpg
 	D:\qtgrp\5.13.2\mingw73_32\bin\rcc.exe -name pic pic.qrc -o release\qrc_pic.cpp
