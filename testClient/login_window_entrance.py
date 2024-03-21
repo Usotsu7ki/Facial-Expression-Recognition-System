@@ -26,14 +26,14 @@ def read_server_address():
         port = int(lines[1].strip())
     return host, port
 
+# Add a loading bar(only for beauty)
 def show_loading_dialog():
-    # 创建一个QProgressDialog实例
     progressDialog = ProgressBarDialog()
     progressDialog.setWindowTitle("Launching, Please Wait")
     progressDialog.setWindowModality(Qt.ApplicationModal)
     progressDialog.show()
 
-    # 更新进度条来模拟加载过程
+    # update the progress bar
     for i in range(1, 71):
         progressDialog.update_progress(i)
         time.sleep(0.01)
@@ -43,12 +43,17 @@ def show_loading_dialog():
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('login\widget.ui', self)  # 加载UI文件
+        uic.loadUi('login\widget.ui', self)  # load ui
 
         self.label_pwd_2.setPixmap(QPixmap(":/res/pic/user_name.png"))
 
-        self.btn_login.clicked.connect(self.submitPassword)  # 绑定提交按钮的点击事件
-        #self.btn_forget.clicked.connect(self.skipLogin)  # 绑定跳过按钮的点击事件
+        self.btn_5.clicked.connect(self.changeStyleToStarrySky)
+        self.btn_6.clicked.connect(self.changeStyleToSea)
+        self.btn_7.clicked.connect(self.changeStyleToDesert)
+        self.btn_8.clicked.connect(self.changeStyleToGrassland)
+
+        self.btn_login.clicked.connect(self.submitPassword)  # bind submit username and password to the button
+        #self.btn_forget.clicked.connect(self.skipLogin)
 
         '''
         self.helpAction = self.findChild(QtWidgets.QAction, 'actionhelp')
@@ -61,8 +66,8 @@ class MainWindow(QtWidgets.QWidget):
 
         self.lineE_pwd.setEchoMode(QtWidgets.QLineEdit.Password)
 
-        self.pushButton_register.clicked.connect(self.openRegisterWindow)
-        self.pushButton_fgtpwd.clicked.connect(self.openForgetPasswordWindow)
+        self.pushButton_register.clicked.connect(self.openRegisterWindow) #register function
+        self.pushButton_fgtpwd.clicked.connect(self.openForgetPasswordWindow) #forget password function
 
         self.btn_forget_2.clicked.connect(self.contactActionTriggered)
         self.btn_forget_3.clicked.connect(self.helpActionTriggered)
@@ -71,9 +76,47 @@ class MainWindow(QtWidgets.QWidget):
 
         self.host, self.port = read_server_address()
 
-        self.client_socket = self.connect_to_server()  # 建立到服务器的连接
+        self.client_socket = self.connect_to_server()  # connect to server
 
 
+    # Change UI style 5 methods
+    def applyStyleSheet(self, styleSheetPath):
+        try:
+            with open(styleSheetPath, "r", encoding="utf-8") as file:
+                self.setStyleSheet(file.read())
+        except Exception as e:
+            print(f"Error loading stylesheet: {e}")
+
+    def changeStyleToStarrySky(self):
+        self.applyStyleSheet(r"login\res\qss\style-1.qss")
+
+    def changeStyleToSea(self):
+        self.applyStyleSheet(r"login\res\qss\style-2.qss")
+
+    def changeStyleToDesert(self):
+        self.applyStyleSheet(r"login\res\qss\style-3.qss")
+
+    def changeStyleToGrassland(self):
+        self.applyStyleSheet(r"login\res\qss\style-4.qss")
+
+    # Open camera window
+    def handle_client(self):
+        reply = QMessageBox.question(self, 'Webcam Permission', 'Please give us permission to open the camera.',
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            print("open camera window")
+            self.client_socket.send("request_ok".encode())
+            if self.client_socket.recv(1024).decode() == "ok":
+                print("receive respnce ok from server, open the webcam and send imgs")
+                self.camera_window = CameraWindow(self.client_socket, self, self.host, self.port)
+                self.camera_window.show()
+                self.hide()
+            else:
+                print(self.client_socket.recv(1024).decode())
+        else:
+            self.client_socket.send("request_back".encode())
+            print("camera permission not granted")
+            return
 
     def openRegisterWindow(self):
         print("open stage open")
@@ -95,53 +138,46 @@ class MainWindow(QtWidgets.QWidget):
             print(f"error in connect the server, please check the server or the internet:{e}")
             #reply = QMessageBox.show(self,"connet fail")
 
+    # Submit username and password form lineE then send to server for checking
+    # After receiving server messages, open different windows based on judgements
     def submitPassword(self):
         username = self.lineE_username.text()
         password = self.lineE_pwd.text()
 
         if username and password:
-            login_info = f"login:{username}:{password}"
-            self.client_socket.send(login_info.encode())
-            print("username password 发送完毕")
-            response = self.client_socket.recv(1024).decode()
-            print("Received:", response)
-            if response == "admin":
-                print("接到admin指令，初始化并打开管理员界面")
-                self.admin_window = AdminWindow(self.client_socket)  # 创建管理员界面
-                self.admin_window.show()
-                self.close()
-                print("admin stage open")
-            elif response == "client":
-                reply = QMessageBox.question(self, 'Webcam Permission', 'Please give us permission to open the camera.',
-                                             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-                if reply == QMessageBox.Yes:
-                    print("open camera window")
-                    self.client_socket.send("request_ok".encode())
-                    if self.client_socket.recv(1024).decode() == "ok":
-                        print("receive respnce ok from server, open the webcam and send imgs")
-                        self.camera_window = CameraWindow(self.client_socket, self,self.host,self.port)
-                        self.camera_window.show()
-                        self.hide()
-                    else:
-                        print(self.client_socket.recv(1024).decode())
+            try:
+                login_info = f"login:{username}:{password}"
+                self.client_socket.send(login_info.encode())
+                print("username password send complete")
+                response = self.client_socket.recv(1024).decode()
+                print("Received:", response)
+                if response == "admin":
+                    print("receive admin message，init and open admin window")
+                    self.admin_window = AdminWindow(self.client_socket)
+                    self.admin_window.show()
+                    self.close()
+                    print("admin stage open")
+                elif response == "client": # open client window
+                    self.handle_client()
+                elif response == "fail": # login fail
+                    QMessageBox.warning(self, 'Login Failed', 'No such user found or incorrect password.', QMessageBox.Ok)
                 else:
-                    self.client_socket.send("request_back".encode())
-                    print("camera permission not granted")
-                    return
-            elif response == "fail":
-                QMessageBox.warning(self, 'Login Failed', 'No such user found or incorrect password.', QMessageBox.Ok)
-            else:
-                QMessageBox.warning(self, 'Error', 'An error occurred during login.', QMessageBox.Ok)
-                print("wrong username or password")
+                    QMessageBox.warning(self, 'Error', 'An error occurred during login.', QMessageBox.Ok)
+                    print("wrong username or password")
+            except Exception as e:
+                print(f"Execption in sending login or receive response: {e}")
+                self.handle_client()
         else:
             QMessageBox.warning(self, 'Input Error', 'Please enter both username and password.', QMessageBox.Ok)
 
 
     """
+    skip login
     跳过登录，给其相应问题框：如果同意给摄像头权限就打开摄像头，关闭登录窗口
             不同意就不操作
     """
     #skipLogin方法已经废弃
+    #this method was abadoned because of Addition od register and accounts
     def skipLogin(self):
         reply = QMessageBox.question(self, 'webcam permission', 'Please give us permission to open camera？',
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -156,12 +192,13 @@ class MainWindow(QtWidgets.QWidget):
             self.camera_window.show()
             self.hide()
 
+    # help and contact us action
     def helpActionTriggered(self):
         print("open help dialog")
         dialog = HelpDialog(self)
         dialog.exec_()
 
-    # help按钮的事件处理函数
+
     def contactActionTriggered(self):
         print("open contact us dialog")
         dialog = ContactUsDialog(self)
@@ -181,7 +218,7 @@ if __name__ == "__main__":
         print(f"Error loading stylesheet: {e}")
 
     mainWin = MainWindow()
-    mainWin.setWindowTitle("Log in")  # 设置窗口标题
+    mainWin.setWindowTitle("Log in")
     mainWin.show()
 
     sys.exit(app.exec_())

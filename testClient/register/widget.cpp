@@ -24,24 +24,45 @@ Widget::Widget(QWidget *parent) :
     ui->lineE_pwd_4->setPlaceholderText("Security answer");
     ui->lineE_pwd_5->setPlaceholderText("Admin code");
 
-    // 创建一个QPalette对象
-   QPalette palette;
+    /* 背景图设置 */
 
-   // 加载背景图片
-   QPixmap backgroundImage(":/res/pic/login.jpg");
-
-   // 缩放背景图片以适应MainWindow的大小
-   backgroundImage = backgroundImage.scaled(size(), Qt::IgnoreAspectRatio);
-
-   // 将背景图片设置为QPalette的背景
-   palette.setBrush(QPalette::Background, backgroundImage);
-
-   // 将QPalette应用到MainWindow中
-   setPalette(palette);
+    connect(ui->btn_1, SIGNAL(clicked(bool)), this, SLOT(set_style()));
+    connect(ui->btn_2, SIGNAL(clicked(bool)), this, SLOT(set_style()));
+    connect(ui->btn_3, SIGNAL(clicked(bool)), this, SLOT(set_style()));
+    connect(ui->btn_4, SIGNAL(clicked(bool)), this, SLOT(set_style()));
 
 }
 
+void Widget::set_style()
+{
+    QPushButton *btn = qobject_cast<QPushButton*>(sender()); // 获取发射信号的按钮对象
+    QString filePath;
+    QString backgroundImagePath;
 
+    if (btn->objectName() == "btn_1") {
+        filePath = ":/res/qss/style-1.qss";
+
+    } else if (btn->objectName() == "btn_2") {
+        filePath = ":/res/qss/style-2.qss";
+
+    } else if (btn->objectName() == "btn_3") {
+        filePath = ":/res/qss/style-3.qss";
+
+    } else if (btn->objectName() == "btn_4") {
+        filePath = ":/res/qss/style-4.qss";
+
+    }
+
+    /* 皮肤设置 */
+    QFile file(filePath);
+    file.open(QFile::ReadOnly);
+    QTextStream filetext(&file);
+    QString stylesheet = filetext.readAll();
+    this->setStyleSheet(stylesheet);
+    file.close();
+
+
+}
 
 Widget::~Widget()
 {

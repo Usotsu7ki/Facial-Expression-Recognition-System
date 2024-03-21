@@ -13,3 +13,28 @@ class ContactUsDialog(QtWidgets.QDialog):
             print(f"Error loading stylesheet in ContactUsDialog: {e}")
 
         self.pushButton.clicked.connect(self.close)
+
+        self.btn_1.clicked.connect(self.changeStyleToStarrySky)
+        self.btn_2.clicked.connect(self.changeStyleToSea)
+        self.btn_3.clicked.connect(self.changeStyleToDesert)
+        self.btn_4.clicked.connect(self.changeStyleToGrassland)
+
+
+    def applyStyleSheet(self, styleSheetPath):
+        try:
+            with open(styleSheetPath, "r", encoding="utf-8") as file:
+                self.setStyleSheet(file.read())
+        except Exception as e:
+            print(f"Error loading stylesheet: {e}")
+
+    def changeStyleToStarrySky(self):
+        self.applyStyleSheet(r"contactUs\res\qss\style.qss")
+
+    def changeStyleToSea(self):
+        self.applyStyleSheet(r"contactUs\res\qss\style1.qss")
+
+    def changeStyleToDesert(self):
+        self.applyStyleSheet(r"contactUs\res\qss\style2.qss")
+
+    def changeStyleToGrassland(self):
+        self.applyStyleSheet(r"contactUs\res\qss\style3.qss")

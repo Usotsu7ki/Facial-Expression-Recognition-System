@@ -14,6 +14,10 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+
+public slots:
+    void set_style();
+
 private:
     Ui::Widget *ui;
 };

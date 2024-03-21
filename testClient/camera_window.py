@@ -34,9 +34,12 @@ class CameraWindow(QtWidgets.QMainWindow):
         except Exception as e:
             print(f"Error loading stylesheet in CameraWindow: {e}")
 
-        #确保保存视频的record文件夹存在
+        # Ensure the folder for recording exists
         record_path = os.path.join(QCoreApplication.applicationDirPath(), "record")
         os.makedirs(record_path, exist_ok=True)
+
+        print("file path end")
+
 
         self.client_socket = client_socket
         self.main_window = main_window
@@ -44,28 +47,36 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.server_host = server_host
         self.server_port = server_port
 
-        self.returnButton = self.findChild(QtWidgets.QPushButton, 'returnButton')
-        self.returnButton.clicked.connect(self.back_action)
+        self.is_recording = False
+        self.video_writer = None
+        print("initial camera window end")
 
-        self.recordButton = self.findChild(QtWidgets.QPushButton, 'recordButton')
+        # buttons, actions init
+        self.shotButton.clicked.connect(self.takeScreenshot)
+        #self.shotButton.clicked.connect(self.back_action)
+
+        self.recordButton.setStyleSheet("border-image: url(:/res/pic/record.png);")
         self.recordButton.clicked.connect(self.toggleRecording)
-        print("2 button loading end")
+        #print("2 button loading end")
 
-        self.helpAction = self.findChild(QtWidgets.QAction, 'actionhelp')
-        self.helpAction.triggered.connect(self.helpActionTriggered)
-        self.contactAction = self.findChild(QtWidgets.QAction, 'actioncontact_us')
-        self.contactAction.triggered.connect(self.contactActionTriggered)
+        self.btn_1.clicked.connect(self.changeStyleToStarrySky)
+        self.btn_2.clicked.connect(self.changeStyleToSea)
+        self.btn_3.clicked.connect(self.changeStyleToDesert)
+        self.btn_4.clicked.connect(self.changeStyleToGrassland)
+
+        self.actionhelp.triggered.connect(self.helpActionTriggered)
+        self.actioncontact_us.triggered.connect(self.contactActionTriggered)
         self.actionOpen_record_folder = self.findChild(QtWidgets.QAction, 'actionOpen_record_folder')
         self.actionOpen_record_folder.triggered.connect(self.openRecordFolder)
-        print("3 action loading end")
+        #print("3 action loading end")
 
         self.graphicsView = self.findChild(QtWidgets.QGraphicsView, 'graphicsView')
         self.scene = QGraphicsScene(self)
         self.graphicsView.setScene(self.scene)
         print("graphview loading end")
 
-        self.consoleTextEdit = self.findChild(QtWidgets.QTextEdit,'textEdit')
-        self.consoleTextEdit.setReadOnly(True)
+
+        self.textEdit.setReadOnly(True)
 
         self.host, self.port = read_server_address()
 
@@ -74,56 +85,90 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.cap = cv2.VideoCapture(0)
         self.timer_show = QTimer(self)
         self.timer_show.timeout.connect(self.display_frame)
-        self.timer_show.start(20)  # 更新间隔，20ms,50fps
+        self.timer_show.start(50)  # update frequence
         print("cap&timer1 loading end")
 
-        self.frame_queue = queue.Queue(maxsize=5)  # 队列存储待传输的帧
-        self.timer_send = QTimer(self)  # 处理队列中的图像帧
-        self.timer_send.timeout.connect(self.send_frame)  # 将定时器的timeout信号连接到send_frame函数
-        self.timer_send.start(20)
+        self.frame_queue = queue.Queue(maxsize=1)  # queue storing the frame to be sent
+        self.timer_send = QTimer(self)
+        self.timer_send.timeout.connect(self.send_frame)
+        self.timer_send.start(50)
         print("timer2 loading end")
 
         self.back_to_main_signal.connect(main_window.show)
         threading.Thread(target=self.listen_server_messages, daemon=True).start()#aia
 
-        self.is_recording = False
-        self.video_writer = None
-        print("initial camera window end")
+
+
+    # change style methods: 5
+    def applyStyleSheet(self, styleSheetPath):
+        try:
+            with open(styleSheetPath, "r", encoding="utf-8") as file:
+                self.setStyleSheet(file.read())
+        except Exception as e:
+            print(f"Error loading stylesheet: {e}")
+
+    def changeStyleToStarrySky(self):
+        self.applyStyleSheet(r"cameraWindow\res\qss\style.qss")
+
+    def changeStyleToSea(self):
+        self.applyStyleSheet(r"cameraWindow\res\qss\style1.qss")
+
+    def changeStyleToDesert(self):
+        self.applyStyleSheet(r"cameraWindow\res\qss\style2.qss")
+
+    def changeStyleToGrassland(self):
+        self.applyStyleSheet(r"cameraWindow\res\qss\style3.qss")
+
 
     def openRecordFolder(self):
         record_path = os.path.join(QCoreApplication.applicationDirPath(), "record")
-        # 检查操作系统平台
-        if os.name == 'nt':  # 对于Windows
+        # check OS
+        if os.name == 'nt':  # Windows
             os.startfile(record_path)
-        elif os.name == 'posix':  # 对于macOS和Linux
+        elif os.name == 'posix':  # macOS和Linux
             try:
-                # 尝试macOS的打开方式
+                #macos
                 os.system(f'open "{record_path}"')
             except:
-                # 默认使用Linux的打开方式
+                #linux
                 os.system(f'xdg-open "{record_path}"')
 
+    # take screen shot triggered by shotButton
+    def takeScreenshot(self):
+        record_path = os.path.join(QCoreApplication.applicationDirPath(), "record")
+        screenshot_filename = os.path.join(QCoreApplication.applicationDirPath(), "record",
+                                           "screenshot-{}.png".format(time.strftime("%Y%m%d-%H%M%S")))
+        screenshot = self.grab()
+        # 保存截图
+        screenshot.save(screenshot_filename, 'PNG')
+        self.append_to_console(f"ScreenShot in{record_path}")
+
+    # take recording and change the image of record button
     def toggleRecording(self):
         if self.is_recording:
-            # 停止录制
+            # stop recording
             self.is_recording = False
-            self.recordButton.setText("Record")
+            self.recordButton.setStyleSheet("border-image: url(:/res/pic/record.png);")
+            # self.recordButton.setText("Record")
             if self.video_writer:
                 self.video_writer.release()
                 self.video_writer = None
             self.append_to_console("Recording finished")
         else:
-            # 开始录制
+            # begin recording
             self.is_recording = True
-            self.recordButton.setText("Stop")
+            self.recordButton.setStyleSheet("border-image: url(:/res/pic/recording.png);")
+            # self.recordButton.setText("Stop")
             filename = os.path.join(QCoreApplication.applicationDirPath(), "record",
                                     "recorded-{}.avi".format(time.strftime("%Y%m%d-%H%M%S")))
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
             self.video_writer = cv2.VideoWriter(filename, fourcc, 20.0, (640, 480))
             self.append_to_console("Recording started")
     def append_to_console(self,message):
-        self.consoleTextEdit.append(message)
+        self.textEdit.append(message)
 
+    #本方法因为存在bug废弃
+    #this method abandoned because of existence of bugs
     def back_action(self):
         print("back action")
         self.append_to_console("back action")
@@ -135,18 +180,17 @@ class CameraWindow(QtWidgets.QMainWindow):
 
 
     def display_frame(self):
-        # 显示摄像头捕获的图像帧
+        # show the frames caught by camera
         try:
             ret, frame = self.cap.read()
             if ret:
-                self.process_frame(frame)  # 处理和显示图像帧
+                self.process_frame(frame)  # process and show main method
         except Exception as e:
             self.append_to_console("error in reading camera"+str(e))
 
+    # process and show frames
     def process_frame(self, frame):
-        # 显示图像帧的函数
         try:
-            # 显示图像的代码
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             h, w, ch = frame.shape
             bytes_per_line = ch * w
@@ -161,10 +205,11 @@ class CameraWindow(QtWidgets.QMainWindow):
             self.frame_queue.get()
         self.frame_queue.put(frame)
 
-        #如果在录制也开始写入视频文件
+        # if is recording then also record
         if self.is_recording and self.video_writer is not None:
             self.video_writer.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
+    # Method sending frames to server
     def send_frame(self):
         # 处理队列中的图像帧并发送
         if not self.frame_queue.empty():
@@ -179,9 +224,9 @@ class CameraWindow(QtWidgets.QMainWindow):
                 self.append_to_console("error in packing and sending"+str(e))
 
 
-    #废弃不用了
+    #this method abandoned
     def closeCameraAndTCPConnection(self):
-        # 关闭摄像头的代码
+        # close camera
         print("Closing camera and TCP connection")
         self.timer_show.stop()
         self.timer_send.stop()
@@ -193,9 +238,10 @@ class CameraWindow(QtWidgets.QMainWindow):
             self.append_to_console("error in closing connection " + str(e))
 
 
+    # Overload the close
     def closeEvent(self, event):#重写关闭窗口函数，清理资源
         self.cleanup_resources()
-        self.client_socket.send("close\n".encode())
+        self.client_socket.send("close".encode())
         event.accept()
 
     def cleanup_resources(self):
@@ -219,7 +265,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         print("Resources cleaned up")
 
     def clear_socket_buffer(self):
-        """清除在socket缓冲区中可能残留的数据。"""
+        """clear socket data in buffer"""
         self.client_socket.setblocking(False)
         try:
             while True:
@@ -233,7 +279,7 @@ class CameraWindow(QtWidgets.QMainWindow):
 
 
     """
-    处理服务器发送过来的内容的一些函数：
+    listen to server, handling the messages from server
     """
     def listen_server_messages(self):
         while True:
@@ -244,8 +290,10 @@ class CameraWindow(QtWidgets.QMainWindow):
                     self.back_action()
                     break
                 else:
+                    #此处添加表情逻辑
                     print("其他消息")
                     self.append_to_console(server_message)
+                    print(server_message)
             except Exception as e:
                 print("Error in receiving message from server: " + str(e))
                 break

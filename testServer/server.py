@@ -276,6 +276,12 @@ def handle_client(client_sock,client_address):
             img = np.frombuffer(img_bytes, dtype=np.uint8)
             img = cv2.imdecode(img, cv2.IMREAD_COLOR)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+
+
+
+
+
             cv2.imshow("img", img)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break

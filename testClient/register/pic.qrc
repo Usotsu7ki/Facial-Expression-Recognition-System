@@ -1,10 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/pic/user_name.png</file>
         <file>res/pic/pwd.png</file>
         <file>res/pic/login.jpg</file>
         <file>res/pic/right.jpg</file>
-        <file>res/pic/protect.jpeg</file>
-        <file>res/pic/Admin.jpeg</file>
     </qresource>
 </RCC>

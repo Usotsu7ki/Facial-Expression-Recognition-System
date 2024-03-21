@@ -14,7 +14,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
+public slots:
+    void set_style();
+    void changeCamera();
 private:
     Ui::MainWindow *ui;
 };

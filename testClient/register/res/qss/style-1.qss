@@ -1,10 +1,6 @@
-/**
-
-*/
-
 
 /*背景*/
-#frame_background{
+#frame{
     background:url(:/res/pic/login.jpg);
 }
 /*登录背景*/
@@ -156,4 +152,35 @@ QLineEdit{
     border-image:url(:/res/pic/Admin.jpeg);
 }
 
+/*按钮-星空*/
+#btn_1{
+color:#000000;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-大海*/
+#btn_2{
+color:#20cfff;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-高山*/
+#btn_3{
+color:#7185ff;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
+
+/*按钮-草原*/
+#btn_4{
+color:#7bb7a5;
+background-color:#ffffff;
+border:none;
+border-radius: 10px;
+}
 

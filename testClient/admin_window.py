@@ -14,7 +14,7 @@ ADDRESS = (HOST, PORT)
 
 class AdminWindow(QtWidgets.QMainWindow):
 
-    update_client_list_signal = QtCore.pyqtSignal(list) #更新客户端列表信号
+    update_client_list_signal = QtCore.pyqtSignal(list) #signal to update client list
 
     def __init__(self, client_socket):
         super().__init__()
@@ -29,6 +29,11 @@ class AdminWindow(QtWidgets.QMainWindow):
             print(f"Error loading stylesheet in AdminWindow: {e}")
 
         self.client_socket = client_socket
+
+        self.btn_1.clicked.connect(self.changeStyleToStarrySky)
+        self.btn_2.clicked.connect(self.changeStyleToSea)
+        self.btn_3.clicked.connect(self.changeStyleToDesert)
+        self.btn_4.clicked.connect(self.changeStyleToGrassland)
 
         self.clientListWidget = self.findChild(QtWidgets.QListWidget, 'listWidget_2')
         self.consoleTextEdit = self.findChild(QtWidgets.QTextEdit, 'textEdit')
@@ -45,7 +50,26 @@ class AdminWindow(QtWidgets.QMainWindow):
 
         self.update_client_list_signal.connect(self.update_client_list)
         self.start_receiving()
-        print("加载admin完毕")
+        print("init admin end")
+
+    def applyStyleSheet(self, styleSheetPath):
+        try:
+            with open(styleSheetPath, "r", encoding="utf-8") as file:
+                self.setStyleSheet(file.read())
+        except Exception as e:
+            print(f"Error loading stylesheet: {e}")
+
+    def changeStyleToStarrySky(self):
+        self.applyStyleSheet(r"admin\res\qss\style.qss")
+
+    def changeStyleToSea(self):
+        self.applyStyleSheet(r"admin\res\qss\style1.qss")
+
+    def changeStyleToDesert(self):
+        self.applyStyleSheet(r"admin\res\qss\style2.qss")
+
+    def changeStyleToGrassland(self):
+        self.applyStyleSheet(r"admin\res\qss\style3.qss")
 
     def start_receiving(self):
         print("start receiving")
@@ -57,32 +81,32 @@ class AdminWindow(QtWidgets.QMainWindow):
             try:
                 data = self.client_socket.recv(1024)
                 client_list_str = data.decode()
-                client_list = client_list_str.split("\n")  # 分割字符串获取客户端列表
+                client_list = client_list_str.split("\n")  # divide strings of different client sockets and added in lists
                 print("receive client lists")
-                self.update_client_list_signal.emit(client_list)  # 发射信号
+                self.update_client_list_signal.emit(client_list)  # update the current list and refresh
             except Exception as e:
                 print(f"Error receiving client list: {e}")
                 break
 
     def update_client_list(self, client_list):
-        # 清除当前列表
+        # clear the current list
         self.clientListWidget.clear()
-        # 添加新的客户端列表
+        # using new list
         for client_address in client_list:
-            if client_address and client_address != "disconnect" and not(HOST in client_address):  # 确保地址不是空字符串
+            if client_address and client_address != "disconnect" and not(HOST in client_address):  # Ensure the address not null, not admin itself
                 self.add_client(client_address)
 
     def add_client(self, client_address):
-        # 添加新客户端到列表
+        # add new client to list
         self.clientListWidget.addItem(client_address)
 
     def display_message(self, message):
-        # 在控制台显示消息
+        # append messages to testE
         self.consoleTextEdit.append(message)
 
 
     def showContextMenu(self, position):
-        # 显示右键菜单
+        # Show mouse button menu and actions
         menu = QtWidgets.QMenu()
         disconnectAction = menu.addAction("kick this client")
         sendMessageAction = menu.addAction("send messages")
@@ -93,7 +117,7 @@ class AdminWindow(QtWidgets.QMainWindow):
             self.consoleTextEdit.setFocus()
 
     def kickClient(self):
-        # 给服务端发送消息踢对应的客户端
+        # send messages to server, kick the client chosen
         print("kick it")
         selected_item = self.clientListWidget.currentItem()
         if selected_item:
@@ -101,20 +125,19 @@ class AdminWindow(QtWidgets.QMainWindow):
             self.client_socket.send(("kick:" + client_address).encode())
 
     def sendMessage(self):
-        print("begin send message")
+        print("begin sending message")
         selected_item = self.clientListWidget.currentItem()
         if selected_item:
             client_address = selected_item.text()
-            message = self.consoleTextEdit.toPlainText().split('\n')[-1]  # 获取最后一行文本
+            message = self.consoleTextEdit.toPlainText().split('\n')[-1]  # send the last line
             full_message = "sendmessage|" + client_address + "|" + message
-            #这里有很难办的文字处理问题
             self.client_socket.send(full_message.encode())
 
     def closeEvent(self, event):
-        # 在窗口关闭时执行的操作
+        # overload the close
         if self.client_socket:
             self.client_socket.send("closeme".encode())
-            self.client_socket.close()  # 关闭socket
+            self.client_socket.close()   ############ may be this should be added in camera window after cancel of return
         event.accept()
 
 
