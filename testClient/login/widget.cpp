@@ -12,6 +12,14 @@ Widget::Widget(QWidget *parent) :
     ui->label_pwd->setScaledContents(true);         //图片自适应label大小
 
     ui->lineE_pwd->setEchoMode(QLineEdit::Password);//设置为小黑点
+
+    /* 背景图设置 */
+
+    connect(ui->btn_5, SIGNAL(clicked(bool)), this, SLOT(set_style()));
+    connect(ui->btn_6, SIGNAL(clicked(bool)), this, SLOT(set_style()));
+    connect(ui->btn_7, SIGNAL(clicked(bool)), this, SLOT(set_style()));
+    connect(ui->btn_8, SIGNAL(clicked(bool)), this, SLOT(set_style()));
+
 }
 
 /*
@@ -19,7 +27,23 @@ Widget::Widget(QWidget *parent) :
 */
 void Widget::set_style()
 {
+    QPushButton *btn = qobject_cast<QPushButton*>(sender()); // 获取发射信号的按钮对象
     QString filePath;
+    QString backgroundImagePath;
+
+    if (btn->objectName() == "btn_5") {
+        filePath = ":/res/qss/style-1.qss";
+
+    } else if (btn->objectName() == "btn_6") {
+        filePath = ":/res/qss/style-2.qss";
+
+    } else if (btn->objectName() == "btn_7") {
+        filePath = ":/res/qss/style-3.qss";
+
+    } else if (btn->objectName() == "btn_8") {
+        filePath = ":/res/qss/style-4.qss";
+
+    }
 
     /*皮肤设置*/
     QFile file(filePath);/*QSS文件所在的路径*/
