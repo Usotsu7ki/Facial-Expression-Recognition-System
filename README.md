@@ -17,3 +17,8 @@
 <br>3.8:增加注册和忘记密码
 <br>3.12:camera window适配新ui， 增加打开录像文件夹功能
 <br>3.21:Apply new UI with buttons changing styles, add screenshot function, Add comments in Eng
+
+
+<br>3.23:Change client sending frames logic. From triggered by send_timer, to sending after receiving messages from server(face recog data later). 
+<br>The first frame sending will be triggered by listening thread after launched 1 seconds, then it will listen server messages
+<br>Also, add a thread used to ensure sending is normal. If sending error, try to send after 10 seconds
