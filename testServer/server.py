@@ -2,6 +2,8 @@
 import socket
 import threading
 import cv2
+import time
+
 import numpy as np
 import sqlite3
 
@@ -279,10 +281,13 @@ def handle_client(client_sock,client_address):
 
 
 
-
-
-
             cv2.imshow("img", img)
+
+
+            time.sleep(0.05) #此数我试过从0.05到0.2都可以， 也就是说，20ms获得500ms才取得结果都是可以的
+
+            client_sock.send("ok".encode())
+            print("send ok to client")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
     except Exception as e:

@@ -75,6 +75,9 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.graphicsView.setScene(self.scene)
         print("graphview loading end")
 
+        self.is_running = True  # control the thread running
+        self.last_ok_received = time.time() #this used to keep sending and receiving normal
+
 
         self.textEdit.setReadOnly(True)
 
@@ -88,14 +91,16 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.timer_show.start(50)  # update frequence
         print("cap&timer1 loading end")
 
-        self.frame_queue = queue.Queue(maxsize=1)  # queue storing the frame to be sent
-        self.timer_send = QTimer(self)
-        self.timer_send.timeout.connect(self.send_frame)
-        self.timer_send.start(50)
-        print("timer2 loading end")
+        self.frame_queue = queue.Queue(maxsize=5)  # queue storing the frame to be sent
+        # self.timer_send = QTimer(self)
+        # self.timer_send.timeout.connect(self.send_frame)
+        # self.timer_send.start(50)
+        # print("timer2 loading end")
 
         self.back_to_main_signal.connect(main_window.show)
         threading.Thread(target=self.listen_server_messages, daemon=True).start()#aia
+
+
 
 
 
@@ -175,6 +180,8 @@ class CameraWindow(QtWidgets.QMainWindow):
 
         self.cleanup_resources()
 
+
+
         self.back_to_main_signal.emit()
         self.close()
 
@@ -209,19 +216,6 @@ class CameraWindow(QtWidgets.QMainWindow):
         if self.is_recording and self.video_writer is not None:
             self.video_writer.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
-    # Method sending frames to server
-    def send_frame(self):
-        # 处理队列中的图像帧并发送
-        if not self.frame_queue.empty():
-            frame = self.frame_queue.get()  # 从队列中获取一个图像帧
-            try:
-                img_encode = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])[1] #压缩
-                byte_data = img_encode.tobytes() #转成字节流
-                length = len(byte_data)
-                self.client_socket.sendall(str(length).encode() + b'\n')
-                self.client_socket.sendall(byte_data)
-            except Exception as e:
-                self.append_to_console("error in packing and sending"+str(e))
 
 
     #this method abandoned
@@ -248,15 +242,26 @@ class CameraWindow(QtWidgets.QMainWindow):
         print("Cleaning up resources")
         if self.is_recording:
             self.toggleRecording()  # 停止录制并保存
+        print("recording stop")
+
+        self.is_running = False
 
         if self.timer_show.isActive():
             self.timer_show.stop()
+        print("time show stop")
 
-        if self.timer_send.isActive():
-            self.timer_send.stop()
+        # if self.timer_send.isActive():
+        #    self.timer_send.stop()
 
         if self.cap.isOpened():
             self.cap.release()
+        print("camera stop")
+
+        if self.timeout_timer is not None:
+            self.timeout_timer.cancel()
+        print("time out stop")
+
+
 
         #self.client_socket.close()
         #self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -278,19 +283,43 @@ class CameraWindow(QtWidgets.QMainWindow):
             self.client_socket.setblocking(True)
 
 
+    # Method sending frames to server
+    def send_frame(self):
+        if not self.frame_queue.empty() and self.is_running:
+            print("try to send")
+            frame = self.frame_queue.get()
+            try:
+                img_encode = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])[1]
+                byte_data = img_encode.tobytes()
+                length = len(byte_data)
+                self.client_socket.sendall(str(length).encode() + b'\n')
+                self.client_socket.sendall(byte_data)
+            except Exception as e:
+                self.append_to_console("error in packing and sending" + str(e))
+
+
     """
     listen to server, handling the messages from server
     """
     def listen_server_messages(self):
-        while True:
+        self.last_ok_received = time.time()
+        self.check_for_timeout()
+        time.sleep(1)
+        while self.is_running:
             try:
-                server_message = self.client_socket.recv(1024).decode()
-                if server_message == "disconnect":
+                print("listening...")
+                self.send_frame()
+                server_message = self.client_socket.recv(128).decode()
+                print(f"receive message: {server_message}")
+                if server_message == "ok":# 此处改为表情逻辑
+                    print("Received ok")
+                    self.last_ok_received = time.time()
+                elif server_message == "disconnect":
                     print("Received disconnect from server")
                     self.back_action()
                     break
                 else:
-                    #此处添加表情逻辑
+
                     print("其他消息")
                     self.append_to_console(server_message)
                     print(server_message)
@@ -300,6 +329,15 @@ class CameraWindow(QtWidgets.QMainWindow):
 
 
 
+
+    def check_for_timeout(self):
+        if time.time() - self.last_ok_received > 10: # try to resend if can not send after 10 secs
+            self.send_frame()
+            self.append_to_console("Error in sending images to server, try to resend")
+            print("sending error")
+
+        self.timeout_timer = threading.Timer(10, self.check_for_timeout) # continue checking after 10 secs
+        self.timeout_timer.start()
 
 
     def helpActionTriggered(self):
