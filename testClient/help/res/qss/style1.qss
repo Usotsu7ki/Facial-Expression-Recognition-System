@@ -11,7 +11,7 @@
     font: 10pt Arial;
 }
 #Dialog{
-    border-image:url(:/pic/login1.jpg);
+    border-image:url(:/res/pic/login1.jpg);
 }
 #pushButton{
     color:#ffffff;

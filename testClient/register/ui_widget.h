@@ -30,16 +30,6 @@ public:
     QFrame *frame;
     QGridLayout *gridLayout_3;
     QVBoxLayout *verticalLayout;
-    QHBoxLayout *horizontalLayout_14;
-    QSpacerItem *horizontalSpacer_16;
-    QPushButton *btn_1;
-    QSpacerItem *horizontalSpacer_26;
-    QPushButton *btn_2;
-    QSpacerItem *horizontalSpacer_27;
-    QPushButton *btn_3;
-    QSpacerItem *horizontalSpacer_28;
-    QPushButton *btn_4;
-    QSpacerItem *horizontalSpacer_29;
     QHBoxLayout *horizontalLayout_9;
     QSpacerItem *horizontalSpacer_17;
     QFrame *frame_3;
@@ -56,7 +46,7 @@ public:
     QHBoxLayout *horizontalLayout_10;
     QSpacerItem *horizontalSpacer_9;
     QLabel *label_pwd_2;
-    QLineEdit *lineE_pwd_2;
+    QLineEdit *lineE_username;
     QSpacerItem *horizontalSpacer_20;
     QHBoxLayout *horizontalLayout_11;
     QSpacerItem *horizontalSpacer_10;
@@ -65,7 +55,7 @@ public:
     QHBoxLayout *horizontalLayout_12;
     QSpacerItem *horizontalSpacer_11;
     QLabel *label_pwd_3;
-    QLineEdit *lineE_pwd_3;
+    QLineEdit *lineE_security_question;
     QSpacerItem *horizontalSpacer_21;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer_6;
@@ -91,7 +81,7 @@ public:
     QHBoxLayout *horizontalLayout_13;
     QSpacerItem *horizontalSpacer_15;
     QLabel *label_pwd_4;
-    QLineEdit *lineE_pwd_4;
+    QLineEdit *lineE_security_ans;
     QSpacerItem *horizontalSpacer_22;
     QSpacerItem *verticalSpacer_3;
     QSpacerItem *verticalSpacer_7;
@@ -99,7 +89,7 @@ public:
     QSpacerItem *verticalSpacer_16;
     QHBoxLayout *horizontalLayout_6;
     QSpacerItem *horizontalSpacer_13;
-    QPushButton *btn_forget;
+    QPushButton *btn_submit;
     QSpacerItem *horizontalSpacer_14;
     QHBoxLayout *horizontalLayout_15;
     QSpacerItem *horizontalSpacer_23;
@@ -108,7 +98,7 @@ public:
     QHBoxLayout *horizontalLayout_16;
     QSpacerItem *horizontalSpacer_24;
     QLabel *label_pwd_5;
-    QLineEdit *lineE_pwd_5;
+    QLineEdit *lineE_admin_number;
     QSpacerItem *horizontalSpacer_25;
     QSpacerItem *verticalSpacer_15;
     QPushButton *btn_forget_2;
@@ -138,78 +128,6 @@ public:
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        horizontalLayout_14 = new QHBoxLayout();
-        horizontalLayout_14->setSpacing(6);
-        horizontalLayout_14->setObjectName(QString::fromUtf8("horizontalLayout_14"));
-        horizontalSpacer_16 = new QSpacerItem(13, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_14->addItem(horizontalSpacer_16);
-
-        btn_1 = new QPushButton(frame);
-        btn_1->setObjectName(QString::fromUtf8("btn_1"));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(btn_1->sizePolicy().hasHeightForWidth());
-        btn_1->setSizePolicy(sizePolicy);
-        btn_1->setMinimumSize(QSize(150, 50));
-        btn_1->setMaximumSize(QSize(150, 50));
-        QFont font;
-        font.setFamily(QString::fromUtf8("Arial"));
-        font.setPointSize(10);
-        btn_1->setFont(font);
-
-        horizontalLayout_14->addWidget(btn_1);
-
-        horizontalSpacer_26 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        horizontalLayout_14->addItem(horizontalSpacer_26);
-
-        btn_2 = new QPushButton(frame);
-        btn_2->setObjectName(QString::fromUtf8("btn_2"));
-        sizePolicy.setHeightForWidth(btn_2->sizePolicy().hasHeightForWidth());
-        btn_2->setSizePolicy(sizePolicy);
-        btn_2->setMinimumSize(QSize(150, 50));
-        btn_2->setMaximumSize(QSize(150, 50));
-        btn_2->setFont(font);
-
-        horizontalLayout_14->addWidget(btn_2);
-
-        horizontalSpacer_27 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        horizontalLayout_14->addItem(horizontalSpacer_27);
-
-        btn_3 = new QPushButton(frame);
-        btn_3->setObjectName(QString::fromUtf8("btn_3"));
-        sizePolicy.setHeightForWidth(btn_3->sizePolicy().hasHeightForWidth());
-        btn_3->setSizePolicy(sizePolicy);
-        btn_3->setMinimumSize(QSize(150, 50));
-        btn_3->setMaximumSize(QSize(150, 50));
-        btn_3->setFont(font);
-
-        horizontalLayout_14->addWidget(btn_3);
-
-        horizontalSpacer_28 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        horizontalLayout_14->addItem(horizontalSpacer_28);
-
-        btn_4 = new QPushButton(frame);
-        btn_4->setObjectName(QString::fromUtf8("btn_4"));
-        sizePolicy.setHeightForWidth(btn_4->sizePolicy().hasHeightForWidth());
-        btn_4->setSizePolicy(sizePolicy);
-        btn_4->setMinimumSize(QSize(150, 50));
-        btn_4->setMaximumSize(QSize(150, 50));
-        btn_4->setFont(font);
-
-        horizontalLayout_14->addWidget(btn_4);
-
-        horizontalSpacer_29 = new QSpacerItem(13, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_14->addItem(horizontalSpacer_29);
-
-
-        verticalLayout->addLayout(horizontalLayout_14);
-
         horizontalLayout_9 = new QHBoxLayout();
         horizontalLayout_9->setSpacing(6);
         horizontalLayout_9->setObjectName(QString::fromUtf8("horizontalLayout_9"));
@@ -230,11 +148,11 @@ public:
         horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
         frame_login = new QFrame(frame_3);
         frame_login->setObjectName(QString::fromUtf8("frame_login"));
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(frame_login->sizePolicy().hasHeightForWidth());
-        frame_login->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(frame_login->sizePolicy().hasHeightForWidth());
+        frame_login->setSizePolicy(sizePolicy);
         frame_login->setMinimumSize(QSize(500, 600));
         frame_login->setMaximumSize(QSize(500, 600));
         frame_login->setStyleSheet(QString::fromUtf8(""));
@@ -275,17 +193,20 @@ public:
 
         label_pwd_2 = new QLabel(frame_pwd_2);
         label_pwd_2->setObjectName(QString::fromUtf8("label_pwd_2"));
-        sizePolicy.setHeightForWidth(label_pwd_2->sizePolicy().hasHeightForWidth());
-        label_pwd_2->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(label_pwd_2->sizePolicy().hasHeightForWidth());
+        label_pwd_2->setSizePolicy(sizePolicy1);
         label_pwd_2->setMinimumSize(QSize(30, 30));
         label_pwd_2->setMaximumSize(QSize(30, 30));
 
         horizontalLayout_10->addWidget(label_pwd_2);
 
-        lineE_pwd_2 = new QLineEdit(frame_pwd_2);
-        lineE_pwd_2->setObjectName(QString::fromUtf8("lineE_pwd_2"));
+        lineE_username = new QLineEdit(frame_pwd_2);
+        lineE_username->setObjectName(QString::fromUtf8("lineE_username"));
 
-        horizontalLayout_10->addWidget(lineE_pwd_2);
+        horizontalLayout_10->addWidget(lineE_username);
 
 
         gridLayout_4->addLayout(horizontalLayout_10, 0, 0, 1, 1);
@@ -324,17 +245,17 @@ public:
 
         label_pwd_3 = new QLabel(frame_pwd_3);
         label_pwd_3->setObjectName(QString::fromUtf8("label_pwd_3"));
-        sizePolicy.setHeightForWidth(label_pwd_3->sizePolicy().hasHeightForWidth());
-        label_pwd_3->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(label_pwd_3->sizePolicy().hasHeightForWidth());
+        label_pwd_3->setSizePolicy(sizePolicy1);
         label_pwd_3->setMinimumSize(QSize(30, 30));
         label_pwd_3->setMaximumSize(QSize(30, 30));
 
         horizontalLayout_12->addWidget(label_pwd_3);
 
-        lineE_pwd_3 = new QLineEdit(frame_pwd_3);
-        lineE_pwd_3->setObjectName(QString::fromUtf8("lineE_pwd_3"));
+        lineE_security_question = new QLineEdit(frame_pwd_3);
+        lineE_security_question->setObjectName(QString::fromUtf8("lineE_security_question"));
 
-        horizontalLayout_12->addWidget(lineE_pwd_3);
+        horizontalLayout_12->addWidget(lineE_security_question);
 
 
         gridLayout_5->addLayout(horizontalLayout_12, 0, 0, 1, 1);
@@ -373,8 +294,8 @@ public:
 
         label_pwd = new QLabel(frame_pwd);
         label_pwd->setObjectName(QString::fromUtf8("label_pwd"));
-        sizePolicy.setHeightForWidth(label_pwd->sizePolicy().hasHeightForWidth());
-        label_pwd->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(label_pwd->sizePolicy().hasHeightForWidth());
+        label_pwd->setSizePolicy(sizePolicy1);
         label_pwd->setMinimumSize(QSize(30, 30));
         label_pwd->setMaximumSize(QSize(30, 30));
 
@@ -407,10 +328,10 @@ public:
 
         label_login = new QLabel(frame_login);
         label_login->setObjectName(QString::fromUtf8("label_login"));
-        QFont font1;
-        font1.setFamily(QString::fromUtf8("Arial"));
-        font1.setPointSize(22);
-        label_login->setFont(font1);
+        QFont font;
+        font.setFamily(QString::fromUtf8("Arial"));
+        font.setPointSize(22);
+        label_login->setFont(font);
         label_login->setStyleSheet(QString::fromUtf8(""));
 
         horizontalLayout->addWidget(label_login);
@@ -437,10 +358,10 @@ public:
 
         btn_forget_3 = new QPushButton(frame_login);
         btn_forget_3->setObjectName(QString::fromUtf8("btn_forget_3"));
-        QFont font2;
-        font2.setFamily(QString::fromUtf8("Arial"));
-        font2.setUnderline(true);
-        btn_forget_3->setFont(font2);
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Arial"));
+        font1.setUnderline(true);
+        btn_forget_3->setFont(font1);
         btn_forget_3->setStyleSheet(QString::fromUtf8(""));
 
         gridLayout_9->addWidget(btn_forget_3, 16, 0, 1, 5);
@@ -469,17 +390,17 @@ public:
 
         label_pwd_4 = new QLabel(frame_pwd_4);
         label_pwd_4->setObjectName(QString::fromUtf8("label_pwd_4"));
-        sizePolicy.setHeightForWidth(label_pwd_4->sizePolicy().hasHeightForWidth());
-        label_pwd_4->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(label_pwd_4->sizePolicy().hasHeightForWidth());
+        label_pwd_4->setSizePolicy(sizePolicy1);
         label_pwd_4->setMinimumSize(QSize(30, 30));
         label_pwd_4->setMaximumSize(QSize(30, 30));
 
         horizontalLayout_13->addWidget(label_pwd_4);
 
-        lineE_pwd_4 = new QLineEdit(frame_pwd_4);
-        lineE_pwd_4->setObjectName(QString::fromUtf8("lineE_pwd_4"));
+        lineE_security_ans = new QLineEdit(frame_pwd_4);
+        lineE_security_ans->setObjectName(QString::fromUtf8("lineE_security_ans"));
 
-        horizontalLayout_13->addWidget(lineE_pwd_4);
+        horizontalLayout_13->addWidget(lineE_security_ans);
 
 
         gridLayout_6->addLayout(horizontalLayout_13, 0, 0, 1, 1);
@@ -517,19 +438,19 @@ public:
 
         horizontalLayout_6->addItem(horizontalSpacer_13);
 
-        btn_forget = new QPushButton(frame_login);
-        btn_forget->setObjectName(QString::fromUtf8("btn_forget"));
-        sizePolicy.setHeightForWidth(btn_forget->sizePolicy().hasHeightForWidth());
-        btn_forget->setSizePolicy(sizePolicy);
-        btn_forget->setMinimumSize(QSize(320, 50));
-        btn_forget->setMaximumSize(QSize(320, 50));
-        QFont font3;
-        font3.setFamily(QString::fromUtf8("Arial"));
-        font3.setPointSize(12);
-        font3.setUnderline(false);
-        btn_forget->setFont(font3);
+        btn_submit = new QPushButton(frame_login);
+        btn_submit->setObjectName(QString::fromUtf8("btn_submit"));
+        sizePolicy1.setHeightForWidth(btn_submit->sizePolicy().hasHeightForWidth());
+        btn_submit->setSizePolicy(sizePolicy1);
+        btn_submit->setMinimumSize(QSize(320, 50));
+        btn_submit->setMaximumSize(QSize(320, 50));
+        QFont font2;
+        font2.setFamily(QString::fromUtf8("Arial"));
+        font2.setPointSize(12);
+        font2.setUnderline(false);
+        btn_submit->setFont(font2);
 
-        horizontalLayout_6->addWidget(btn_forget);
+        horizontalLayout_6->addWidget(btn_submit);
 
         horizontalSpacer_14 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -562,17 +483,17 @@ public:
 
         label_pwd_5 = new QLabel(frame_pwd_5);
         label_pwd_5->setObjectName(QString::fromUtf8("label_pwd_5"));
-        sizePolicy.setHeightForWidth(label_pwd_5->sizePolicy().hasHeightForWidth());
-        label_pwd_5->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(label_pwd_5->sizePolicy().hasHeightForWidth());
+        label_pwd_5->setSizePolicy(sizePolicy1);
         label_pwd_5->setMinimumSize(QSize(30, 30));
         label_pwd_5->setMaximumSize(QSize(30, 30));
 
         horizontalLayout_16->addWidget(label_pwd_5);
 
-        lineE_pwd_5 = new QLineEdit(frame_pwd_5);
-        lineE_pwd_5->setObjectName(QString::fromUtf8("lineE_pwd_5"));
+        lineE_admin_number = new QLineEdit(frame_pwd_5);
+        lineE_admin_number->setObjectName(QString::fromUtf8("lineE_admin_number"));
 
-        horizontalLayout_16->addWidget(lineE_pwd_5);
+        horizontalLayout_16->addWidget(lineE_admin_number);
 
 
         gridLayout_8->addLayout(horizontalLayout_16, 0, 0, 1, 1);
@@ -593,7 +514,7 @@ public:
 
         btn_forget_2 = new QPushButton(frame_login);
         btn_forget_2->setObjectName(QString::fromUtf8("btn_forget_2"));
-        btn_forget_2->setFont(font2);
+        btn_forget_2->setFont(font1);
 
         gridLayout_9->addWidget(btn_forget_2, 17, 0, 1, 5);
 
@@ -605,8 +526,8 @@ public:
 
         frame_pic = new QFrame(frame_3);
         frame_pic->setObjectName(QString::fromUtf8("frame_pic"));
-        sizePolicy1.setHeightForWidth(frame_pic->sizePolicy().hasHeightForWidth());
-        frame_pic->setSizePolicy(sizePolicy1);
+        sizePolicy.setHeightForWidth(frame_pic->sizePolicy().hasHeightForWidth());
+        frame_pic->setSizePolicy(sizePolicy);
         frame_pic->setMinimumSize(QSize(500, 600));
         frame_pic->setStyleSheet(QString::fromUtf8(""));
         frame_pic->setFrameShape(QFrame::StyledPanel);
@@ -642,10 +563,6 @@ public:
     void retranslateUi(QWidget *Widget)
     {
         Widget->setWindowTitle(QCoreApplication::translate("Widget", "Widget", nullptr));
-        btn_1->setText(QCoreApplication::translate("Widget", "starry sky", nullptr));
-        btn_2->setText(QCoreApplication::translate("Widget", "sea", nullptr));
-        btn_3->setText(QCoreApplication::translate("Widget", "desert", nullptr));
-        btn_4->setText(QCoreApplication::translate("Widget", "grassland", nullptr));
         label_pwd_2->setText(QString());
         label_pwd_3->setText(QString());
         label_pwd->setText(QString());
@@ -653,7 +570,7 @@ public:
         label->setText(QCoreApplication::translate("Widget", "version 0.0.0", nullptr));
         btn_forget_3->setText(QCoreApplication::translate("Widget", "help", nullptr));
         label_pwd_4->setText(QString());
-        btn_forget->setText(QCoreApplication::translate("Widget", "Submit it", nullptr));
+        btn_submit->setText(QCoreApplication::translate("Widget", "Submit it", nullptr));
         label_pwd_5->setText(QString());
         btn_forget_2->setText(QCoreApplication::translate("Widget", "contact us", nullptr));
     } // retranslateUi

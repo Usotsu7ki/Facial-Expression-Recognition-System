@@ -225,6 +225,7 @@ Makefile: register.pro D:/qtgrp/5.13.2/mingw73_32/mkspecs/win32-g++/qmake.conf D
 		D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/qt_config.prf \
 		D:/qtgrp/5.13.2/mingw73_32/mkspecs/win32-g++/qmake.conf \
 		D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/exclusive_builds.prf \
 		D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/toolchain.prf \
 		D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/default_pre.prf \
@@ -415,6 +416,7 @@ D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/qt_functions.prf:
 D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/qt_config.prf:
 D:/qtgrp/5.13.2/mingw73_32/mkspecs/win32-g++/qmake.conf:
 D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/spec_post.prf:
+.qmake.stash:
 D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/exclusive_builds.prf:
 D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/toolchain.prf:
 D:/qtgrp/5.13.2/mingw73_32/mkspecs/features/default_pre.prf:

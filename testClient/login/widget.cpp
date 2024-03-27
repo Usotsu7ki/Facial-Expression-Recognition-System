@@ -15,10 +15,6 @@ Widget::Widget(QWidget *parent) :
 
     /* 背景图设置 */
 
-    connect(ui->btn_5, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_6, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_7, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_8, SIGNAL(clicked(bool)), this, SLOT(set_style()));
 
 }
 

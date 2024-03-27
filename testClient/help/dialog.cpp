@@ -11,10 +11,6 @@ Dialog::Dialog(QWidget *parent)
 
     /* 背景图设置 */
 
-    connect(ui->btn_1, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_2, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_3, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_4, SIGNAL(clicked(bool)), this, SLOT(set_style()));
 }
 void Dialog::set_style()
 {

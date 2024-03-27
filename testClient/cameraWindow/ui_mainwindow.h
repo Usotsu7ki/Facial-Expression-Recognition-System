@@ -23,7 +23,6 @@
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
-#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -34,169 +33,117 @@ public:
     QAction *actionhelp;
     QAction *actioncontact_us;
     QAction *actionLog_out;
+    QAction *actionOpen_record_folder;
+    QAction *actionstarry_sky;
+    QAction *actionsea;
+    QAction *actiondesert;
+    QAction *actiongrassland;
     QWidget *centralwidget;
+    QGridLayout *gridLayout_2;
     QGridLayout *gridLayout;
-    QHBoxLayout *horizontalLayout_12;
-    QSpacerItem *horizontalSpacer_8;
-    QPushButton *btn_1;
-    QSpacerItem *horizontalSpacer_23;
-    QPushButton *btn_2;
-    QSpacerItem *horizontalSpacer_24;
-    QPushButton *btn_3;
-    QSpacerItem *horizontalSpacer_25;
-    QPushButton *btn_4;
-    QSpacerItem *horizontalSpacer_9;
-    QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
-    QPushButton *Camera;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *shotButton;
-    QPushButton *returnButton;
     QGraphicsView *graphicsView;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *recordButton;
+    QSpacerItem *horizontalSpacer_3;
     QLabel *label;
     QTextEdit *textEdit;
     QMenuBar *menubar;
     QMenu *menumenu;
+    QMenu *menusetting;
+    QMenu *menuAppearance;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(813, 580);
+        MainWindow->resize(700, 900);
         actionhelp = new QAction(MainWindow);
         actionhelp->setObjectName(QString::fromUtf8("actionhelp"));
         actioncontact_us = new QAction(MainWindow);
         actioncontact_us->setObjectName(QString::fromUtf8("actioncontact_us"));
         actionLog_out = new QAction(MainWindow);
         actionLog_out->setObjectName(QString::fromUtf8("actionLog_out"));
+        actionOpen_record_folder = new QAction(MainWindow);
+        actionOpen_record_folder->setObjectName(QString::fromUtf8("actionOpen_record_folder"));
+        actionstarry_sky = new QAction(MainWindow);
+        actionstarry_sky->setObjectName(QString::fromUtf8("actionstarry_sky"));
+        actionsea = new QAction(MainWindow);
+        actionsea->setObjectName(QString::fromUtf8("actionsea"));
+        actiondesert = new QAction(MainWindow);
+        actiondesert->setObjectName(QString::fromUtf8("actiondesert"));
+        actiongrassland = new QAction(MainWindow);
+        actiongrassland->setObjectName(QString::fromUtf8("actiongrassland"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        gridLayout = new QGridLayout(centralwidget);
+        gridLayout_2 = new QGridLayout(centralwidget);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        gridLayout = new QGridLayout();
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        horizontalLayout_12 = new QHBoxLayout();
-        horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
-        horizontalSpacer_8 = new QSpacerItem(13, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_12->addItem(horizontalSpacer_8);
-
-        btn_1 = new QPushButton(centralwidget);
-        btn_1->setObjectName(QString::fromUtf8("btn_1"));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(btn_1->sizePolicy().hasHeightForWidth());
-        btn_1->setSizePolicy(sizePolicy);
-        btn_1->setMinimumSize(QSize(150, 50));
-        btn_1->setMaximumSize(QSize(150, 50));
-        QFont font;
-        font.setFamily(QString::fromUtf8("Arial"));
-        font.setPointSize(10);
-        btn_1->setFont(font);
-
-        horizontalLayout_12->addWidget(btn_1);
-
-        horizontalSpacer_23 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        horizontalLayout_12->addItem(horizontalSpacer_23);
-
-        btn_2 = new QPushButton(centralwidget);
-        btn_2->setObjectName(QString::fromUtf8("btn_2"));
-        sizePolicy.setHeightForWidth(btn_2->sizePolicy().hasHeightForWidth());
-        btn_2->setSizePolicy(sizePolicy);
-        btn_2->setMinimumSize(QSize(150, 50));
-        btn_2->setMaximumSize(QSize(150, 50));
-        btn_2->setFont(font);
-
-        horizontalLayout_12->addWidget(btn_2);
-
-        horizontalSpacer_24 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        horizontalLayout_12->addItem(horizontalSpacer_24);
-
-        btn_3 = new QPushButton(centralwidget);
-        btn_3->setObjectName(QString::fromUtf8("btn_3"));
-        sizePolicy.setHeightForWidth(btn_3->sizePolicy().hasHeightForWidth());
-        btn_3->setSizePolicy(sizePolicy);
-        btn_3->setMinimumSize(QSize(150, 50));
-        btn_3->setMaximumSize(QSize(150, 50));
-        btn_3->setFont(font);
-
-        horizontalLayout_12->addWidget(btn_3);
-
-        horizontalSpacer_25 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
-
-        horizontalLayout_12->addItem(horizontalSpacer_25);
-
-        btn_4 = new QPushButton(centralwidget);
-        btn_4->setObjectName(QString::fromUtf8("btn_4"));
-        sizePolicy.setHeightForWidth(btn_4->sizePolicy().hasHeightForWidth());
-        btn_4->setSizePolicy(sizePolicy);
-        btn_4->setMinimumSize(QSize(150, 50));
-        btn_4->setMaximumSize(QSize(150, 50));
-        btn_4->setFont(font);
-
-        horizontalLayout_12->addWidget(btn_4);
-
-        horizontalSpacer_9 = new QSpacerItem(13, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_12->addItem(horizontalSpacer_9);
-
-
-        gridLayout->addLayout(horizontalLayout_12, 0, 0, 1, 1);
-
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        Camera = new QPushButton(centralwidget);
-        Camera->setObjectName(QString::fromUtf8("Camera"));
-        sizePolicy.setHeightForWidth(Camera->sizePolicy().hasHeightForWidth());
-        Camera->setSizePolicy(sizePolicy);
-        Camera->setMinimumSize(QSize(80, 80));
-        QFont font1;
-        font1.setFamily(QString::fromUtf8("Arial"));
-        Camera->setFont(font1);
-        Camera->setStyleSheet(QString::fromUtf8(""));
-
-        horizontalLayout->addWidget(Camera);
-
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer_2);
 
         shotButton = new QPushButton(centralwidget);
         shotButton->setObjectName(QString::fromUtf8("shotButton"));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(shotButton->sizePolicy().hasHeightForWidth());
         shotButton->setSizePolicy(sizePolicy);
         shotButton->setMinimumSize(QSize(130, 50));
-        shotButton->setFont(font1);
+        QFont font;
+        font.setFamily(QString::fromUtf8("Arial"));
+        shotButton->setFont(font);
 
         horizontalLayout->addWidget(shotButton);
 
-        returnButton = new QPushButton(centralwidget);
-        returnButton->setObjectName(QString::fromUtf8("returnButton"));
-        sizePolicy.setHeightForWidth(returnButton->sizePolicy().hasHeightForWidth());
-        returnButton->setSizePolicy(sizePolicy);
-        returnButton->setMinimumSize(QSize(130, 50));
-        returnButton->setFont(font1);
 
-        horizontalLayout->addWidget(returnButton);
-
-
-        verticalLayout->addLayout(horizontalLayout);
+        gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
 
         graphicsView = new QGraphicsView(centralwidget);
         graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
-        graphicsView->setFont(font);
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Arial"));
+        font1.setPointSize(10);
+        graphicsView->setFont(font1);
 
-        verticalLayout->addWidget(graphicsView);
+        gridLayout->addWidget(graphicsView, 1, 0, 1, 1);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer);
+
+        recordButton = new QPushButton(centralwidget);
+        recordButton->setObjectName(QString::fromUtf8("recordButton"));
+        sizePolicy.setHeightForWidth(recordButton->sizePolicy().hasHeightForWidth());
+        recordButton->setSizePolicy(sizePolicy);
+        recordButton->setMinimumSize(QSize(80, 80));
+        recordButton->setFont(font);
+        recordButton->setStyleSheet(QString::fromUtf8(""));
+
+        horizontalLayout_2->addWidget(recordButton);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_3);
+
+
+        gridLayout->addLayout(horizontalLayout_2, 2, 0, 1, 1);
 
         label = new QLabel(centralwidget);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setFont(font1);
+        label->setFont(font);
 
-        verticalLayout->addWidget(label);
+        gridLayout->addWidget(label, 3, 0, 1, 1);
 
         textEdit = new QTextEdit(centralwidget);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
@@ -208,28 +155,38 @@ public:
         textEdit->setFocusPolicy(Qt::NoFocus);
         textEdit->setInputMethodHints(Qt::ImhNone);
 
-        verticalLayout->addWidget(textEdit);
+        gridLayout->addWidget(textEdit, 4, 0, 1, 1);
 
 
-        gridLayout->addLayout(verticalLayout, 1, 0, 1, 1);
+        gridLayout_2->addLayout(gridLayout, 0, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 813, 21));
+        menubar->setGeometry(QRect(0, 0, 700, 21));
         menumenu = new QMenu(menubar);
         menumenu->setObjectName(QString::fromUtf8("menumenu"));
+        menusetting = new QMenu(menubar);
+        menusetting->setObjectName(QString::fromUtf8("menusetting"));
+        menuAppearance = new QMenu(menusetting);
+        menuAppearance->setObjectName(QString::fromUtf8("menuAppearance"));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
         MainWindow->setStatusBar(statusbar);
 
         menubar->addAction(menumenu->menuAction());
+        menubar->addAction(menusetting->menuAction());
         menumenu->addSeparator();
         menumenu->addAction(actionhelp);
         menumenu->addAction(actioncontact_us);
         menumenu->addSeparator();
-        menumenu->addAction(actionLog_out);
+        menumenu->addAction(actionOpen_record_folder);
+        menusetting->addAction(menuAppearance->menuAction());
+        menuAppearance->addAction(actionstarry_sky);
+        menuAppearance->addAction(actionsea);
+        menuAppearance->addAction(actiondesert);
+        menuAppearance->addAction(actiongrassland);
 
         retranslateUi(MainWindow);
 
@@ -242,15 +199,17 @@ public:
         actionhelp->setText(QCoreApplication::translate("MainWindow", "Help", nullptr));
         actioncontact_us->setText(QCoreApplication::translate("MainWindow", "Contact Us", nullptr));
         actionLog_out->setText(QCoreApplication::translate("MainWindow", "return", nullptr));
-        btn_1->setText(QCoreApplication::translate("MainWindow", "starry sky", nullptr));
-        btn_2->setText(QCoreApplication::translate("MainWindow", "sea", nullptr));
-        btn_3->setText(QCoreApplication::translate("MainWindow", "desert", nullptr));
-        btn_4->setText(QCoreApplication::translate("MainWindow", "grassland", nullptr));
-        Camera->setText(QString());
+        actionOpen_record_folder->setText(QCoreApplication::translate("MainWindow", "Open record folder", nullptr));
+        actionstarry_sky->setText(QCoreApplication::translate("MainWindow", "starry sky", nullptr));
+        actionsea->setText(QCoreApplication::translate("MainWindow", "sea", nullptr));
+        actiondesert->setText(QCoreApplication::translate("MainWindow", "desert", nullptr));
+        actiongrassland->setText(QCoreApplication::translate("MainWindow", "grassland", nullptr));
         shotButton->setText(QCoreApplication::translate("MainWindow", "screen shot", nullptr));
-        returnButton->setText(QCoreApplication::translate("MainWindow", "return", nullptr));
+        recordButton->setText(QString());
         label->setText(QCoreApplication::translate("MainWindow", "ConsoleText", nullptr));
         menumenu->setTitle(QCoreApplication::translate("MainWindow", "menu", nullptr));
+        menusetting->setTitle(QCoreApplication::translate("MainWindow", "setting", nullptr));
+        menuAppearance->setTitle(QCoreApplication::translate("MainWindow", "Appearance", nullptr));
     } // retranslateUi
 
 };

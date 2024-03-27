@@ -18,18 +18,10 @@ Widget::Widget(QWidget *parent) :
     ui->label_pwd_4->setScaledContents(true);         //图片自适应label大小
     ui->label_pwd_5->setScaledContents(true);         //图片自适应label大小
 
-    ui->lineE_pwd_2->setPlaceholderText("User name");
-    ui->lineE_pwd->setPlaceholderText("Password");
-    ui->lineE_pwd_3->setPlaceholderText("Security");
-    ui->lineE_pwd_4->setPlaceholderText("Security answer");
-    ui->lineE_pwd_5->setPlaceholderText("Admin code");
+
 
     /* 背景图设置 */
 
-    connect(ui->btn_1, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_2, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_3, SIGNAL(clicked(bool)), this, SLOT(set_style()));
-    connect(ui->btn_4, SIGNAL(clicked(bool)), this, SLOT(set_style()));
 
 }
 
