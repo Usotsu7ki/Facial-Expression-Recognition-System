@@ -35,7 +35,7 @@ def show_loading_dialog():
 
     # update the progress bar
     for i in range(1, 71):
-        progressDialog.update_progress(i)
+        progressDialog.updateProgress(i)
         time.sleep(0.01)
 
     progressDialog.close()
@@ -90,7 +90,7 @@ class MainWindow(QtWidgets.QWidget):
 
     # Open camera window
     def handle_client(self):
-        reply = QMessageBox.question(self, 'Webcam Permission', 'Please give us permission to open the camera.',
+        reply = QMessageBox.question(self, "Webcam Permission", "Please give us permission to open the camera.",
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             print("open camera window")
@@ -154,26 +154,26 @@ class MainWindow(QtWidgets.QWidget):
                 elif response == "client": # open client window
                     self.handle_client()
                 elif response == "fail": # login fail
-                    QMessageBox.warning(self, 'Login Failed', 'No such user found or incorrect password.', QMessageBox.Ok)
+                    QMessageBox.warning(self, "login Failed", "No such user found or incorrect password.", QMessageBox.Ok)
                 else:
-                    QMessageBox.warning(self, 'Error', 'An error occurred during login.', QMessageBox.Ok)
+                    QMessageBox.warning(self, "Error", "An error occurred during login.", QMessageBox.Ok)
                     print("wrong username or password")
             except Exception as e:
                 print(f"Execption in sending login or receive response: {e}")
                 self.handle_client()
         else:
-            QMessageBox.warning(self, 'Input Error', 'Please enter both username and password.', QMessageBox.Ok)
+            QMessageBox.warning(self, "Input Error", "Please enter both username and password.", QMessageBox.Ok)
 
 
     """
-    skip login
+    skip login(abadon)
     跳过登录，给其相应问题框：如果同意给摄像头权限就打开摄像头，关闭登录窗口
             不同意就不操作
     """
     #skipLogin方法已经废弃
     #this method was abadoned because of Addition od register and accounts
     def skipLogin(self):
-        reply = QMessageBox.question(self, 'webcam permission', 'Please give us permission to open camera？',
+        reply = QMessageBox.question(self, "webcam permission", "Please give us permission to open camera？",
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             print("jump to camera window")

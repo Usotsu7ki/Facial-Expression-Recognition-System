@@ -4,10 +4,9 @@ import threading
 
 from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtCore import QTimer, Qt, QCoreApplication
-from PyQt5.QtGui import QImage, QPixmap, QColor, QPen, QFont
-from PyQt5.QtWidgets import QMessageBox, QGraphicsScene, QGraphicsRectItem, QGraphicsTextItem
+from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtWidgets import QMessageBox, QGraphicsScene
 import cv2
-import socket
 import time
 
 from contactus import ContactUsDialog
@@ -30,12 +29,12 @@ class CameraWindow(QtWidgets.QMainWindow):
     def __init__(self, client_socket):
         super().__init__()
 
-        self.x = 0
-        self.h = 0
-        self.w = 0
-        self.y = 0
-        self.probability = 0
-        self.emotion = "Neural"
+        self.xs = []
+        self.ys = []
+        self.ws = []
+        self.hs = []
+        self.probabilities = []
+        self.emotions = []
 
         uic.loadUi('cameraWindow\mainwindow.ui', self)
         try:
@@ -63,7 +62,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         # self.shotButton.clicked.connect(self.back_action)
 
         self.recordButton.setStyleSheet("border-image: url(:/res/pic/record.png);")
-        self.recordButton.clicked.connect(self.toggleRecording)
+        self.recordButton.clicked.connect(self.switchforRecording)
         # print("2 button loading end")
 
         self.actionstarry_sky.triggered.connect(self.changeStyleToStarrySky)
@@ -85,7 +84,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.is_running = True  # control the thread running
         self.last_ok_received = time.time()  # this used to keep sending and receiving normal
 
-        self.textEdit.setReadOnly(True)
+        self.textEdit.setReadOnly(True) # the console only used to show messages
 
         self.host, self.port = read_server_address()
 
@@ -103,13 +102,12 @@ class CameraWindow(QtWidgets.QMainWindow):
         # self.timer_send.start(50)
         # print("timer2 loading end")
 
-        self.update_graphics_signal.connect(self.update_graphics_draw)
+        self.update_graphics_signal.connect(self.updateGraphicsDraw)
 
-        threading.Thread(target=self.listen_server_message, daemon=True).start()  # aia
+        threading.Thread(target=self.listeningMessages, daemon=True).start()  # aia
 
 
-
-    # change style methods: 5
+    # change background images for all scenes, 5 methods
     def applyStyleSheet(self, styleSheetPath):
         try:
             with open(styleSheetPath, "r", encoding="utf-8") as file:
@@ -146,7 +144,8 @@ class CameraWindow(QtWidgets.QMainWindow):
                 # linux
                 os.system(f'xdg-open "{record_path}"')
 
-    # take screen shot triggered by shotButton
+
+    # take screenshot triggered by shotButton, this method will screenshot the whole widget
     def takeScreenshot(self):
         record_path = os.path.join(QCoreApplication.applicationDirPath(), "record")
         if not os.path.exists(record_path):
@@ -158,7 +157,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.append_to_console(f"ScreenShot in{record_path}")
 
     # take recording and change the image of record button
-    def toggleRecording(self):
+    def switchforRecording(self):
         if self.is_recording:
             # stop recording
             self.is_recording = False
@@ -182,19 +181,6 @@ class CameraWindow(QtWidgets.QMainWindow):
     def append_to_console(self, message):
         self.textEdit.append(message)
 
-    # 本方法因为存在bug废弃
-    # this method abandoned because of existence of bugs
-    def back_action(self):
-        print("back action")
-        self.append_to_console("you are kicked")
-
-        self.cleanup_resources()
-
-        QMessageBox.warning(self, 'You are kicked by an admin.', QMessageBox.Ok)
-
-        # self.back_to_main_signal.emit()
-        self.close()
-
     def display_frame(self):
         # show the frames caught by camera
         try:
@@ -209,10 +195,11 @@ class CameraWindow(QtWidgets.QMainWindow):
         try:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-            cv2.rectangle(frame, (self.x, self.y), (self.x + self.w, self.y + self.h), (255, 0, 0), 2)
-
-            cv2.putText(frame, f"{self.emotion}: {self.probability}%", (self.x+20, self.y), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.9, (255, 255, 255), 2)
+            for i in range(len(self.emotions)):
+                cv2.rectangle(frame, (self.xs[i], self.ys[i]), (self.xs[i] + self.ws[i], self.ys[i] + self.hs[i]),
+                              (255, 0, 0), 2)
+                cv2.putText(frame, f"{self.emotions[i]}: {self.probabilities[i]}%", (self.xs[i] + 20, self.ys[i]),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
 
             h, w, ch = frame.shape
             bytes_per_line = ch * w
@@ -232,18 +219,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         if self.is_recording and self.video_writer is not None:
             self.video_writer.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
-    # this method abandoned
-    def closeCameraAndTCPConnection(self):
-        # close camera
-        print("Closing camera and TCP connection")
-        self.timer_show.stop()
-        self.timer_send.stop()
-        self.cap.release()
-        print("release camera")
-        try:
-            self.client_socket.close()
-        except Exception as e:
-            self.append_to_console("error in closing connection " + str(e))
+
 
     # Overload the close
     def closeEvent(self, event):  # 重写关闭窗口函数，清理资源
@@ -254,7 +230,7 @@ class CameraWindow(QtWidgets.QMainWindow):
     def cleanup_resources(self):
         print("Cleaning up resources")
         if self.is_recording:
-            self.toggleRecording()  # 停止录制并保存
+            self.switchforRecording()  # if is recording, then stop and save
         print("recording stop")
 
         self.is_running = False
@@ -280,25 +256,34 @@ class CameraWindow(QtWidgets.QMainWindow):
         # self.clear_socket_buffer()
         print("Resources cleaned up")
 
-    def update_graphics_draw(self, message):
+    def updateGraphicsDraw(self, message):
+        self.xs.clear()
+        self.ys.clear()
+        self.ws.clear()
+        self.hs.clear()
+        self.probabilities.clear()
+        self.emotions.clear()
 
         faces_data = message.split(',')  # different faces may be divided by ","
         for face_data in faces_data:
             if face_data.strip():
                 data_parts = face_data.strip().split(' ')
                 if len(data_parts) == 6:
-                    self.emotion, probability, x, y, w, h = data_parts
-                    self.probability = float(probability)
-                    self.x = int(x)
-                    self.y = int(y)
-                    self.w = int(w)
-                    self.h = int(h)
+                    emotion, probability, x, y, w, h = data_parts
+                    self.emotions.append(emotion)
+                    self.probabilities.append(float(probability))
+                    self.xs.append(int(x))
+                    self.ys.append(int(y))
+                    self.ws.append(int(w))
+                    self.hs.append(int(h))
+                else:
+                    print("length of faces error")
 
         # clean previous rectangle and emotion text before draw the next faces
         # self.scene.clear()
 
     # Method sending frames to server
-    def send_frame(self):
+    def sendingFrame(self):
         if not self.frame_queue.empty() and self.is_running:
             print("try to send")
             frame = self.frame_queue.get()
@@ -311,18 +296,19 @@ class CameraWindow(QtWidgets.QMainWindow):
             except Exception as e:
                 self.append_to_console("error in packing and sending" + str(e))
 
+
+
     """
     listen to server, handling the messages from server
     """
-
-    def listen_server_message(self):
+    def listeningMessages(self):
         self.last_ok_received = time.time()
-        self.check_for_timeout()
+        self.checkWhetherTimeout()
         time.sleep(1)
         while self.is_running:
             try:
                 time.sleep(0.2)
-                self.send_frame()
+                self.sendingFrame()
                 print("listening...")
                 server_message = self.client_socket.recv(512).decode()
                 print(f"receive message: {server_message}")
@@ -331,7 +317,8 @@ class CameraWindow(QtWidgets.QMainWindow):
                     self.last_ok_received = time.time()
                 elif server_message == "disconnect":
                     print("received disconnect from server")
-                    self.back_action()
+                    QMessageBox.Warning(self,"Disconnect","Sorry, you are kicked by the admin",QMessageBox.Ok)
+                    self.close()
                     break
                 else:
                     print("other message...")
@@ -342,13 +329,14 @@ class CameraWindow(QtWidgets.QMainWindow):
                 print("Error in receiving message from server: " + str(e))
                 break
 
-    def check_for_timeout(self):
+    # check and resend when the server can not handle frames and send messages back well
+    def checkWhetherTimeout(self):
         if time.time() - self.last_ok_received > 5:  # try to resend if can not send after 10 secs
             print("sending error, retry")
-            self.send_frame()
+            self.sendingFrame()
             # self.append_to_console("Error in sending images to server, try to resend")
 
-        self.timeout_timer = threading.Timer(5, self.check_for_timeout)  # continue checking after 10 secs
+        self.timeout_timer = threading.Timer(5, self.checkWhetherTimeout)  # continue checking after 10 secs
         self.timeout_timer.start()
 
     def helpActionTriggered(self):
@@ -360,3 +348,30 @@ class CameraWindow(QtWidgets.QMainWindow):
         print("open contact us dialog")
         dialog = ContactUsDialog(self)
         dialog.exec_()
+
+
+    # 本方法因为存在bug废弃
+    # this method abandoned because of existence of bugs
+    def back_action(self):
+        print("back action")
+        self.append_to_console("you are kicked")
+
+        self.cleanup_resources()
+
+        QMessageBox.warning(self, 'You are kicked by an admin.', QMessageBox.Ok)
+
+        # self.back_to_main_signal.emit()
+        self.close()
+
+    # this method abandoned
+    def closeCameraAndTCPConnection(self):
+        # close camera
+        print("Closing camera and TCP connection")
+        self.timer_show.stop()
+        self.timer_send.stop()
+        self.cap.release()
+        print("release camera")
+        try:
+            self.client_socket.close()
+        except Exception as e:
+            self.append_to_console("error in closing connection " + str(e))

@@ -127,7 +127,7 @@ class ForgetPasswordWindow(QtWidgets.QDialog):
                 QMessageBox.warning(self, "Security answer incorrect or other error. Please try again.")
 
         except Exception as e:
-            print(f"发送失败: {e}")
+            print(f"sending fail: {e}")
             QMessageBox.warning(self, "Connection Error", "Failed to send registration info to the server.")
             return
 

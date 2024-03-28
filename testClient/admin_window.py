@@ -19,6 +19,7 @@ class AdminWindow(QtWidgets.QMainWindow):
     update_client_list_signal = QtCore.pyqtSignal(list) #signal to update client list
 
     def __init__(self, client_socket):
+        self.IP = HOST
         super().__init__()
         uic.loadUi('admin\mainwindow.ui', self)
         print("load ui finish")
@@ -46,14 +47,35 @@ class AdminWindow(QtWidgets.QMainWindow):
         self.contactAction = self.findChild(QtWidgets.QAction, 'actionContact_us')
         self.contactAction.triggered.connect(self.contactActionTriggered)
 
-        self.sendButton.clicked.connect(self.sendMessage) # send button
+        self.sendButton.clicked.connect(self.sendMessage) # send message button
         self.clientListWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu) # list right click menu
         self.clientListWidget.customContextMenuRequested.connect(self.showContextMenu) #showing menu
 
-        self.update_client_list_signal.connect(self.update_client_list)
-        self.start_receiving()
+        self.update_client_list_signal.connect(self.updateConnectionClientList)
+        self.startReceiving()
         print("init admin end")
+        print(self.extract_ip())
+        self.init_IP()
 
+    def extract_ip(self):
+        st = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            st.connect(('10.255.255.255', 1))
+            IP = st.getsockname()[0]
+        except Exception:
+            IP = '127.0.0.1'
+        finally:
+            st.close()
+        return IP
+
+    def init_IP(self):
+        if global_settings.isLocal:
+            self.IP = HOST
+        else:
+            self.IP = self.extract_ip()
+
+
+    # the following 5 methods are used to change styles/background images and some button colors for all widgets
     def applyStyleSheet(self, styleSheetPath):
         try:
             with open(styleSheetPath, "r", encoding="utf-8") as file:
@@ -77,12 +99,13 @@ class AdminWindow(QtWidgets.QMainWindow):
         global_settings.change_style_sheet("grassland")
         self.applyStyleSheet(r"admin\res\qss\style3.qss")
 
-    def start_receiving(self):
+    # when init, start a thread used  to listen messages from server: including clients_list
+    def startReceiving(self):
         print("start receiving")
         self.client_socket.send("message from admin".encode())
-        threading.Thread(target=self.receive_client_list, daemon=True).start()
+        threading.Thread(target=self.processClientList, daemon=True).start()
 
-    def receive_client_list(self):
+    def processClientList(self):
         while True:
             try:
                 data = self.client_socket.recv(1024)
@@ -94,19 +117,19 @@ class AdminWindow(QtWidgets.QMainWindow):
                 print(f"Error receiving client list: {e}")
                 break
 
-    def update_client_list(self, client_list):
+    def updateConnectionClientList(self, client_list):
         # clear the current list
         self.clientListWidget.clear()
         # using new list
         for client_address in client_list:
             if client_address and client_address != "disconnect" and not(HOST in client_address):  # Ensure the address not null, not admin itself
-                self.add_client(client_address)
+                self.addClient(client_address)
 
-    def add_client(self, client_address):
+    def addClient(self, client_address):
         # add new client to list
         self.clientListWidget.addItem(client_address)
 
-    def display_message(self, message):
+    def displayMessage(self, message):
         # append messages to testE
         self.consoleTextEdit.append(message)
 
