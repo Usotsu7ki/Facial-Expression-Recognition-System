@@ -8,6 +8,8 @@
 <br>Be cautious: 目前管理员注册码是12345678
 <br>当前问题：在点back button回到login界面后，再次登录出现服务器发送给客户端的第一条消息无法被正确接收的情况
 <br>介于上面这个情况，我把返回主界面的按钮删了
+<br>finally, I find where the bug exist, and I debug it, now the log out function is added again
+<br>Change some pictures
 <br>----------------------------------------------------------------------------------------
 #### Update 
 <br>11.29: add server, client and admin on github

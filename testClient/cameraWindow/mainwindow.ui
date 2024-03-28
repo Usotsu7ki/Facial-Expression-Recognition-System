@@ -163,7 +163,7 @@
      <x>0</x>
      <y>0</y>
      <width>700</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menumenu">
@@ -175,6 +175,8 @@
     <addaction name="actioncontact_us"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_record_folder"/>
+    <addaction name="separator"/>
+    <addaction name="actionback"/>
    </widget>
    <widget class="QMenu" name="menusetting">
     <property name="title">
@@ -233,6 +235,11 @@
   <action name="actiongrassland">
    <property name="text">
     <string>grassland</string>
+   </property>
+  </action>
+  <action name="actionback">
+   <property name="text">
+    <string>Log out</string>
    </property>
   </action>
  </widget>

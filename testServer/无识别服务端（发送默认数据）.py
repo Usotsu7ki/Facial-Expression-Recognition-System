@@ -1,11 +1,19 @@
-# server.py
+# 无识别服务端（发送默认数据）.py
+#from main import *
+import os
+import argparse
+
+# from models.PosterV2_7cls import *
+import time
+
+
 import socket
 import threading
 import cv2
-import time
-
 import numpy as np
 import sqlite3
+
+
 
 # 服务器IP和端口配置
 SERVER_IP = ''
@@ -144,7 +152,7 @@ def load_admin_password():
         return None
 
 def client_handler(client_sock, client_address):
-    clear_socket_buffer(client_sock)
+    # clear_socket_buffer(client_sock)
     global admin_sock
     print("client handler")
     while True:
@@ -219,7 +227,12 @@ def client_handler(client_sock, client_address):
                         client_sock.send("fail_database".encode())
                 else:
                     client_sock.send("fail".encode())
+            elif message.startswith('d'):
+                receiving_processing(client_sock,client_address)
 ############################其他分支#############################################
+            elif message == 'close':
+                client_handler(client_sock,client_address)
+                return
             else:
                 print(f"未知消息 {message} 从 {client_address} 收到,可能是断开连接")
                 break
@@ -236,24 +249,30 @@ def handle_client(client_sock,client_address):
     # 处理普通客户端的函数
     # 这里可以处理客户端发送的图像并发送回响应
     print("handling client")
-    is_connected = True
-    message = client_sock.recv(1024).decode#用于等阻塞客户端的Qmessagebox
+
+    message = client_sock.recv(1024).decode()#用于等阻塞客户端的Qmessagebox
     print(message)
-    if(message=="request_back"):
+    if(message=='back'):
         client_handler(client_sock, client_address)
+        print("back")
         return
     client_sock.send("ok".encode())
     if admin_sock:
         send_client_list_to_admin(admin_sock)
+    receiving_processing(client_sock,client_address)
+
+def receiving_processing(client_sock,client_address):
+    is_connected = True
     try:
         while is_connected:
+            print("listening")
             length_str = b""
             char = client_sock.recv(1)
             if char == b'':
                 is_connected = False
                 print("Client disconnected1")
                 continue
-            while char != b'\n':
+            while char != b'\n' and char !=b'd':
                 length_str += char
                 char = client_sock.recv(1)
                 if char == b'':
@@ -278,18 +297,52 @@ def handle_client(client_sock,client_address):
             img = np.frombuffer(img_bytes, dtype=np.uint8)
             img = cv2.imdecode(img, cv2.IMREAD_COLOR)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            # print(img)
+            start_time = time.time()
+            #faces = detector(img, 0)
+
+            send_message = "B:Smile 0.999 250 150 200 200"
+            # for face in faces:
+            #     x, y, w, h = face.left(), face.top(), face.width(), face.height()
+            #     # 提取人脸ROI
+            #     face_roi = img[y:y + h, x:x + w]
+            #     face_pil = Image.fromarray(cv2.cvtColor(face_roi, cv2.COLOR_BGR2RGB))
+            #     face_tensor = tran(face_pil).unsqueeze(0).cuda()  # 将输入数据移到GPU
+            #
+            #     # 进行推理
+            #     with torch.no_grad():
+            #         output = model(face_tensor)
+            #         probs = F.softmax(output, dim=1).squeeze().cpu().numpy()
+            #     _, predicted_class = torch.max(output, 1)
+            #     # print(predicted_class)
+            #     predicted_label = classes[predicted_class]
+            #
+            #     cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            #     # cv2.putText(img, f'{predicted_label}: {probs[predicted_class]:.2f}', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
+            #     #             (0, 255, 0), 2)
+            #     send_message = send_message+f'{predicted_label} '+f'{probs[predicted_class]:.3f} '+f'{x} {y} {w} {h},'
+            #     # 添加每个类别的概率文本
+            #     # y_offset = y + h + 20
+            #     # for i, prob in enumerate(probs):
+            #     #     cv2.putText(img, f'{classes[i]}: {prob:.8f}', (x, y_offset), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+            #     #                 (255, 255, 255), 1)
+            #     #     y_offset += 20  # 调整文本的垂直位置
+            #
+            #     # cv2.imshow('frame', img)
+            time.sleep(0.2)
+            end_time = time.time()
+            execution_time = end_time - start_time
+            cv2.imshow('frame', img)
+            print("Code execution time: {:.2f} seconds".format(execution_time))
+
+            client_sock.send(send_message.encode())
+            print("send end")
 
 
-
-            cv2.imshow("img", img)
-
-
-            time.sleep(0.05) #此数我试过从0.05到0.2都可以， 也就是说，20ms获得500ms才取得结果都是可以的
-
-            client_sock.send("ok".encode())
-            print("send ok to client")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+
+
     except Exception as e:
         print("receiving and processing error：" + str(e))
     finally:
@@ -299,7 +352,6 @@ def handle_client(client_sock,client_address):
         if admin_sock:
             send_client_list_to_admin(admin_sock)
         client_handler(client_sock,client_address)
-
 
 
 def handle_admin(admin_socket_me,admin_address): #要像client一样退出后回去
@@ -366,6 +418,7 @@ def accept_connections(server_socket):
     while True:
         client_sock, client_address = server_socket.accept()
         print(f"客户端 {client_address} 已连接。")
+        # every client
         threading.Thread(target=client_handler, args=(client_sock, client_address)).start()
 
 def clear_socket_buffer(sock):

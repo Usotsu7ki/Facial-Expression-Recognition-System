@@ -8,6 +8,7 @@ from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QMessageBox, QGraphicsScene
 import cv2
 import time
+from socket import socket
 
 from contactus import ContactUsDialog
 import global_settings
@@ -23,10 +24,10 @@ def read_server_address():
 
 
 class CameraWindow(QtWidgets.QMainWindow):
-    # back_to_main_signal = QtCore.pyqtSignal()
+    back_to_main_signal = QtCore.pyqtSignal()
     update_graphics_signal = QtCore.pyqtSignal(str)
 
-    def __init__(self, client_socket):
+    def __init__(self, client_socket,main_window):
         super().__init__()
 
         self.xs = []
@@ -60,6 +61,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         # buttons, actions init
         self.shotButton.clicked.connect(self.takeScreenshot)
         # self.shotButton.clicked.connect(self.back_action)
+        self.actionback.triggered.connect(self.back_action)
 
         self.recordButton.setStyleSheet("border-image: url(:/res/pic/record.png);")
         self.recordButton.clicked.connect(self.switchforRecording)
@@ -103,6 +105,11 @@ class CameraWindow(QtWidgets.QMainWindow):
         # print("timer2 loading end")
 
         self.update_graphics_signal.connect(self.updateGraphicsDraw)
+
+        self.main_window = main_window
+        self.back_to_main_signal.connect(main_window.show)
+
+        self.client_socket.settimeout(3.0) #this is used to stop receive message, prevent disturp other windows
 
         threading.Thread(target=self.listeningMessages, daemon=True).start()  # aia
 
@@ -310,7 +317,11 @@ class CameraWindow(QtWidgets.QMainWindow):
                 time.sleep(0.2)
                 self.sendingFrame()
                 print("listening...")
-                server_message = self.client_socket.recv(512).decode()
+                try:
+                    server_message = self.client_socket.recv(512).decode()
+                except socket.timeout:
+                    if not self.is_running:
+                        break
                 print(f"receive message: {server_message}")
                 if server_message.startswith("B:"):
                     self.update_graphics_signal.emit(server_message[2:])
@@ -320,6 +331,8 @@ class CameraWindow(QtWidgets.QMainWindow):
                     QMessageBox.Warning(self,"Disconnect","Sorry, you are kicked by the admin",QMessageBox.Ok)
                     self.close()
                     break
+                elif server_message == 'client':
+                    self.main_window.handle_client()
                 else:
                     print("other message...")
                     # self.last_ok_received = time.time()
@@ -350,17 +363,16 @@ class CameraWindow(QtWidgets.QMainWindow):
         dialog.exec_()
 
 
-    # 本方法因为存在bug废弃
-    # this method abandoned because of existence of bugs
     def back_action(self):
         print("back action")
         self.append_to_console("you are kicked")
 
         self.cleanup_resources()
 
-        QMessageBox.warning(self, 'You are kicked by an admin.', QMessageBox.Ok)
+        QMessageBox.warning(self, "Sorry", "You are kicked or disconnect.")
 
-        # self.back_to_main_signal.emit()
+        self.back_to_main_signal.emit()
+        self.client_socket.send(b'close\n')
         self.close()
 
     # this method abandoned

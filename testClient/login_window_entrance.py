@@ -3,6 +3,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
+import global_settings
 import resources_rc
 import sys
 import time
@@ -76,17 +77,6 @@ class MainWindow(QtWidgets.QWidget):
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
 
-    # def changeStyleToStarrySky(self):
-    #     self.applyStyleSheet(r"login\res\qss\style-1.qss")
-    #
-    # def changeStyleToSea(self):
-    #     self.applyStyleSheet(r"login\res\qss\style-2.qss")
-    #
-    # def changeStyleToDesert(self):
-    #     self.applyStyleSheet(r"login\res\qss\style-3.qss")
-    #
-    # def changeStyleToGrassland(self):
-    #     self.applyStyleSheet(r"login\res\qss\style-4.qss")
 
     # Open camera window
     def handle_client(self):
@@ -97,15 +87,15 @@ class MainWindow(QtWidgets.QWidget):
             self.client_socket.send("request_ok".encode())
             if self.client_socket.recv(1024).decode() == "ok":
                 print("receive respnce ok from server, open the webcam and send imgs")
-                self.camera_window = CameraWindow(self.client_socket)
+                self.camera_window = CameraWindow(self.client_socket,self)
                 self.camera_window.show()
                 self.hide()
             else:
                 print(self.client_socket.recv(1024).decode())
         else:
-            self.client_socket.send("request_back".encode())
+            self.client_socket.send(b'back')
             print("camera permission not granted")
-            return
+
 
     def openRegisterWindow(self):
         print("open stage open")
@@ -153,6 +143,7 @@ class MainWindow(QtWidgets.QWidget):
                     print("admin stage open")
                 elif response == "client": # open client window
                     self.handle_client()
+                    return
                 elif response == "fail": # login fail
                     QMessageBox.warning(self, "login Failed", "No such user found or incorrect password.", QMessageBox.Ok)
                 else:
@@ -198,7 +189,9 @@ class MainWindow(QtWidgets.QWidget):
         dialog = ContactUsDialog(self)
         dialog.exec_()
 
-
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.applyStyleSheet(global_settings.login_style_path)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
