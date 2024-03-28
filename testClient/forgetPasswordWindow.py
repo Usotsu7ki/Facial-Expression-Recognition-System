@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMessageBox
 
+import global_settings
 from contactus import ContactUsDialog
 from help import HelpDialog
 
@@ -13,7 +14,7 @@ class ForgetPasswordWindow(QtWidgets.QDialog):
         self.client_socket = client_socket
 
         try:
-            with open("forget/res/qss/style-1.qss", "r", encoding="utf-8") as file:
+            with open(global_settings.forget_style_path, "r", encoding="utf-8") as file:
                 self.setStyleSheet(file.read())
         except Exception as e:
             print(f"Error loading stylesheet for register window: {e}")
@@ -34,11 +35,11 @@ class ForgetPasswordWindow(QtWidgets.QDialog):
         # print("5 lineE loading complete")
 
 
-        self.btn_1.clicked.connect(self.changeStyleToStarrySky)
-        self.btn_2.clicked.connect(self.changeStyleToSea)
-        self.btn_3.clicked.connect(self.changeStyleToDesert)
-        self.btn_4.clicked.connect(self.changeStyleToGrassland)
-        # print("4个风格按钮加载完成")
+        # self.btn_1.clicked.connect(self.changeStyleToStarrySky)
+        # self.btn_2.clicked.connect(self.changeStyleToSea)
+        # self.btn_3.clicked.connect(self.changeStyleToDesert)
+        # self.btn_4.clicked.connect(self.changeStyleToGrassland)
+        # # print("4个风格按钮加载完成")
 
         self.btn_submit.clicked.connect(self.onSubmit)
 
@@ -82,17 +83,17 @@ class ForgetPasswordWindow(QtWidgets.QDialog):
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
 
-    def changeStyleToStarrySky(self):
-        self.applyStyleSheet(r"forget\res\qss\style-1.qss")
-
-    def changeStyleToSea(self):
-        self.applyStyleSheet(r"forget\res\qss\style-2.qss")
-
-    def changeStyleToDesert(self):
-        self.applyStyleSheet(r"forget\res\qss\style-3.qss")
-
-    def changeStyleToGrassland(self):
-        self.applyStyleSheet(r"forget\res\qss\style-4.qss")
+    # def changeStyleToStarrySky(self):
+    #     self.applyStyleSheet(r"forget\res\qss\style-1.qss")
+    #
+    # def changeStyleToSea(self):
+    #     self.applyStyleSheet(r"forget\res\qss\style-2.qss")
+    #
+    # def changeStyleToDesert(self):
+    #     self.applyStyleSheet(r"forget\res\qss\style-3.qss")
+    #
+    # def changeStyleToGrassland(self):
+    #     self.applyStyleSheet(r"forget\res\qss\style-4.qss")
 
     # Press submit button, submit all messages inputted
     def onSubmit(self):

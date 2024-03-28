@@ -47,20 +47,9 @@ class MainWindow(QtWidgets.QWidget):
 
         self.label_pwd_2.setPixmap(QPixmap(":/res/pic/user_name.png"))
 
-        self.btn_5.clicked.connect(self.changeStyleToStarrySky)
-        self.btn_6.clicked.connect(self.changeStyleToSea)
-        self.btn_7.clicked.connect(self.changeStyleToDesert)
-        self.btn_8.clicked.connect(self.changeStyleToGrassland)
 
         self.btn_login.clicked.connect(self.submitPassword)  # bind submit username and password to the button
         #self.btn_forget.clicked.connect(self.skipLogin)
-
-        '''
-        self.helpAction = self.findChild(QtWidgets.QAction, 'actionhelp')
-        self.helpAction.triggered.connect(self.helpActionTriggered)
-        self.contactAction = self.findChild(QtWidgets.QAction, 'actioncontact_us')
-        self.contactAction.triggered.connect(self.contactActionTriggered)
-        '''
 
         self.lineE_username.setPlaceholderText("Enter username")
 
@@ -75,7 +64,7 @@ class MainWindow(QtWidgets.QWidget):
         print("Window initialized")
 
         self.host, self.port = read_server_address()
-
+        self.is_socket_connection = True
         self.client_socket = self.connect_to_server()  # connect to server
 
 
@@ -87,17 +76,17 @@ class MainWindow(QtWidgets.QWidget):
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
 
-    def changeStyleToStarrySky(self):
-        self.applyStyleSheet(r"login\res\qss\style-1.qss")
-
-    def changeStyleToSea(self):
-        self.applyStyleSheet(r"login\res\qss\style-2.qss")
-
-    def changeStyleToDesert(self):
-        self.applyStyleSheet(r"login\res\qss\style-3.qss")
-
-    def changeStyleToGrassland(self):
-        self.applyStyleSheet(r"login\res\qss\style-4.qss")
+    # def changeStyleToStarrySky(self):
+    #     self.applyStyleSheet(r"login\res\qss\style-1.qss")
+    #
+    # def changeStyleToSea(self):
+    #     self.applyStyleSheet(r"login\res\qss\style-2.qss")
+    #
+    # def changeStyleToDesert(self):
+    #     self.applyStyleSheet(r"login\res\qss\style-3.qss")
+    #
+    # def changeStyleToGrassland(self):
+    #     self.applyStyleSheet(r"login\res\qss\style-4.qss")
 
     # Open camera window
     def handle_client(self):
@@ -108,7 +97,7 @@ class MainWindow(QtWidgets.QWidget):
             self.client_socket.send("request_ok".encode())
             if self.client_socket.recv(1024).decode() == "ok":
                 print("receive respnce ok from server, open the webcam and send imgs")
-                self.camera_window = CameraWindow(self.client_socket, self, self.host, self.port)
+                self.camera_window = CameraWindow(self.client_socket)
                 self.camera_window.show()
                 self.hide()
             else:
@@ -136,13 +125,18 @@ class MainWindow(QtWidgets.QWidget):
             return client_socket
         except Exception as e:
             print(f"error in connect the server, please check the server or the internet:{e}")
-            #reply = QMessageBox.show(self,"connet fail")
+            QMessageBox.warning(self, "Error in connect the server", "Please check the server or the internet.")
+            self.is_socket_connection = False
+
 
     # Submit username and password form lineE then send to server for checking
     # After receiving server messages, open different windows based on judgements
     def submitPassword(self):
         username = self.lineE_username.text()
         password = self.lineE_pwd.text()
+        if not self.is_socket_connection:
+            QMessageBox.warning(self,"No connection to server.","Please check the server and the internet")
+            return
 
         if username and password:
             try:

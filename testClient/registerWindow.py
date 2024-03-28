@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMessageBox
 
+import global_settings
 from contactus import ContactUsDialog
 from help import HelpDialog
 
@@ -19,10 +20,10 @@ class RegisterWindow(QtWidgets.QWidget):
         self.btn_forget_2.clicked.connect(self.contactActionTriggered)
         self.btn_forget_3.clicked.connect(self.helpActionTriggered)
 
-        self.btn_1.clicked.connect(self.changeStyleToStarrySky)
-        self.btn_2.clicked.connect(self.changeStyleToSea)
-        self.btn_3.clicked.connect(self.changeStyleToDesert)
-        self.btn_4.clicked.connect(self.changeStyleToGrassland)
+        # self.btn_1.clicked.connect(self.changeStyleToStarrySky)
+        # self.btn_2.clicked.connect(self.changeStyleToSea)
+        # self.btn_3.clicked.connect(self.changeStyleToDesert)
+        # self.btn_4.clicked.connect(self.changeStyleToGrassland)
 
         self.label_pwd.setScaledContents(True)
         self.label_pwd_2.setScaledContents(True)
@@ -38,7 +39,7 @@ class RegisterWindow(QtWidgets.QWidget):
 
         # load qss
         try:
-            with open("register/res/qss/style-1.qss", "r", encoding="utf-8") as file:
+            with open(global_settings.register_style_path, "r", encoding="utf-8") as file:
                 self.setStyleSheet(file.read())
         except Exception as e:
             print(f"Error loading stylesheet for register window: {e}")
@@ -53,17 +54,17 @@ class RegisterWindow(QtWidgets.QWidget):
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
 
-    def changeStyleToStarrySky(self):
-        self.applyStyleSheet(r"register\res\qss\style-1.qss")
-
-    def changeStyleToSea(self):
-        self.applyStyleSheet(r"register\res\qss\style-2.qss")
-
-    def changeStyleToDesert(self):
-        self.applyStyleSheet(r"register\res\qss\style-3.qss")
-
-    def changeStyleToGrassland(self):
-        self.applyStyleSheet(r"register\res\qss\style-4.qss")
+    # def changeStyleToStarrySky(self):
+    #     self.applyStyleSheet(r"register\res\qss\style-1.qss")
+    #
+    # def changeStyleToSea(self):
+    #     self.applyStyleSheet(r"register\res\qss\style-2.qss")
+    #
+    # def changeStyleToDesert(self):
+    #     self.applyStyleSheet(r"register\res\qss\style-3.qss")
+    #
+    # def changeStyleToGrassland(self):
+    #     self.applyStyleSheet(r"register\res\qss\style-4.qss")
 
 
     # Submit the username, pwd, security ques and ans to server, if have admin code, also send(optional)

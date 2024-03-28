@@ -1,6 +1,8 @@
 import socket
 import threading
 from PyQt5 import QtWidgets, uic, QtCore
+
+import global_settings
 # import sys
 
 from contactus import ContactUsDialog
@@ -22,7 +24,7 @@ class AdminWindow(QtWidgets.QMainWindow):
         print("load ui finish")
 
         try:
-            with open(r"admin\res\qss\style.qss", "r", encoding="utf-8") as file:
+            with open(global_settings.admin_style_path, "r", encoding="utf-8") as file:
                 stylesheet = file.read()
                 self.setStyleSheet(stylesheet)
         except Exception as e:
@@ -30,10 +32,10 @@ class AdminWindow(QtWidgets.QMainWindow):
 
         self.client_socket = client_socket
 
-        self.btn_1.clicked.connect(self.changeStyleToStarrySky)
-        self.btn_2.clicked.connect(self.changeStyleToSea)
-        self.btn_3.clicked.connect(self.changeStyleToDesert)
-        self.btn_4.clicked.connect(self.changeStyleToGrassland)
+        self.actionstarry_sky.triggered.connect(self.changeStyleToStarrySky)
+        self.actionsea.triggered.connect(self.changeStyleToSea)
+        self.actiondesert.triggered.connect(self.changeStyleToDesert)
+        self.actiongrassland.triggered.connect(self.changeStyleToGrassland)
 
         self.clientListWidget = self.findChild(QtWidgets.QListWidget, 'listWidget_2')
         self.consoleTextEdit = self.findChild(QtWidgets.QTextEdit, 'textEdit')
@@ -60,15 +62,19 @@ class AdminWindow(QtWidgets.QMainWindow):
             print(f"Error loading stylesheet: {e}")
 
     def changeStyleToStarrySky(self):
+        global_settings.change_style_sheet("sky")
         self.applyStyleSheet(r"admin\res\qss\style.qss")
 
     def changeStyleToSea(self):
+        global_settings.change_style_sheet("sea")
         self.applyStyleSheet(r"admin\res\qss\style1.qss")
 
     def changeStyleToDesert(self):
+        global_settings.change_style_sheet("desert")
         self.applyStyleSheet(r"admin\res\qss\style2.qss")
 
     def changeStyleToGrassland(self):
+        global_settings.change_style_sheet("grassland")
         self.applyStyleSheet(r"admin\res\qss\style3.qss")
 
     def start_receiving(self):
