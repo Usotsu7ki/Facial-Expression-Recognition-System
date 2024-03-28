@@ -1,15 +1,17 @@
 # Facial-Expression-Recognition-System
 
 ### 
-<br>test branch client server and admin-page
-<br>请注意：client和server的依赖库并没有上传，请自行配置环境
-<br>请注意：server端在钟qifeng那
+### This is branch for client(including login,camera, register and forget password), server and admin-window
+<br>Be cautious: client andserver的lib并没有upload, please配置环境 by your own
+<br>Be cautious: 目前最新版本的Server端在钟qifeng那
 
-<br>请注意：管理员注册码是12345678
-<br>未完成功能：连接和表情数据传输，表情数据显示，脸部的框
+<br>Be cautious: 目前管理员注册码是12345678
 <br>当前问题：在点back button回到login界面后，再次登录出现服务器发送给客户端的第一条消息无法被正确接收的情况
 <br>介于上面这个情况，我把返回主界面的按钮删了
-
+<br>----------------------------------------------------------------------------------------
+#### Update 
+<br>11.29: add server, client and admin on github
+<br>2:24: add qss for client 
 <br>2.26:add record function, under python compiler it will mkdir folder for it, recording save in .avi
 <br>2.26:will loading address.txt for server address rather than write in code
 <br>2.26:change some class naming
@@ -27,3 +29,7 @@
 <br>However, did not know how to add rectangle and text into recording
 
 <br>3.28: repair bug, apply new ui according to fiseha's suggestions
+<br>3.29: add drawing logics for different faces, add local address ip get for admin for self exclusion in connecting-sockets list 
+
+
+brfore launching, please check whether running the server locally, if server and client are running differently, please change global_setting.isLocal to False, also, change address.txt, using the ip of the server        -by biylj9
