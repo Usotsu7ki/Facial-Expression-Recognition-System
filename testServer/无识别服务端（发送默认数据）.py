@@ -85,9 +85,7 @@ def verify_user_credentials(username, password):
 
     if user_record:
         stored_password, admin_number = user_record
-        #判断密码
         if password == stored_password:
-            #判断是否有admin码
             if admin_number:
                 is_admin = True
             else:
@@ -116,7 +114,7 @@ def setup_database():
     conn.close()
 
 def register_user(username, password, security_question, security_answer, admin_number):
-    print("注册用户")
+    print("Register for user")
     conn = sqlite3.connect(DATABASE_FILE)
     cursor = conn.cursor()
     try:
@@ -124,7 +122,7 @@ def register_user(username, password, security_question, security_answer, admin_
         INSERT INTO users (username, password, security_question, security_answer, admin_number)
         VALUES (?, ?, ?, ?, ?)''', (username, password, security_question, security_answer, admin_number))
         conn.commit()
-        print("注册完毕")
+        print("register complete")
         return True
     except sqlite3.IntegrityError:
         return False
@@ -146,7 +144,7 @@ def username_exists(username):
 def load_admin_password():
     try:
         with open('password.txt', 'r') as file:
-            return file.readline().strip()  # 读取第一行并去除可能的前后空白字符
+            return file.readline().strip()
     except Exception as e:
         print(f"Error loading admin password: {e}")
         return None

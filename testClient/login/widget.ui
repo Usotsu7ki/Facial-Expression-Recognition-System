@@ -282,7 +282,13 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="lineE_username"/>
+                            <widget class="QLineEdit" name="lineE_username">
+                             <property name="font">
+                              <font>
+                               <family>Arial</family>
+                              </font>
+                             </property>
+                            </widget>
                            </item>
                           </layout>
                          </item>
@@ -378,7 +384,16 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="lineE_pwd"/>
+                            <widget class="QLineEdit" name="lineE_pwd">
+                             <property name="font">
+                              <font>
+                               <family>Arial</family>
+                              </font>
+                             </property>
+                             <property name="echoMode">
+                              <enum>QLineEdit::Password</enum>
+                             </property>
+                            </widget>
                            </item>
                           </layout>
                          </item>

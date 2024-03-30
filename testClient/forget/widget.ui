@@ -272,12 +272,23 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="username"/>
+                            <widget class="QLineEdit" name="username">
+                             <property name="font">
+                              <font>
+                               <family>Arial</family>
+                              </font>
+                             </property>
+                            </widget>
                            </item>
                           </layout>
                          </item>
                          <item row="0" column="1">
                           <widget class="QPushButton" name="btn_getSecurity">
+                           <property name="font">
+                            <font>
+                             <family>Arial</family>
+                            </font>
+                           </property>
                            <property name="text">
                             <string>Get Security</string>
                            </property>
@@ -450,7 +461,16 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="new_password"/>
+                            <widget class="QLineEdit" name="new_password">
+                             <property name="font">
+                              <font>
+                               <family>Arial</family>
+                              </font>
+                             </property>
+                             <property name="echoMode">
+                              <enum>QLineEdit::Password</enum>
+                             </property>
+                            </widget>
                            </item>
                           </layout>
                          </item>
@@ -736,7 +756,13 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="security_answer"/>
+                            <widget class="QLineEdit" name="security_answer">
+                             <property name="font">
+                              <font>
+                               <family>Arial</family>
+                              </font>
+                             </property>
+                            </widget>
                            </item>
                           </layout>
                          </item>
@@ -832,7 +858,16 @@
                             </widget>
                            </item>
                            <item>
-                            <widget class="QLineEdit" name="check_password"/>
+                            <widget class="QLineEdit" name="check_password">
+                             <property name="font">
+                              <font>
+                               <family>Arial</family>
+                              </font>
+                             </property>
+                             <property name="echoMode">
+                              <enum>QLineEdit::Password</enum>
+                             </property>
+                            </widget>
                            </item>
                           </layout>
                          </item>
