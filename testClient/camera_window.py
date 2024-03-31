@@ -30,6 +30,7 @@ class CameraWindow(QtWidgets.QMainWindow):
     def __init__(self, client_socket,main_window):
         super().__init__()
 
+        # these four lists r used to store the results from server
         self.xs = []
         self.ys = []
         self.ws = []
@@ -37,6 +38,9 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.probabilities = []
         self.emotions = []
 
+        self.classes = ('Surprise', 'Fear', 'Disgust', 'Smile', 'Sadness', 'Anger', 'Neutral')
+
+        # load ui
         uic.loadUi('cameraWindow\mainwindow.ui', self)
         try:
             with open(global_settings.camera_style_path, "r", encoding="utf-8") as file:
@@ -99,10 +103,11 @@ class CameraWindow(QtWidgets.QMainWindow):
         print("cap&timer1 loading end")
 
         self.frame_queue = queue.Queue(maxsize=5)  # queue storing the frame to be sent
+
         # self.timer_send = QTimer(self)
         # self.timer_send.timeout.connect(self.send_frame)
         # self.timer_send.start(50)
-        # print("timer2 loading end")
+        # print("timer2 loading end")                          """cautious: this timer is already abandon"""
 
         self.update_graphics_signal.connect(self.updateGraphicsDraw)
 
@@ -123,8 +128,8 @@ class CameraWindow(QtWidgets.QMainWindow):
             print(f"Error loading stylesheet: {e}")
 
     def changeStyleToStarrySky(self):
-        global_settings.change_style_sheet("sky")
-        self.applyStyleSheet(r"cameraWindow\res\qss\style.qss")
+        global_settings.change_style_sheet("sky")  #apply the change for other window
+        self.applyStyleSheet(r"cameraWindow\res\qss\style.qss")  # update this window
 
     def changeStyleToSea(self):
         global_settings.change_style_sheet("sea")
@@ -163,6 +168,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         screenshot.save(screenshot_filename, 'PNG')
         self.append_to_console(f"ScreenShot in{record_path}")
 
+
     # take recording and change the image of record button
     def switchforRecording(self):
         if self.is_recording:
@@ -185,8 +191,11 @@ class CameraWindow(QtWidgets.QMainWindow):
             self.video_writer = cv2.VideoWriter(filename, fourcc, 20.0, (640, 480))
             self.append_to_console("Recording started")
 
+
+    # this method used to print some exception or message to the console in the main window
     def append_to_console(self, message):
         self.textEdit.append(message)
+
 
     def display_frame(self):
         # show the frames caught by camera
@@ -199,13 +208,21 @@ class CameraWindow(QtWidgets.QMainWindow):
 
     # process and show frames
     def process_frame(self, frame):
+        # store the frame in queue(the queue is used to store the frames to be sent)
+        if self.frame_queue.full():
+            self.frame_queue.get()
+        self.frame_queue.put(frame)
+
+        # draw the frame and rectangles, and the results
         try:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             for i in range(len(self.emotions)):
+                emotion_index = int(self.emotions[i])
+                emotion_text = self.classes[emotion_index] # find the text using the number of the expression
                 cv2.rectangle(frame, (self.xs[i], self.ys[i]), (self.xs[i] + self.ws[i], self.ys[i] + self.hs[i]),
                               (255, 0, 0), 2)
-                cv2.putText(frame, f"{self.emotions[i]}: {self.probabilities[i]}%", (self.xs[i] + 20, self.ys[i]),
+                cv2.putText(frame, f"{emotion_text}: {self.probabilities[i]}%", (self.xs[i] + 20, self.ys[i]),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
 
             h, w, ch = frame.shape
@@ -218,9 +235,7 @@ class CameraWindow(QtWidgets.QMainWindow):
             # self.draw_graphics()
         except Exception as e:
             self.append_to_console("error in processing and showing frame" + str(e))
-        if self.frame_queue.full():
-            self.frame_queue.get()
-        self.frame_queue.put(frame)
+
 
         # if is recording then also record
         if self.is_recording and self.video_writer is not None:
@@ -229,7 +244,7 @@ class CameraWindow(QtWidgets.QMainWindow):
 
 
     # Overload the close
-    def closeEvent(self, event):  # 重写关闭窗口函数，清理资源
+    def closeEvent(self, event):
         self.cleanup_resources()
         self.client_socket.send("close".encode())
         event.accept()
@@ -271,20 +286,28 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.probabilities.clear()
         self.emotions.clear()
 
-        faces_data = message.split(',')  # different faces may be divided by ","
-        for face_data in faces_data:
-            if face_data.strip():
-                data_parts = face_data.strip().split(' ')
-                if len(data_parts) == 6:
-                    emotion, probability, x, y, w, h = data_parts
-                    self.emotions.append(emotion)
-                    self.probabilities.append(float(probability))
-                    self.xs.append(int(x))
-                    self.ys.append(int(y))
-                    self.ws.append(int(w))
-                    self.hs.append(int(h))
-                else:
-                    print("length of faces error")
+        # The example of message:       6, 6|'0.999', '0.999'|244, 145, 151, 150, 480, 24, 125, 125|
+
+        parts = message.split('|')
+
+        emotions = parts[0].split(',')
+        probabilities = parts[1].split(',')
+        boxFeatures = parts[2].split(',')
+
+        if len(emotions) == len(probabilities) and len(boxFeatures) % 4 == 0:
+            self.emotions = emotions
+            for probability in probabilities:
+                self.probabilities.append(float(probability))
+
+            for i in range(0, len(boxFeatures), 4):
+                self.xs.append(int(boxFeatures[i]))
+                self.ys.append(int(boxFeatures[i + 1]))
+                self.ws.append(int(boxFeatures[i + 2]))
+                self.hs.append(int(boxFeatures[i + 3]))
+
+        else:
+            print("the data received is in wrong format")
+
 
         # clean previous rectangle and emotion text before draw the next faces
         # self.scene.clear()

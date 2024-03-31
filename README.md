@@ -6,9 +6,7 @@
 <br>Be cautious: 目前最新版本的Server端在钟qifeng那
 
 <br>Be cautious: 目前管理员注册码是12345678
-<br>当前问题：在点back button回到login界面后，再次登录出现服务器发送给客户端的第一条消息无法被正确接收的情况
-<br>介于上面这个情况，我把返回主界面的按钮删了
-<br>finally, I find where the bug exist, and I debug it, now the log out function is added again
+<br>Finally, I find where the bug exist, and I debug it, now the log out function is added again
 <br>Change some pictures
 <br>----------------------------------------------------------------------------------------
 #### Update 
@@ -32,6 +30,8 @@
 
 <br>3.28: repair bug, apply new ui according to fiseha's suggestions
 <br>3.29: add drawing logics for different faces, add local address ip get for admin for self exclusion in connecting-sockets list 
+<br>4.1: change font sizes, background images of desert,grassland. change split message logic according to the demand of server.
 
+<p>请注意，目前服务端在zqf那，此服务端残端无法与客户端正常连接
 
 brfore launching, please check whether running the server locally, if server and client are running differently, please change global_setting.isLocal to False, also, change address.txt, using the ip of the server        -by biylj9
