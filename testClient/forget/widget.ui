@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Widget</string>
+   <string>Reset Password</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -561,7 +561,7 @@
                          <string notr="true"/>
                         </property>
                         <property name="text">
-                         <string>Forget password</string>
+                         <string>Reset password</string>
                         </property>
                        </widget>
                       </item>

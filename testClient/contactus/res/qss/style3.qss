@@ -2,7 +2,7 @@
     border-image:url(:/res/pic/login3.jpg);
 }
 #label{
-    color:#ffffff;
+    color:#000000;
     font: 10pt Arial;
 }
 #label_2{
