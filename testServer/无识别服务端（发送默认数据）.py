@@ -299,7 +299,7 @@ def receiving_processing(client_sock,client_address):
             start_time = time.time()
             #faces = detector(img, 0)
 
-            send_message = "B:Smile 0.999 250 150 200 200"
+            send_message = "B:6, 6|'0.999', '0.999'|244, 145, 151, 150, 480, 24, 125, 125|"
             # for face in faces:
             #     x, y, w, h = face.left(), face.top(), face.width(), face.height()
             #     # 提取人脸ROI

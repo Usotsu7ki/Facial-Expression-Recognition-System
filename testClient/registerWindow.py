@@ -86,16 +86,16 @@ class RegisterWindow(QtWidgets.QWidget):
 
         response = self.client_socket.recv(1024).decode()  # get response and judge
         if response == "register success":
-            QMessageBox.information(self, "Success", "Registration successful!")
+            QMessageBox.information(self, "Congratulations", "Registered successfully!")
             self.close()  # register success
         elif response == "fail_admin":
-            QMessageBox.warning(self, "Registration Failed", "Incorrect admin number.")
+            QMessageBox.warning(self, "Sorry", "Fail to register")
         elif response == "fail_username_same":
-            QMessageBox.warning(self, "Registration Failed", "Username already exists.")
+            QMessageBox.warning(self, "Sorry", "Username already exists.")
         elif response == "fail_database":
-            QMessageBox.warning(self, "Registration Failed", "Database error occurred.")
+            QMessageBox.warning(self, "Sorry", "Database error occurred.")
         else:
-            QMessageBox.warning(self, "Registration Failed", "An unknown error occurred.")
+            QMessageBox.warning(self, "Sorry", "An unknown error occurred.")
 
 
     def sendRegistrationInfo(self, username, password, security_question, security_answer, admin_number):

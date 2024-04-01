@@ -279,34 +279,42 @@ class CameraWindow(QtWidgets.QMainWindow):
         print("Resources cleaned up")
 
     def updateGraphicsDraw(self, message):
+        print(message)
         self.xs.clear()
         self.ys.clear()
         self.ws.clear()
         self.hs.clear()
         self.probabilities.clear()
         self.emotions.clear()
+        print("update: clean end")
 
-        # The example of message:       6, 6|'0.999', '0.999'|244, 145, 151, 150, 480, 24, 125, 125|
+        # The example of message:       6, 6|'0.999', '0.999'|244, 145, 151, 150, 480, 24, 125, 125
+        try:
+            parts = message.split('|')
 
-        parts = message.split('|')
+            emotions = parts[0].split(',')
+            probabilities = parts[1].replace("'", "").split(',')
+            boxFeatures = parts[2].split(',')
 
-        emotions = parts[0].split(',')
-        probabilities = parts[1].split(',')
-        boxFeatures = parts[2].split(',')
+            print("split end")
 
-        if len(emotions) == len(probabilities) and len(boxFeatures) % 4 == 0:
-            self.emotions = emotions
-            for probability in probabilities:
-                self.probabilities.append(float(probability))
+            if len(emotions) == len(probabilities) and len(boxFeatures) % 4 == 0:
+                self.emotions = emotions
+                for probability in probabilities:
+                    self.probabilities.append(float(probability))
 
-            for i in range(0, len(boxFeatures), 4):
-                self.xs.append(int(boxFeatures[i]))
-                self.ys.append(int(boxFeatures[i + 1]))
-                self.ws.append(int(boxFeatures[i + 2]))
-                self.hs.append(int(boxFeatures[i + 3]))
+                for i in range(0, len(boxFeatures), 4):
+                    self.xs.append(int(boxFeatures[i]))
+                    self.ys.append(int(boxFeatures[i + 1]))
+                    self.ws.append(int(boxFeatures[i + 2]))
+                    self.hs.append(int(boxFeatures[i + 3]))
+                print("update: store end")
 
-        else:
-            print("the data received is in wrong format")
+            else:
+                print("the data received is in wrong format")
+
+        except Exception as e:
+            print('error happen in split the messsage: '+ e)
 
 
         # clean previous rectangle and emotion text before draw the next faces
@@ -341,14 +349,16 @@ class CameraWindow(QtWidgets.QMainWindow):
                 self.sendingFrame()
                 print("listening...")
                 try:
-                    server_message = self.client_socket.recv(512).decode()
+                    server_message = self.client_socket.recv(1024).decode()
                 except socket.timeout:
                     if not self.is_running:
                         break
                 print(f"receive message: {server_message}")
                 if server_message.startswith("B:"):
-                    self.update_graphics_signal.emit(server_message[2:])
+                    clean_message = server_message[2:]  #
+                    self.update_graphics_signal.emit(clean_message)
                     self.last_ok_received = time.time()
+
                 elif server_message == "disconnect":
                     print("received disconnect from server")
                     QMessageBox.Warning(self,"Disconnect","Sorry, you are kicked by the admin",QMessageBox.Ok)
@@ -392,7 +402,7 @@ class CameraWindow(QtWidgets.QMainWindow):
 
         self.cleanup_resources()
 
-        QMessageBox.warning(self, "Sorry", "You are kicked or disconnect.")
+        # QMessageBox.warning(self, "Back", "You are kicked or .")
 
         self.back_to_main_signal.emit()
         self.client_socket.send(b'close\n')
