@@ -108,7 +108,7 @@ class ForgetPasswordWindow(QtWidgets.QDialog):
 
             response = self.client_socket.recv(1024).decode()
             if response == "success": # change success
-                QMessageBox.information(self, "Success", "Password change successful.")
+                QMessageBox.information(self, ":D", "Password changed successfully.")
                 self.close()
             elif response == "fail_database": # something wrong happens in database
                 QMessageBox.warning(self, "Change Failed", "There was a database error. Please try again later.")

@@ -1,7 +1,7 @@
 # login_window_entrance.py
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QFont
 
 import global_settings
 import resources_rc
@@ -80,8 +80,20 @@ class MainWindow(QtWidgets.QWidget):
 
     # Open camera window
     def handle_client(self):
-        reply = QMessageBox.question(self, "Webcam Permission", "Please give us permission to open the camera.",
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        # this QMessagebox is different from others, because the font here need to be changed
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("Webcam Permission")
+        msgBox.setText("Please give us permission to open the camera.")
+
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msgBox.setDefaultButton(QMessageBox.No)
+
+        buttons = msgBox.buttons()
+        font = QFont("Arial", 9, QFont.Bold)
+        for button in buttons:
+            button.setFont(font)
+        reply = msgBox.exec_()
+
         if reply == QMessageBox.Yes:
             print("open camera window")
             self.client_socket.send("request_ok".encode())
