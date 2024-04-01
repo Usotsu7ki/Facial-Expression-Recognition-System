@@ -1,13 +1,16 @@
 # Facial-Expression-Recognition-System
 
+### To run the client, please read this: 
+[How to Run the Client](install.md)
+
 ### 
 ### This is branch for client(including login,camera, register and forget password), server and admin-window
-<br>Be cautious: client andserver的lib并没有upload, please配置环境 by your own
+<br>Be cautious: the lib of client did not upload, please config environment by yourself
 <br>Be cautious: 目前最新版本的Server端在钟qifeng那
 
-<br>Be cautious: 目前管理员注册码是12345678
-<br>Finally, I find where the bug exist, and I debug it, now the log out function is added again
-<br>Change some pictures
+##### !!!Be cautious: the admin code used to register as admin is 12345678
+
+
 <br>----------------------------------------------------------------------------------------
 #### Update 
 <br>11.29: add server, client and admin on github
@@ -28,10 +31,13 @@
 <br>Add receive recog result from server, spilt, then display using rectangle and texts.
 <br>However, did not know how to add rectangle and text into recording
 
+<br>Finally, I find where the bug exist, and I debug it, now the log-out function is added again
+<br>Change some pictures
+
 <br>3.28: repair bug, apply new ui according to fiseha's suggestions
 <br>3.29: add drawing logics for different faces, add local address ip get for admin for self exclusion in connecting-sockets list 
 <br>4.1: change font sizes, background images of desert,grassland. change split message logic according to the demand of server.
 
 <p>请注意，目前服务端在zqf那，此服务端残端无法与客户端正常连接
 
-brfore launching, please check whether running the server locally, if server and client are running differently, please change global_setting.isLocal to False, also, change address.txt, using the ip of the server        -by biylj9
+before launching, please check whether running the server locally, if server and client are running differently, please change global_setting.isLocal to False, also, change address.txt, using the ip of the server        -by biylj9
