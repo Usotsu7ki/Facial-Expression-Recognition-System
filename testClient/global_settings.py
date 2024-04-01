@@ -7,7 +7,7 @@ help_style_path=r"help/res/qss/style.qss" #123
 forget_style_path=r"forget/res/qss/style-1.qss" #1234
 register_style_path = r"register/res/qss/style-1.qss" #1234
 
-isLocal = True
+isLocal = False
 
 def change_style_sheet(style):
     global login_style_path, camera_style_path, admin_style_path, contactus_style_path, help_style_path, forget_style_path, register_style_path

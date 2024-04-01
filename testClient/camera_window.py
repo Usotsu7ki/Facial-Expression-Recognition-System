@@ -288,6 +288,10 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.emotions.clear()
         print("update: clean end")
 
+        if not message:
+            print("Received empty data after 'B:'")
+            return
+
         # The example of message:       6, 6|'0.999', '0.999'|244, 145, 151, 150, 480, 24, 125, 125
         try:
             parts = message.split('|')
@@ -355,10 +359,12 @@ class CameraWindow(QtWidgets.QMainWindow):
                         break
                 print(f"receive message: {server_message}")
                 if server_message.startswith("B:"):
-                    clean_message = server_message[2:]  #
+                    if server_message=="B:":
+                        self.last_ok_received = time.time()
+                        continue
+                    clean_message = server_message[2:]
                     self.update_graphics_signal.emit(clean_message)
                     self.last_ok_received = time.time()
-
                 elif server_message == "disconnect":
                     print("received disconnect from server")
                     QMessageBox.Warning(self,"Disconnect","Sorry, you are kicked by the admin",QMessageBox.Ok)
