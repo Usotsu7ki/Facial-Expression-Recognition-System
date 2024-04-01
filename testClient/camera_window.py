@@ -321,6 +321,7 @@ class CameraWindow(QtWidgets.QMainWindow):
             print('error happen in split the messsage: '+ e)
 
 
+
         # clean previous rectangle and emotion text before draw the next faces
         # self.scene.clear()
 
@@ -349,7 +350,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         time.sleep(1)
         while self.is_running:
             try:
-                time.sleep(0.2)
+                time.sleep(0.05)
                 self.sendingFrame()
                 print("listening...")
                 try:
@@ -367,7 +368,7 @@ class CameraWindow(QtWidgets.QMainWindow):
                     self.last_ok_received = time.time()
                 elif server_message == "disconnect":
                     print("received disconnect from server")
-                    QMessageBox.Warning(self,"Disconnect","Sorry, you are kicked by the admin",QMessageBox.Ok)
+                    QMessageBox.warning(self,"Disconnect","Sorry, you are kicked by the admin",QMessageBox.Ok)
                     self.close()
                     break
                 elif server_message == 'client':
