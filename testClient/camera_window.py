@@ -41,7 +41,7 @@ class CameraWindow(QtWidgets.QMainWindow):
         self.classes = ('Surprise', 'Fear', 'Disgust', 'Smile', 'Sadness', 'Anger', 'Neutral')
 
         # load ui
-        uic.loadUi('cameraWindow\mainwindow.ui', self)
+        uic.loadUi('cameraWindow/mainwindow.ui', self)
         try:
             with open(global_settings.camera_style_path, "r", encoding="utf-8") as file:
                 stylesheet = file.read()
@@ -129,19 +129,19 @@ class CameraWindow(QtWidgets.QMainWindow):
 
     def changeStyleToStarrySky(self):
         global_settings.change_style_sheet("sky")  #apply the change for other window
-        self.applyStyleSheet(r"cameraWindow\res\qss\style.qss")  # update this window
+        self.applyStyleSheet(r"cameraWindow/res/qss/style.qss")  # update this window
 
     def changeStyleToSea(self):
         global_settings.change_style_sheet("sea")
-        self.applyStyleSheet(r"cameraWindow\res\qss\style1.qss")
+        self.applyStyleSheet(r"cameraWindow/res/qss/style1.qss")
 
     def changeStyleToDesert(self):
         global_settings.change_style_sheet("desert")
-        self.applyStyleSheet(r"cameraWindow\res\qss\style2.qss")
+        self.applyStyleSheet(r"cameraWindow/res/qss/style2.qss")
 
     def changeStyleToGrassland(self):
         global_settings.change_style_sheet("grassland")
-        self.applyStyleSheet(r"cameraWindow\res\qss\style3.qss")
+        self.applyStyleSheet(r"cameraWindow/res/qss/style3.qss")
 
     def openRecordFolder(self):
         record_path = os.path.join(QCoreApplication.applicationDirPath(), "record")

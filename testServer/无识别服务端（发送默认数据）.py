@@ -300,33 +300,7 @@ def receiving_processing(client_sock,client_address):
             #faces = detector(img, 0)
 
             send_message = "B:6, 6|'0.999', '0.999'|244, 145, 151, 150, 480, 24, 125, 125|"
-            # for face in faces:
-            #     x, y, w, h = face.left(), face.top(), face.width(), face.height()
-            #     # 提取人脸ROI
-            #     face_roi = img[y:y + h, x:x + w]
-            #     face_pil = Image.fromarray(cv2.cvtColor(face_roi, cv2.COLOR_BGR2RGB))
-            #     face_tensor = tran(face_pil).unsqueeze(0).cuda()  # 将输入数据移到GPU
-            #
-            #     # 进行推理
-            #     with torch.no_grad():
-            #         output = model(face_tensor)
-            #         probs = F.softmax(output, dim=1).squeeze().cpu().numpy()
-            #     _, predicted_class = torch.max(output, 1)
-            #     # print(predicted_class)
-            #     predicted_label = classes[predicted_class]
-            #
-            #     cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            #     # cv2.putText(img, f'{predicted_label}: {probs[predicted_class]:.2f}', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1,
-            #     #             (0, 255, 0), 2)
-            #     send_message = send_message+f'{predicted_label} '+f'{probs[predicted_class]:.3f} '+f'{x} {y} {w} {h},'
-            #     # 添加每个类别的概率文本
-            #     # y_offset = y + h + 20
-            #     # for i, prob in enumerate(probs):
-            #     #     cv2.putText(img, f'{classes[i]}: {prob:.8f}', (x, y_offset), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-            #     #                 (255, 255, 255), 1)
-            #     #     y_offset += 20  # 调整文本的垂直位置
-            #
-            #     # cv2.imshow('frame', img)
+
             time.sleep(0.2)
             end_time = time.time()
             execution_time = end_time - start_time

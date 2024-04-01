@@ -6,7 +6,7 @@ import global_settings
 class HelpDialog(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(HelpDialog, self).__init__(parent)
-        uic.loadUi('help\dialog.ui', self)
+        uic.loadUi('help/dialog.ui', self)
 
         try:
             with open(global_settings.help_style_path, "r", encoding="utf-8") as file:
@@ -30,14 +30,4 @@ class HelpDialog(QtWidgets.QDialog):
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
 
-    # def changeStyleToStarrySky(self):
-    #     self.applyStyleSheet(r"help\res\qss\style.qss")
-    #
-    # def changeStyleToSea(self):
-    #     self.applyStyleSheet(r"help\res\qss\style1.qss")
-    #
-    # def changeStyleToDesert(self):
-    #     self.applyStyleSheet(r"help\res\qss\style2.qss")
-    #
-    # def changeStyleToGrassland(self):
-    #     self.applyStyleSheet(r"help\res\qss\style3.qss")
+

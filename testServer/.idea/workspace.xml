@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ae96defc-0c45-4527-ad52-f246750d45ba" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/../testClient/admin_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/admin_window.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../testClient/camera_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/camera_window.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../testClient/help/res/qss/style3.qss" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/help/res/qss/style3.qss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testClient/contactus.py" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/contactus.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testClient/forgetPasswordWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/forgetPasswordWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testClient/global_settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/global_settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testClient/help.py" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/help.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../testClient/login_window_entrance.py" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/login_window_entrance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../testClient/registerWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/../testClient/registerWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/password.txt" beforeDir="false" afterPath="$PROJECT_DIR$/password.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server_database.db" beforeDir="false" afterPath="$PROJECT_DIR$/server_database.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/无识别服务端（发送默认数据）.py" beforeDir="false" afterPath="$PROJECT_DIR$/无识别服务端（发送默认数据）.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,7 +38,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "serverClient",
-    "last_opened_file_path": "C:/Users/jacob/Desktop/xiangmu2/Facial-Expression-Recognition-System/testServer"
+    "last_opened_file_path": "C:/Users/jacob/Desktop/xiangmu2/Facial-Expression-Recognition-System/testClient"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />

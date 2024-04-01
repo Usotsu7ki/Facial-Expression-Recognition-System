@@ -54,17 +54,6 @@ class RegisterWindow(QtWidgets.QWidget):
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
 
-    # def changeStyleToStarrySky(self):
-    #     self.applyStyleSheet(r"register\res\qss\style-1.qss")
-    #
-    # def changeStyleToSea(self):
-    #     self.applyStyleSheet(r"register\res\qss\style-2.qss")
-    #
-    # def changeStyleToDesert(self):
-    #     self.applyStyleSheet(r"register\res\qss\style-3.qss")
-    #
-    # def changeStyleToGrassland(self):
-    #     self.applyStyleSheet(r"register\res\qss\style-4.qss")
 
 
     # Submit the username, pwd, security ques and ans to server, if have admin code, also send(optional)

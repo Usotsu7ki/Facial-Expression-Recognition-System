@@ -83,17 +83,6 @@ class ForgetPasswordWindow(QtWidgets.QDialog):
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
 
-    # def changeStyleToStarrySky(self):
-    #     self.applyStyleSheet(r"forget\res\qss\style-1.qss")
-    #
-    # def changeStyleToSea(self):
-    #     self.applyStyleSheet(r"forget\res\qss\style-2.qss")
-    #
-    # def changeStyleToDesert(self):
-    #     self.applyStyleSheet(r"forget\res\qss\style-3.qss")
-    #
-    # def changeStyleToGrassland(self):
-    #     self.applyStyleSheet(r"forget\res\qss\style-4.qss")
 
     # Press submit button, submit all messages inputted
     def onSubmit(self):

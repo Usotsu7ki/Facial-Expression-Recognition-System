@@ -6,7 +6,7 @@ import global_settings
 class ContactUsDialog(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(ContactUsDialog, self).__init__(parent)
-        uic.loadUi('contactUs\dialog.ui', self)
+        uic.loadUi('contactUs/dialog.ui', self)
 
         try:
             with open(global_settings.contactus_style_path, "r", encoding="utf-8") as file:
@@ -30,14 +30,4 @@ class ContactUsDialog(QtWidgets.QDialog):
         except Exception as e:
             print(f"Error loading stylesheet: {e}")
 
-    # def changeStyleToStarrySky(self):
-    #     self.applyStyleSheet(r"contactUs\res\qss\style.qss")
-    #
-    # def changeStyleToSea(self):
-    #     self.applyStyleSheet(r"contactUs\res\qss\style1.qss")
-    #
-    # def changeStyleToDesert(self):
-    #     self.applyStyleSheet(r"contactUs\res\qss\style2.qss")
-    #
-    # def changeStyleToGrassland(self):
-    #     self.applyStyleSheet(r"contactUs\res\qss\style3.qss")
+

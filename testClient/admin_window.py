@@ -21,7 +21,7 @@ class AdminWindow(QtWidgets.QMainWindow):
     def __init__(self, client_socket):
         self.IP = HOST
         super().__init__()
-        uic.loadUi('admin\mainwindow.ui', self)
+        uic.loadUi('admin/mainwindow.ui', self)
         print("load ui finish")
 
         try:
@@ -85,19 +85,19 @@ class AdminWindow(QtWidgets.QMainWindow):
 
     def changeStyleToStarrySky(self):
         global_settings.change_style_sheet("sky")
-        self.applyStyleSheet(r"admin\res\qss\style.qss")
+        self.applyStyleSheet(r"admin/res/qss/style.qss")
 
     def changeStyleToSea(self):
         global_settings.change_style_sheet("sea")
-        self.applyStyleSheet(r"admin\res\qss\style1.qss")
+        self.applyStyleSheet(r"admin/res/qss/style1.qss")
 
     def changeStyleToDesert(self):
         global_settings.change_style_sheet("desert")
-        self.applyStyleSheet(r"admin\res\qss\style2.qss")
+        self.applyStyleSheet(r"admin/res/qss/style2.qss")
 
     def changeStyleToGrassland(self):
         global_settings.change_style_sheet("grassland")
-        self.applyStyleSheet(r"admin\res\qss\style3.qss")
+        self.applyStyleSheet(r"admin/res/qss/style3.qss")
 
     # when init, start a thread used  to listen messages from server: including clients_list
     def startReceiving(self):

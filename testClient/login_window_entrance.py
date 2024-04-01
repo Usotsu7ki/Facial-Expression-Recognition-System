@@ -44,7 +44,7 @@ def show_loading_dialog():
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('login\widget.ui', self)  # load ui
+        uic.loadUi('login/widget.ui', self)  # load ui
 
         self.label_pwd_2.setPixmap(QPixmap(":/res/pic/user_name.png"))
 
@@ -198,7 +198,7 @@ if __name__ == "__main__":
 
     show_loading_dialog()
     try:
-        with open(r"login\res\qss\style-1.qss", "r", encoding="utf-8") as file:
+        with open(r"login/res/qss/style-1.qss", "r", encoding="utf-8") as file:
             stylesheet = file.read()
             app.setStyleSheet(stylesheet)
     except Exception as e:
