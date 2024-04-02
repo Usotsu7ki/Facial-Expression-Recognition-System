@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/qss/style-1.qss</file>
+        <file>res/pic/Admin.jpeg</file>
+        <file>res/pic/login.jpg</file>
+        <file>res/pic/protect.jpeg</file>
+        <file>res/pic/pwd.png</file>
+        <file>res/pic/right.jpg</file>
+        <file>res/pic/user_name.png</file>
+        <file>res/pic/login1.jpg</file>
+        <file>res/pic/login2.jpg</file>
+        <file>res/qss/style-2.qss</file>
+        <file>res/qss/style-3.qss</file>
+        <file>res/qss/style-4.qss</file>
+        <file>res/pic/login3.jpg</file>
+    </qresource>
+</RCC>
