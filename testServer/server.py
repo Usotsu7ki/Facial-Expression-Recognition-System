@@ -1,34 +1,56 @@
 # 无识别服务端（发送默认数据）.py
-#from main import *
+from main import *
 import os
 import argparse
 
-# from models.PosterV2_7cls import *
+from models.PosterV2_7cls import *
 import time
-
-
+import torch.nn.parallel
+import torch.optim
+import torch.utils.data
+import torch.utils.data.distributed
+import torchvision.transforms as transforms
+import dlib
 import socket
 import threading
 import cv2
 import numpy as np
 import sqlite3
+from PIL import Image
 
 
-
-# 服务器IP和端口配置
+# The ip and port
 SERVER_IP = ''
 SERVER_PORT = 8080
 
+# the database name
 DATABASE_FILE = 'server_database.db'
 
-# 客户端和管理员的套接字列表
+# connected client socket lists
 client_sockets = []
 admin_sock = None
 
-# 暂时定义一个管理员注册码为12345678
+# you can change it freely, we set it as 12345678(you should change it in the password.txt, not here)
 correct_admin_number = 12345678
 
 
+classes = ('Surprise', 'fear', 'disgust', 'smile','sadness', 'anger', 'Neutral')
+tran = transforms.Compose([transforms.Resize((224, 224)),
+                           transforms.ToTensor(),
+                           transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                                std=[0.229, 0.224, 0.225]),
+                           ])
+
+os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+model = pyramid_trans_expr2(img_size=224, num_classes=7)
+model = torch.nn.DataParallel(model).cuda()
+criterion = torch.nn.CrossEntropyLoss()
+checkpoint = torch.load(r'C:\Users\hp\Desktop\Facial-Expression-Recognition-System-serverClient\testServer\checkpoint\raf-db-model_best.pth')
+model.load_state_dict(checkpoint['state_dict'])
+model.eval()
+detector = dlib.cnn_face_detection_model_v1(r'C:\Users\hp\Desktop\Facial-Expression-Recognition-System-serverClient\testServer\checkpoint\mmod_human_face_detector.dat')
+# detector = dlib.get_frontal_face_detector()
+print(torch.cuda.is_available())
 
 
 def verify_security_answer(username, security_answer):
@@ -132,14 +154,17 @@ def register_user(username, password, security_question, security_answer, admin_
     finally:
         conn.close()
 
-# 验证用户名是否已存在
+# during registration, check whether the username exists
 def username_exists(username):
     conn = sqlite3.connect(DATABASE_FILE)
     cursor = conn.cursor()
     cursor.execute('SELECT id FROM users WHERE username=?', (username,))
     user = cursor.fetchone()
     conn.close()
-    return user is not None
+    if user is not None:
+        return True
+    else:
+        return False
 
 def load_admin_password():
     try:
@@ -149,57 +174,61 @@ def load_admin_password():
         print(f"Error loading admin password: {e}")
         return None
 
+
+# For every client connection a new thread executing this method will start
+# During this method, client will be in the menu, there are 5 kind of messages that it may send to here
+# This method is used to judge the messages and execute different methods
 def client_handler(client_sock, client_address):
     # clear_socket_buffer(client_sock)
     global admin_sock
     print("client handler")
     while True:
         try:
-            # 接收客户端发送的信息
+            # client is in
             message = client_sock.recv(1024).decode()
-############################第一个分支，login#############################################
+############################first situation: the clikent want to login#############################################
             if message.startswith("login:"):
                 _, username, password = message.split(":", 2)
-                # 收到后进行用户名和密码的验证
+                # received username and password
                 user_verified, is_admin = verify_user_credentials(username, password)
                 if user_verified:
                     if is_admin:
-                        # 如果是管理员，发送确认消息(主界面接收并打开admin界面)
+                        # if the account is admin, send message to verify login as admin
                         print("admin require to connect")
-                        client_sockets.append(client_sock)
+                        # client_sockets.append(client_sock)
                         admin_sock = client_sock
                         client_sock.send("admin".encode())
-                        print(f"管理员 {client_address} 已连接。")
+                        print(f"administrator {client_address} is connected。")
                         handle_admin(client_sock,client_address)
                         break
                     else:
-                        # 不是管理员，进入普通客户端处理逻辑
+                        # not admin, the client-side is a normal client
                         print("client require to connect")
                         client_sock.send("client".encode())
-                        client_sockets.append(client_sock)
+                        # client_sockets.append(client_sock)
                         handle_client(client_sock, client_address)
                         break
                 else:
                     client_sock.send("fail".encode())
-############################第二个分支，register#############################################
+############################the second situation: the user want to register#############################################
             elif message.startswith("register:"):
                 print("user want to register")
                 _, registration_info = message.split("register:", 1)
                 username, password, security_question, security_answer, admin_number = registration_info.split("|")
 
-                # 如果提供了 admin_number，需要验证
+                # if he/she provide admin code, check it
                 if admin_number and admin_number != str(correct_admin_number):
                     print("admin number incorrect")
                     client_sock.send("fail_admin".encode())
                     continue
 
-                # 检查用户名是否已存在
+                # check whether the username exists
                 if username_exists(username):
                     print("username duplicate")
                     client_sock.send("fail_username_same".encode())
                     continue
 
-                # 注册用户
+                # register the account for the user
                 if register_user(username, password, security_question, security_answer, admin_number):
                     print("register success")
                     client_sock.send("register success".encode())
@@ -207,7 +236,7 @@ def client_handler(client_sock, client_address):
                     print("fail in database")
                     client_sock.send("fail_database".encode())
                     continue
-############################第三个分支，获取密保#############################################
+############################the third situation: the user want to reset pwd, ask for security question firstly#############################################
             elif message.startswith("forget:"):
                 username = message.split(":", 1)[1]
                 security_question = get_security_question(username)
@@ -215,7 +244,7 @@ def client_handler(client_sock, client_address):
                     client_sock.send(security_question.encode())
                 else:
                     client_sock.send("username_notexist".encode())
-############################第四个分支，修改密码#############################################
+############################the forth situation: the user want to reset pwd, with the security answer#############################################
             elif message.startswith("change:"):
                 _, username, security_answer, new_password = message.split(":", 3)
                 if verify_security_answer(username, security_answer):
@@ -225,18 +254,19 @@ def client_handler(client_sock, client_address):
                         client_sock.send("fail_database".encode())
                 else:
                     client_sock.send("fail".encode())
+#############################special situation, continue processing#############################################
             elif message.startswith('d'):
                 receiving_processing(client_sock,client_address)
-############################其他分支#############################################
+############################other situation, including the client close#############################################
             elif message == 'close':
                 client_handler(client_sock,client_address)
                 return
             else:
-                print(f"未知消息 {message} 从 {client_address} 收到,可能是断开连接")
+                print(f"unknown {message} from {client_address} , usually it means disconnected ")
                 break
         except ConnectionResetError:
-            # 客户端断开连接
-            print(f"客户端 {client_address} 断开连接。")
+            # the client disconnected
+            print(f"client {client_address} disconnected")
             try:
                 client_sockets.remove(client_sock)
             except Exception as e:
@@ -244,22 +274,25 @@ def client_handler(client_sock, client_address):
             break
 
 def handle_client(client_sock,client_address):
-    # 处理普通客户端的函数
-    # 这里可以处理客户端发送的图像并发送回响应
+    # this is used to handle client
     print("handling client")
 
-    message = client_sock.recv(1024).decode()#用于等阻塞客户端的Qmessagebox
+    message = client_sock.recv(1024).decode()
     print(message)
     if(message=='back'):
         client_handler(client_sock, client_address)
         print("back")
         return
     client_sock.send("ok".encode())
+    client_sockets.append(client_sock) #add the client to the list
     if admin_sock:
-        send_client_list_to_admin(admin_sock)
+        send_client_list_to_admin(admin_sock) # and ask admin to update the list
     receiving_processing(client_sock,client_address)
 
-def receiving_processing(client_sock,client_address):
+
+
+# This method receive images from client, processing and send results
+def receiving_processing(client_sock, client_address):
     is_connected = True
     try:
         while is_connected:
@@ -270,7 +303,7 @@ def receiving_processing(client_sock,client_address):
                 is_connected = False
                 print("Client disconnected1")
                 continue
-            while char != b'\n' and char !=b'd':
+            while char != b'\n' and char != b'd':
                 length_str += char
                 char = client_sock.recv(1)
                 if char == b'':
@@ -278,63 +311,92 @@ def receiving_processing(client_sock,client_address):
                     print("Client disconnected2")
                     break
 
-            if length_str == b'close': #收到close命令后停止接收处理图像(但是不停socket)
+            if length_str == b'close':  # after receiving close, stop receiving(client back or close), back to client_handler
                 is_connected = False
                 print("Client requested to close the connection")
-                clear_socket_buffer(client_sock)
+                # clear_socket_buffer(client_sock)
                 continue
 
             total = int(length_str)
 
-            # 然后根据长度接收图像数据
+            # receive image according to the length
             img_bytes = client_sock.recv(total)
             while len(img_bytes) < total:
                 img_bytes += client_sock.recv(total - len(img_bytes))
 
-            # 解析接收到的字节流数据，并显示图像
+            # Parse the received byte stream data and display the image
             img = np.frombuffer(img_bytes, dtype=np.uint8)
             img = cv2.imdecode(img, cv2.IMREAD_COLOR)
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            # print(img)
+            # Record the time before starting to process the image
             start_time = time.time()
-            #faces = detector(img, 0)
+            # Initialize the parameters sent to the client,B: is for Begin
+            send_message = "B:"
+            # Face detection model detects faces
+            faces = detector(img, 0)
+            # A list that stores tensor information of faces
+            tensor_list = []
+            # A list that stores the location of faces in the image
+            position_list = []
+            # Classify expressions on each face in the picture
+            for face in faces:
+                rect = face.rect
+                x, y, w, h = rect.left(), rect.top(), rect.width(), rect.height()
+                face_roi = img[y:y + h, x:x + w]
+                try:
+                    # If the face returned by the detector cannot be converted to RGB
+                    face_pil = Image.fromarray(cv2.cvtColor(face_roi, cv2.COLOR_BGR2RGB))
+                    tensor_list.append(tran(face_pil).unsqueeze(0).cuda())
+                    position_list.append([x, y, w, h])
+                except Exception as e:
+                    print(f"The face shake is too large, please try again!")
+                    continue
 
-            send_message = "B:6, 6|'0.999', '0.999'|244, 145, 151, 150, 480, 24, 125, 125|"
-
-            time.sleep(0.2)
+            if len(tensor_list) != 0:
+                """Put the faces separated by the detection model into the one
+                dimension so that they can be used as the input of the model in the same batch"""
+                input = torch.cat(tensor_list, dim=0)
+                with torch.no_grad():
+                    output = model(input)
+                    probs = F.softmax(output, dim=1).squeeze().cpu().numpy()
+                _, predicted_class = torch.max(output, 1)
+                if probs.ndim == 1:
+                    max_probs = [np.max(probs)]
+                else:
+                    max_probs = np.amax(probs, axis=1)
+                send_message = send_message + (
+                            str(predicted_class.tolist()) + '|' + str([f'{x:.3f}' for x in max_probs]) + '|' + str(
+                        position_list) + '|')
+                send_message = send_message.replace("[", "")
+                send_message = send_message.replace("]", "")
+                print(classes[predicted_class])
+            else:
+                print("There is no face")
             end_time = time.time()
             execution_time = end_time - start_time
-            cv2.imshow('frame', img)
             print("Code execution time: {:.2f} seconds".format(execution_time))
-
+            print(send_message)
             client_sock.send(send_message.encode())
-            print("send end")
-
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
 
     except Exception as e:
         print("receiving and processing error：" + str(e))
     finally:
         cv2.destroyAllWindows()
         print("connection close, wait for new connection")
-        client_sockets.remove(client_sock)
+        client_sockets.remove(client_sock) # remove it from client_list
         if admin_sock:
             send_client_list_to_admin(admin_sock)
-        client_handler(client_sock,client_address)
+        client_handler(client_sock, client_address) # re-execute client_handler(because this usually means client close, or disconnect)
 
 
-def handle_admin(admin_socket_me,admin_address): #要像client一样退出后回去
+def handle_admin(admin_socket_me,admin_address): #this is used to handle connection with admin
     global admin_sock
     is_admin_connected = True
-    message = admin_socket_me.recv(1024).decode()
+    message = admin_socket_me.recv(1024).decode() # confirm with admin, ensure chatting with admin now
     print(f"message from admin: {message}")
-    send_client_list_to_admin(admin_socket_me)
+    send_client_list_to_admin(admin_socket_me) # send client lists to admin
     try:
         while is_admin_connected:
-            message = admin_socket_me.recv(1024).decode()
+            message = admin_socket_me.recv(1024).decode() #keep listening messages from admin
             if message == "close":
                 is_admin_connected = False
                 continue
@@ -348,23 +410,25 @@ def handle_admin(admin_socket_me,admin_address): #要像client一样退出后回
         print(f"Error handling admin message: {e}")
     finally:
         print("connection close, wait for new connection")
-        if admin_socket_me in client_sockets:
+        if admin_socket_me in client_sockets: # remove the admin from connected list
             client_sockets.remove(admin_socket_me)
         is_admin_connected = False
         admin_sock=None
-        client_handler(admin_socket_me, admin_address)
+        client_handler(admin_socket_me, admin_address) # continue listening
 
 
 
-def kick_client(client_address):
+def kick_client(client_address): # send disconnect to the client to make it quit camera window
     print(f"kick_client begin:{client_address}")
     for client in client_sockets:
         if str(client.getpeername()) == client_address:
             client.send("disconnect".encode())
+            if client in client_sockets:        # remove it from connected client list
+                client_sockets.remove(client)
             print(f"Kicked client {client_address}")
             break
 
-def send_message_to_client(client_address, msg):
+def send_message_to_client(client_address, msg): # send message to client
     for client in client_sockets:
         if str(client.getpeername()) == client_address:
             client.send(msg.encode())
@@ -376,12 +440,12 @@ def send_message_to_client(client_address, msg):
 
 def send_client_list_to_admin(admin_sock):
     print(f"begin send list: {client_sockets}")
-    #把已连接的客户端列表发送给admin
+    # send the client list to the admin
     client_addresses = []
     for client in client_sockets:
         address = str(client.getpeername())
         client_addresses.append(address)
-    client_addresses_str = "\n".join(client_addresses)  # 使用换行符将地址连接成一个字符串
+    client_addresses_str = "\n".join(client_addresses)
     admin_sock.send(client_addresses_str.encode())
     print("send end")
 
@@ -389,27 +453,13 @@ def send_client_list_to_admin(admin_sock):
 def accept_connections(server_socket):
     while True:
         client_sock, client_address = server_socket.accept()
-        print(f"客户端 {client_address} 已连接。")
-        # every client
+        print(f"client {client_address} is connected。")
+        # for every client, create a thread to listen messages from ir
         threading.Thread(target=client_handler, args=(client_sock, client_address)).start()
 
-def clear_socket_buffer(sock):
-    """尝试非阻塞地读取socket，以清理可能残留的数据。"""
-    sock.setblocking(0)  # 设置socket为非阻塞模式
-    try:
-        while True:
-            data = sock.recv(1024)
-            if not data:
-                break  # 如果没有更多数据，跳出循环
-    except BlockingIOError:
-        # 如果没有数据可读，会抛出BlockingIOError错误
-        pass
-    finally:
-        sock.setblocking(1)  # 将socket重置为阻塞模式
-
 def main():
-    setup_database()
-    global ADMIN_PASSWORD
+    setup_database() # set up the database
+    global ADMIN_PASSWORD # this is admin code
     ADMIN_PASSWORD = load_admin_password()
     if ADMIN_PASSWORD is None:
         print("Admin password could not be loaded.")
@@ -417,7 +467,7 @@ def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((SERVER_IP, SERVER_PORT))
     server_socket.listen()
-    print(f"服务器启动，等待连接到 {SERVER_IP}:{SERVER_PORT}...")
+    print(f"Server launched，wait connection to {SERVER_IP}:{SERVER_PORT}...")
     accept_connections(server_socket)
 
 if __name__ == '__main__':

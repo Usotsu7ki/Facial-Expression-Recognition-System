@@ -1,18 +1,12 @@
 # Facial-Expression-Recognition-System
 
 ### To run the client, please read this: 
-[How to Run the Client](install.md)
+[How to install environment for the Server](install.md)
 
-### 
-### This is branch for client(including login,camera, register and forget password), server and admin-window
-<br>Be cautious: the lib of client did not upload, please config environment by yourself
-<br>Be cautious: 目前最新版本的Server端在钟qifeng那
-
-##### !!!Be cautious: the admin code used to register as admin is 12345678
-
+#### !!!Be cautious: the admin code used to register as admin is 12345678
 
 <br>----------------------------------------------------------------------------------------
-#### Update 
+#### Update log for client and server
 <br>11.29: add server, client and admin on github
 <br>2:24: add qss for client 
 <br>2.26:add record function, under python compiler it will mkdir folder for it, recording save in .avi
@@ -35,9 +29,7 @@
 <br>Change some pictures
 
 <br>3.28: repair bug, apply new ui according to fiseha's suggestions
-<br>3.29: add drawing logics for different faces, add local address ip get for admin for self exclusion in connecting-sockets list 
+<br>3.29: add drawing logics for different faces, add local address ip get for admin for self exclusion in connecting-sockets list.
 <br>4.1: change font sizes, background images of desert,grassland. change split message logic according to the demand of server.
 
-<p>请注意，目前服务端在zqf那，此服务端残端无法与客户端正常连接
-
-before launching, please check whether running the server locally, if server and client are running differently, please change global_setting.isLocal to False, also, change address.txt, using the ip of the server        -by biylj9
+before launching, please check whether running the server locally, if server and client are running differently, please change global_setting.isLocal to False, also, change address.txt, using the ip of the server.

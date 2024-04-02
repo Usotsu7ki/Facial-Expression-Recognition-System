@@ -168,27 +168,6 @@ class MainWindow(QtWidgets.QWidget):
             QMessageBox.warning(self, "Input Error", "Please enter both username and password.", QMessageBox.Ok)
 
 
-    """
-    skip login(abadon)
-    跳过登录，给其相应问题框：如果同意给摄像头权限就打开摄像头，关闭登录窗口
-            不同意就不操作
-    """
-    #skipLogin方法已经废弃
-    #this method was abadoned because of Addition od register and accounts
-    def skipLogin(self):
-        reply = QMessageBox.question(self, "webcam permission", "Please give us permission to open camera？",
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            print("jump to camera window")
-            self.client_socket.send("client".encode())
-            if(self.client_socket.recv(1024).decode()=="ok"):
-                print("receive respnce ok from server, open the webcam and send imgs")
-            else:
-                print(self.client_socket.recv(1024).decode())
-            self.camera_window = CameraWindow(self.client_socket,self)
-            self.camera_window.show()
-            self.hide()
-
     # help and contact us action
     def helpActionTriggered(self):
         print("open help dialog")
