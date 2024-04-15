@@ -1,8 +1,5 @@
 # Facial-Expression-Recognition-System
-
-### To run the client, please read this: 
-[How to install environment for the Server](install.md)
-
+## !!!Be cautious: this is not the last version 
 #### !!!Be cautious: the admin code used to register as admin is 12345678
 
 <br>----------------------------------------------------------------------------------------
